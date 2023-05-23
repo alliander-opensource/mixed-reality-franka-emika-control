@@ -72,7 +72,7 @@ This section aims to provide a brief guide on how to use the core functions of t
 #### External PC
 Start the ROS components:
 ```
-roslaunch mrirac kinova_real.launch
+roslaunch mrirac fr3_real.launch
 ```
 #### HoloLens
 From the Application Menu, start the `MRIRAC` app
@@ -86,6 +86,9 @@ From the Application Menu, start the `MRIRAC` app
 * **Obstacles**: Open Collision Obstacle UI
 * **Show Mesh**: Toggle display of spatial awareness mesh
 * **Pick and Place**: Open Pick and Place UI
+* **Plan**: Try to plan a feasible path to the goal
+* **Execute**: Execute the planned path
+* **Extra**: Open the extra options UI
 
 ### Sending Robot to a Target Pose
 https://user-images.githubusercontent.com/48822654/217340937-584c06a8-cff5-4365-ae4e-be78d66b367a.mp4
@@ -113,6 +116,14 @@ https://user-images.githubusercontent.com/48822654/217341097-46c50b44-8e57-4228-
 * **Reset**: Reset detection of pick target (removes added obstacle)
 
 https://user-images.githubusercontent.com/48822654/217341190-aaafd8b8-9d07-454b-926e-0d94b50aba9a.mp4
+
+### Extra options UI
+
+* **RRT**: Set the used planner to the RRT algorithm
+* **RRT Connect**: Set the used planner to the RRT Connect algorithm
+* **RRT Star**: Set the used planner to the RRT Star algorithm
+* **Open gripper**: Open the grippers of the end-effector
+* **Close gripper**: Close the grippers of the end-effector
 
 ## Credits
 This project was developed as part of the Semester Thesis for my (Matthew Hanlon) MSc. Robotics, Systems and Control at ETH Zurich. The project was supervised by Eric Vollenweider (Microsoft Mixed Reality and AI Lab Zurich), in collaboration with the [Computer Vision and Geometry Group](https://cvg.ethz.ch/).
