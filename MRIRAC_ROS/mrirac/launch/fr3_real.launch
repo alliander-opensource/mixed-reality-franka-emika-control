@@ -1,0 +1,10 @@
+<launch>
+    <arg name="robot_ip" />
+    <arg name="load_gripper" />
+
+    <include file="$(find panda_moveit_config)/launch/franka_control.launch" pass_all_args="true" />
+    <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>
+    <node name="mrirac_pose_correction" pkg="mrirac_pose_correction" type="pose_correction_node" output="screen" />
+    <node name="mrirac_trajectory_planner_Fr3" pkg="mrirac" type="trajectory_planner_node_Fr3" output="screen" />
+    <node name="mrirac_pick_and_place_Fr3" pkg="mrirac_pick_and_place" type="pick_and_place_node_Fr3" output="screen" />
+</launch>

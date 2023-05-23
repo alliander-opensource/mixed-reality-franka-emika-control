@@ -1,0 +1,10 @@
+<launch>
+    <include file="$(find panda_moveit_config)/launch/demo_gazebo.launch"/>
+    <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>
+    <node name="mrirac_trajectory_planner_Fr3" pkg="mrirac" type="trajectory_planner_node_Fr3" output="screen" >
+        <param name="simulation" type="bool" value="true" />
+    </node>
+    <node name="mrirac_pick_and_place_Fr3" pkg="mrirac_pick_and_place" type="pick_and_place_node_Fr3" output="screen" >
+        <param name="simulation" type="bool" value="true" />
+    </node>
+</launch>
