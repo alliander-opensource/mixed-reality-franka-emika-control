@@ -59,6 +59,10 @@ sed -i -e 's/"panda"/"fr3"/g' $1/src/panda_moveit_config/config/panda.srdf.xacro
 ## Change the moveit panda_link0 frame to the fr3_link0 frame in the moveit.rviz file
 sed -i -e 's/panda_link0/fr3_link0/g' $1/src/panda_moveit_config/launch/moveit.rviz
 
+## Change the franka_control.launch file
+sed -i -e '5i<arg name="arm_id" default="fr3"/>' $1/src/panda_moveit_config/launch/franka_control.launch
+sed -i -e '6i<arg name="robot" default="fr3"/>' $1/src/panda_moveit_config/launch/franka_control.launch
+
 ## Source the package
 source devel/setup.bash
 
