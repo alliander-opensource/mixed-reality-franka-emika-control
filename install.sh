@@ -50,6 +50,15 @@ catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DFranka_DIR:PATH=~/libfra
 ## Start building the workspace
 catkin build
 
+## Make sure that python can be found
+sudo apt install python-is-python3
+
+## Changes the robot name to "fr3" in the panda.srdf.xacro file
+sed -i -e 's/"panda"/"fr3"/g' $1/src/panda_moveit_config/config/panda.srdf.xacro
+
+## Change the moveit panda_link0 frame to the fr3_link0 frame in the moveit.rviz file
+sed -i -e 's/panda_link0/fr3_link0/g' $1/src/panda_moveit_config/launch/moveit.rviz
+
 ## Source the package
 source devel/setup.bash
 
