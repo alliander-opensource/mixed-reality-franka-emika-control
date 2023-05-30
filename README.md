@@ -4,7 +4,7 @@ Programming industrial robot arms can be a tedious and unintuitive process with 
 
 This repository contains both a Unity application and ROS packages that enable users to control a Franka Emika Research 3 robot arm using the Microsoft HoloLens 2 through a Mixed Reality experience. Besides being able to intuitivKinovaely set pose targets for the robot directly in task space, there is also a demonstration for planning a simple pick and place task. Furthermore, the application utilizes the spatial awareness capabilities of the HoloLens 2 to provide information on obstacles that are in the robot workspace, enabling collision-aware motion planning of robot movements.
 
-This package is an adaption of the orignial [MRIRAC repository](https://github.com/microsoft/mixed-reality-robot-arm-control-demo/tree/main)
+This package is an adaption of the original [MRIRAC repository](https://github.com/microsoft/mixed-reality-robot-arm-control-demo/tree/main)
 
 ## Installation
 ### Hardware
@@ -31,9 +31,6 @@ Make sure that unbuntu is installed with a realtime kernel. This gives the opper
 ##### Ethernet Connection
 Connect the Ethernet cable to the port on the robot and to a port on the PC. So that the PC can connect to the robot driver via the Ethernet connection, the wired connection has to be configured in the following way:
 
-
-<img src="doc/images/WiredConnection.png" width=40% height=40%>
-
 ##### ROS
 This project was developed using ROS Noetic. It may work with other ROS releases, but it is recommended to set up a Noetic environment on the external PC, using these [instructions](http://wiki.ros.org/noetic/Installation/Ubuntu).
 
@@ -44,12 +41,12 @@ Place the QR code for robot localization on the flat surface that the robot is f
 
 The object used for the Pick and Place demo also requires a QR code to be attached, so that the HoloLens can localize it. Attach the QR code to the top of the object as centrally as possible.
 
-### Unity
+### Unity setup
 1. Clone this repository and open the MRIRAC_Unity folder from the Unity Hub (tested with Unity 2020.3.40f1 - we suggest using this exact Unity version, as version up/down-grades sometimes break Unity projects)
 2. In the Unity editor, open the ROS Settings from the Robotics menu and set the ROS IP Address to the IP of the external machine connected to the robot arm.
 3. Build and deploy the application to your HoloLens 2 device, following these [instructions](https://learn.microsoft.com/en-us/windows/mixed-reality/develop/unity/build-and-deploy-to-hololens) 
 
-### ROS
+### ROS workspace setup
 1. Create a new workspace directory that includes a src directory
 2. Clone the following repositories into the same catkin_ws
 
@@ -70,15 +67,25 @@ This section aims to provide a brief guide on how to use the core functions of t
 
 ### Starting the Applications
 #### External PC
-Start the ROS components:
+For the robotic operating software there are two different variants. The first option is for the use of the real robot arm while the second option only uses the simulated robot arm. The second variant is often used for testing purposes. Both variants work in combination with the hololens.
+
+Below the commands are shown how to start the ROS nodes:
+
+##### ROS nodes for real physical robot
 ```
-roslaunch mrirac fr3_real.launch
+roslaunch mrirac fr3_real.launch robot_ip:=ip_adress load_gripper:=true
 ```
+
+##### ROS nodes for simulated robot
+```
+roslaunch mrirac fr3_sim.launch
+```
+
 #### HoloLens
 From the Application Menu, start the `MRIRAC` app
 
 ### Hand Menu UI
-<img src="doc/images/HandMenu.jpg" width=80% height=80%>
+<img src="doc/images/MainMenu_UI.jpg" width=40% height=40%>
 
 * **Home Arm**: Send arm to 'Home' position
 * **Summon Target**: Summon pose target hologram
@@ -90,12 +97,9 @@ From the Application Menu, start the `MRIRAC` app
 * **Execute**: Execute the planned path
 * **Extra**: Open the extra options UI
 
-### Sending Robot to a Target Pose
-https://user-images.githubusercontent.com/48822654/217340937-584c06a8-cff5-4365-ae4e-be78d66b367a.mp4
-
 ### Collision Obstacle UI
 
-<img src="doc/images/CollisionObjectsUI.png" width=80% height=80%>
+<img src="doc/images/CollisionObstacles_UI.jpg" width=40% height=40%>
 
 * **Sphere**: Instantiate a spherical hologram obstacle
 * **Cube**: Instantiate a cubic hologram obstacle
@@ -103,21 +107,17 @@ https://user-images.githubusercontent.com/48822654/217340937-584c06a8-cff5-4365-
 * **Clear Obstacles**: Remove all obstacles from the planning scene
 * **Toggle Spatial Obstacles**: Toggle transmission of spatial awareness mesh information
 
-https://user-images.githubusercontent.com/48822654/217341050-a7dd433c-f838-47ca-af97-89ff8a9c1102.mp4
-
-https://user-images.githubusercontent.com/48822654/217341097-46c50b44-8e57-4228-8b9d-82c9a70898a5.mp4
-
 ### Pick and Place UI
 
-<img src="doc/images/PickAndPlaceUI.png" width=80% height=80%>
+<img src="doc/images/PickAndPlace_UI.jpg" width=40% height=40%>
 
 * **Plan Pick and Place**: Plan pick and place mission
 * **Execute Pick and Place**: Execute planned pick and place mission
 * **Reset**: Reset detection of pick target (removes added obstacle)
 
-https://user-images.githubusercontent.com/48822654/217341190-aaafd8b8-9d07-454b-926e-0d94b50aba9a.mp4
-
 ### Extra options UI
+
+<img src="doc/images/Extra_UI.jpg" width=40% height=40%>
 
 * **RRT**: Set the used planner to the RRT algorithm
 * **RRT Connect**: Set the used planner to the RRT Connect algorithm
