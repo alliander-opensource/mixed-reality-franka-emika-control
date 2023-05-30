@@ -5,6 +5,8 @@ public class PositionCorrection : MonoBehaviour
 {
     [SerializeField]
     private float moveDistance;
+    [SerializeField]
+    private float rotationDistance;
 
     [SerializeField]
     private GameObject controlPanel;
@@ -35,12 +37,43 @@ public class PositionCorrection : MonoBehaviour
                 break;
 
             default:
-                Debug.Log("invalid direction specified");
+                Debug.Log("invalid move direction specified");
                 break;
         }
 
         transform.position = newPosition;
 
+    }
+
+    public void Rotate(int direction)
+    {
+        Quaternion newRotation = transform.rotation;
+        switch (direction)
+        {
+            case 0: //Around x axis positive
+                newRotation = Quaternion.AngleAxis(rotationDistance, transform.right) * newRotation;
+                break;
+            case 1: //Around x axis negative
+                newRotation = Quaternion.AngleAxis(-rotationDistance, transform.right) * newRotation;
+                break;
+            case 2: //Around y axis positive
+                newRotation = Quaternion.AngleAxis(rotationDistance, transform.up) * newRotation;
+                break;
+            case 3: //Around y axis negative
+                newRotation = Quaternion.AngleAxis(-rotationDistance, transform.up) * newRotation;
+                break;
+            case 4: //Around z axis positive
+                newRotation = Quaternion.AngleAxis(rotationDistance, transform.forward) * newRotation;
+                break;
+            case 5: //Around z axis negative
+                newRotation = Quaternion.AngleAxis(-rotationDistance, transform.forward) * newRotation;
+                break;
+            default:
+                Debug.Log("invalid rotation direction specified");
+                break;
+        }
+
+        transform.rotation = newRotation;
     }
 
     public void SetControlPanel()
