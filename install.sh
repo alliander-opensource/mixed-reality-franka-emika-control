@@ -5,10 +5,10 @@
 cd $1/src
 
 ## Download ROS-TCP-Endpoint package: https://github.com/Unity-Technologies/ROS-TCP-Endpoint 
-git clone git@github.com:Unity-Technologies/ROS-TCP-Endpoint.git
+git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint.git
 
 ## Download panda_moveit_config package: https://github.com/ros-planning/panda_moveit_config
-git clone --branch noetic-devel git@github.com:ros-planning/panda_moveit_config.git
+git clone --branch noetic-devel https://github.com/ros-planning/panda_moveit_config.git
 
 ## Download franka_ros package: https://github.com/frankaemika/franka_ros
 cd $1
