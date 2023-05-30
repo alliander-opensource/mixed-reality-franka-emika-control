@@ -43,8 +43,11 @@ The object used for the Pick and Place demo also requires a QR code to be attach
 
 ### Unity setup
 1. Clone this repository and open the MRIRAC_Unity folder from the Unity Hub (tested with Unity 2020.3.40f1 - we suggest using this exact Unity version, as version up/down-grades sometimes break Unity projects)
-2. In the Unity editor, open the ROS Settings from the Robotics menu and set the ROS IP Address to the IP of the external machine connected to the robot arm.
-3. Build and deploy the application to your HoloLens 2 device, following these [instructions](https://learn.microsoft.com/en-us/windows/mixed-reality/develop/unity/build-and-deploy-to-hololens) 
+2. Check if the console gives errors after initializing.
+    1. When initializing goes wrong because a certain unity package cannot be found the user can download this package from the internet and manually add this package.
+    2. Duplicate or same namespace erros probably point towards a rosmessage folder that should not be in the asset directory. The same rosmessages can also be found in the MRIRAC folder and there duplication errors arise.
+3. In the Unity editor, open the ROS Settings from the Robotics menu and set the ROS IP Address to the IP of the external machine connected to the robot arm.
+4. Build and deploy the application to your HoloLens 2 device, following these [instructions](https://learn.microsoft.com/en-us/windows/mixed-reality/develop/unity/build-and-deploy-to-hololens) 
 
 ### ROS workspace setup
 1. Create a new workspace directory that includes a src directory
