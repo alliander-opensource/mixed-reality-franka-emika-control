@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   sensor_msgs
   franka_gripper
-  kinova_msgs
   mrirac_msgs
   moveit_ros_planning_interface
   mrirac_lib
@@ -33,19 +32,13 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(pick_and_place_node src/pick_and_place_node.cpp)
 add_executable(pick_and_place_node_Fr3 src/pick_and_place_node_Fr3.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(pick_and_place_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(pick_and_place_node_Fr3 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(pick_and_place_node
-  ${catkin_LIBRARIES}
-)
-
 target_link_libraries(pick_and_place_node_Fr3
   ${catkin_LIBRARIES}
 )
