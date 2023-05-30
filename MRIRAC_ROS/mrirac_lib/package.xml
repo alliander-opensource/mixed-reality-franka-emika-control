@@ -9,11 +9,9 @@
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>kinova_msgs</buildtool_depend>
   <buildtool_depend>franka_gripper</buildtool_depend>
   <build_depend>roscpp</build_depend>
   <depend>franka_gripper</depend>
-  <depend>kinova_msgs</depend>
   <depend>mrirac_msgs</depend>
   <build_export_depend>roscpp</build_export_depend>
   <exec_depend>roscpp</exec_depend>

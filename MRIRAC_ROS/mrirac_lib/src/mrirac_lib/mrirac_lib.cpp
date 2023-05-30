@@ -1,26 +1,5 @@
 #include "mrirac_lib/mrirac_lib.h"
 
-bool RobotMovements::GripperAction(double turn, actionlib::SimpleActionClient<kinova_msgs::SetFingersPositionAction> *finger_client)
-{
-    kinova_msgs::SetFingersPositionGoal goal;
-    goal.fingers.finger1 = turn;
-    goal.fingers.finger2 = goal.fingers.finger1;
-    goal.fingers.finger3 = goal.fingers.finger1;
-    finger_client->sendGoal(goal);
-
-    if (finger_client->waitForResult(ros::Duration(5.0)))
-    {
-        finger_client->getResult();
-        return true;
-    }
-    else
-    {
-        finger_client->cancelAllGoals();
-        ROS_WARN_STREAM("The gripper action timed-out");
-        return false;
-    }
-}
-
 bool RobotMovements::Fr3_GripperAction(const double width, actionlib::SimpleActionClient<franka_gripper::MoveAction> *fr3_finger_client)
 {
     franka_gripper::MoveGoal goal;

@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   geometry_msgs
   sensor_msgs
-  kinova_msgs
   franka_gripper
   mrirac_msgs
   mrirac_lib
