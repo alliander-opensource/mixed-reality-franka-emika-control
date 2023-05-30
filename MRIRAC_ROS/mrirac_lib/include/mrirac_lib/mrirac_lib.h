@@ -5,7 +5,6 @@
 #include <actionlib/server/simple_action_server.h>
 #include <actionlib/client/simple_action_client.h>
 #include <geometry_msgs/Pose.h>
-#include <kinova_msgs/SetFingersPositionAction.h>
 #include <franka_gripper/MoveAction.h>
 #include <franka_gripper/GraspAction.h>
 #include <moveit/move_group_interface/move_group_interface.h>
@@ -16,8 +15,6 @@
 class RobotMovements
 {
 public:
-    static bool GripperAction(double turn, actionlib::SimpleActionClient<kinova_msgs::SetFingersPositionAction> *finger_client);
-
     static bool Fr3_GripperAction(double width, actionlib::SimpleActionClient<franka_gripper::MoveAction> *fr3_finger_client);
 
     static bool Fr3_GripperGraspAction(double width, actionlib::SimpleActionClient<franka_gripper::GraspAction> *fr3_finger_client);
