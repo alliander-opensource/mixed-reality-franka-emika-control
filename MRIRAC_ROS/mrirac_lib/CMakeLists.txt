@@ -7,7 +7,6 @@ project(mrirac_lib)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   franka_gripper
-  kinova_msgs
   mrirac_msgs
   moveit_ros_planning_interface
 )
