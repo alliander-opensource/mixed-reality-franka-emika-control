@@ -263,6 +263,8 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1243205527269468018, guid: e47255c9cda458b419cc3137bd4f1cd4, type: 2}
   - {fileID: 6118597287994996378, guid: 5a65fcebb07bb344ab3a7efef66ed34f, type: 2}
   - {fileID: 0}
@@ -749,7 +751,7 @@ PlayerSettings:
   metroCertificatePassword: 
   metroCertificateSubject: DefaultCompany
   metroCertificateIssuer: DefaultCompany
-  metroCertificateNotAfter: 80854a764da1da01
+  metroCertificateNotAfter: 00f0b5bd33b4da01
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: QR_Localization
