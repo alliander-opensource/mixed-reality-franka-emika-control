@@ -16645,7 +16645,8 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials: []
+  m_Materials:
+  - {fileID: 2100000, guid: 5fed308c88e442f4999b7d18f8407030, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17279,7 +17280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8779034279059886464, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
       propertyPath: OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f1f46cbecbe08e46a303ccfdb5b498a, type: 3}
@@ -30465,11 +30466,11 @@ PrefabInstance:
       objectReference: {fileID: 1041243034}
     - target: {fileID: 7432322551406483656, guid: 3f8cd66901757c9489b148b3a868322e, type: 3}
       propertyPath: moveDistance
-      value: 0.005
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 7432322551406483656, guid: 3f8cd66901757c9489b148b3a868322e, type: 3}
       propertyPath: rotationDistance
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7432322551406483657, guid: 3f8cd66901757c9489b148b3a868322e, type: 3}
       propertyPath: m_Enabled
