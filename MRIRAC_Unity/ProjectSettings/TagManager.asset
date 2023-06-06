@@ -21,6 +21,7 @@ TagManager:
   - link_8
   - rightfinger
   - leftfinger
+  - DirectControlEnvironment
   layers:
   - Default
   - TransparentFX

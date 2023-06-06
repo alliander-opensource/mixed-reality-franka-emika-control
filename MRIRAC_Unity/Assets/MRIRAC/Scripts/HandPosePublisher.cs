@@ -15,8 +15,10 @@ public class HandPosePublisher : MonoBehaviour
     [SerializeField]
     private string HandPosePublisherTopic;
 
-    
+    [SerializeField]
+    private GameObject HandObject;
 
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -36,14 +38,14 @@ public class HandPosePublisher : MonoBehaviour
         {
             handRight.TryGetJoint(TrackedHandJoint.Palm, out MixedRealityPose pose);
 
+            HandObject.transform.position = pose.Position;
+
             PoseMsg handPose = new PoseMsg()
             {
                 position = new PointMsg(pose.Position[0], pose.Position[1], pose.Position[2]),
                 orientation = new QuaternionMsg(pose.Rotation[0], pose.Rotation[1], pose.Rotation[2], pose.Rotation[3])
             };
             ros.Publish(HandPosePublisherTopic, handPose);
-        }
-
-        
+        }     
     }
 }
