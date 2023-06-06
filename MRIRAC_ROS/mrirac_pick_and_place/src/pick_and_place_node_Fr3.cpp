@@ -189,7 +189,7 @@ bool PickAndPlaceNode::Abort(std_srvs::Empty::Request &req, std_srvs::Empty::Res
 bool PickAndPlaceNode::OpenGripper(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
     ROS_INFO("Opening gripper");
-    RobotMovements::Fr3_GripperAction(0.039, fr3_move_finger_client_);
+    RobotMovements::Fr3_GripperAction(0.08, fr3_move_finger_client_);
     return true;
 }
 
@@ -206,7 +206,7 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
     if (!simulation)
     {
         ROS_INFO("KOEN: in line 185");
-        RobotMovements::Fr3_GripperAction(0.039, fr3_move_finger_client_);
+        RobotMovements::Fr3_GripperAction(0.08, fr3_move_finger_client_);
     }
 
     bool action_success = true;
@@ -246,7 +246,7 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
 
     if (!simulation)
     {
-        RobotMovements::Fr3_GripperGraspAction(5, fr3_grasp_finger_client_);
+        RobotMovements::Fr3_GripperGraspAction(10, fr3_grasp_finger_client_);
     }
 
     action_success = RobotMovements::PickAndPlaceMovement(goal->pre_place_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
@@ -270,7 +270,7 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
 
     if (!simulation)
     {
-        RobotMovements::Fr3_GripperAction(0.039, fr3_move_finger_client_);
+        RobotMovements::Fr3_GripperAction(0.08, fr3_move_finger_client_);
     }
 
     if (action_success)
