@@ -3435,7 +3435,7 @@ PrefabInstance:
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: pickObjectPrefab
       value: 
-      objectReference: {fileID: 2204593352037840240, guid: fdaad6fe3ef82c94d98c6b5538e6898c, type: 3}
+      objectReference: {fileID: 3561830973544841913, guid: 61d3a9439694b0a478b6d3e88011fd55, type: 3}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: hologramObstacles
       value: 

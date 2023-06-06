@@ -204,10 +204,10 @@ namespace Microsoft.MixedReality.SampleQRCodes
                     float size = qrcode.Value.GetComponent<QRCode>().PhysicalSize;
                     Vector3 codePosition = code.transform.position;
                     Quaternion codeOrientation = code.transform.rotation;
-                    Vector3 centerPosition = codePosition + code.transform.right * size / 2 + code.transform.up * size / 2;
+                    Vector3 centerPosition = codePosition - code.transform.right * size / 2 - code.transform.up * size / 2;
 
-                    pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(180f, 0f, 0f);
-                    Vector3 pickPosition = centerPosition - 0.12f * pickTarget.transform.up - 0.05f * pickTarget.transform.forward;
+                    pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(0f, 0f, 90f);//Quaternion.Euler(180f, 0f, 0f);
+                    Vector3 pickPosition = codePosition - 0.12f * pickTarget.transform.up - 0.08f * pickTarget.transform.forward;
                     pickTarget.transform.position = pickPosition;
 
                     if (!pickActive)
@@ -219,8 +219,8 @@ namespace Microsoft.MixedReality.SampleQRCodes
                     }
                     if (pickActive)
                     {
-                        pickObject.transform.rotation = codeOrientation * Quaternion.Euler(90f, 0f, 0f);
-                        pickObject.transform.position = centerPosition;
+                        pickObject.transform.rotation = codeOrientation; //* Quaternion.Euler(0f, 0f, 90f);
+                        pickObject.transform.position = centerPosition + new Vector3(0.0f, -0.0425f, 0.0f); //centerPosition;
                     }
                 }
 
