@@ -31,11 +31,12 @@ public class HandPosePublisher : MonoBehaviour
     {
         if (handRight == null)
         {
-            handRight = HandJointUtils.FindHand(Handedness.Left);
+            handRight = HandJointUtils.FindHand(Handedness.Right);
             Debug.Log("Finding hand...");
         }
         else 
         {
+            handRight = HandJointUtils.FindHand(Handedness.Right);
             handRight.TryGetJoint(TrackedHandJoint.Palm, out MixedRealityPose pose);
 
             HandObject.transform.position = pose.Position;
@@ -45,6 +46,9 @@ public class HandPosePublisher : MonoBehaviour
                 position = new PointMsg(pose.Position[0], pose.Position[1], pose.Position[2]),
                 orientation = new QuaternionMsg(pose.Rotation[0], pose.Rotation[1], pose.Rotation[2], pose.Rotation[3])
             };
+
+            Debug.Log(pose);
+
             ros.Publish(HandPosePublisherTopic, handPose);
         }     
     }

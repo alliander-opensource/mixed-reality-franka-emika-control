@@ -9,7 +9,6 @@ public class HandTriggerEvent : MonoBehaviour
         if (other.tag == "DirectControlEnvironment")
         {
             Debug.Log("Hand in environment");
-            other.transform.Translate(Vector3.forward * Time.deltaTime * 1.0f);
         }
     }
 }
