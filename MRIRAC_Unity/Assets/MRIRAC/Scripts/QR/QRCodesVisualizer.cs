@@ -206,8 +206,9 @@ namespace Microsoft.MixedReality.SampleQRCodes
                     Quaternion codeOrientation = code.transform.rotation;
                     Vector3 centerPosition = codePosition - code.transform.right * size / 2 - code.transform.up * size / 2;
 
-                    pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(0f, 0f, 90f);//Quaternion.Euler(180f, 0f, 0f);
-                    Vector3 pickPosition = codePosition - 0.12f * pickTarget.transform.up - 0.08f * pickTarget.transform.forward;
+                    pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(270f, 0f, 0f);
+                    // up = y, right = x, forward = z
+                    Vector3 pickPosition = codePosition + code.transform.up * 0.085f + code.transform.right * 0.025f + code.transform.forward * 0.09f; // z is real z, y is pointing forward, x is pointing right
                     pickTarget.transform.position = pickPosition;
 
                     if (!pickActive)
@@ -219,8 +220,8 @@ namespace Microsoft.MixedReality.SampleQRCodes
                     }
                     if (pickActive)
                     {
-                        pickObject.transform.rotation = codeOrientation; //* Quaternion.Euler(0f, 0f, 90f);
-                        pickObject.transform.position = centerPosition + new Vector3(0.0f, -0.0425f, 0.0f); //centerPosition;
+                        pickObject.transform.rotation = codeOrientation * Quaternion.Euler(90f, 0f, 0f);
+                        pickObject.transform.position = codePosition + code.transform.up * 0.0825f + code.transform.right * 0.025f + code.transform.forward * -0.0425f;
                     }
                 }
 
