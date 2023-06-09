@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
+using Microsoft.MixedReality.Toolkit.Experimental.UI;
 
 public class RosIP : MonoBehaviour
 {
+    public GameObject ipAddressObject;
     public GameObject RosConnectorObject;
     private TouchScreenKeyboard keyboard;
-    public static string ipAdress = "";
 
     public void ChangeRosIP() 
     {
         RosConnectorObject = GameObject.Find("ROSConnectionPrefab(Clone)");
         ROSConnection RosConnector = RosConnectorObject.GetComponent<ROSConnection>();
-        keyboard = TouchScreenKeyboard.Open("text to edit");
-        ipAdress = keyboard.text;
-        Debug.Log(ipAdress);
-        Debug.Log(RosConnector);
+        MRTKTMPInputField ipAddress = ipAddressObject.GetComponent<MRTKTMPInputField>();
+
+
         RosConnector.Disconnect();
-        RosConnector.Connect(ipAdress, 10000);
+        RosConnector.RosIPAddress = ipAddress.text;
+        RosConnector.Connect();
     }
 }

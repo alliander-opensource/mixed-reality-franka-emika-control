@@ -208,7 +208,7 @@ namespace Microsoft.MixedReality.SampleQRCodes
 
                     pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(270f, 0f, 0f);
                     // up = y, right = x, forward = z
-                    Vector3 pickPosition = codePosition + code.transform.up * 0.075f + code.transform.right * 0.025f + code.transform.forward * 0.08f; // z is real z, y is pointing forward, x is pointing right
+                    Vector3 pickPosition = codePosition + code.transform.up * 0.085f + code.transform.right * 0.025f + code.transform.forward * 0.08f; // z is real z, y is pointing forward, x is pointing right
                     pickTarget.transform.position = pickPosition;
 
                     if (!pickActive)
