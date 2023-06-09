@@ -28,7 +28,7 @@ MonoBehaviour:
   gazeProviderType:
     reference: Microsoft.MixedReality.Toolkit.Input.GazeProvider, Microsoft.MixedReality.Toolkit.Services.InputSystem
   useHeadGazeOverride: 0
-  isEyeTrackingEnabled: 1
+  isEyeTrackingEnabled: 0
   pointerOptions:
   - controllerType: 5167
     handedness: 7
