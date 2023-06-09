@@ -21,6 +21,9 @@ public class PositionCorrection : MonoBehaviour
     [SerializeField]
     private GameObject sliderZAxis;
 
+    [SerializeField]
+    private GameObject CalibrationStorageObject;
+
 
     public void Move(int direction)
     {
@@ -109,6 +112,16 @@ public class PositionCorrection : MonoBehaviour
         }
 
         transform.position = newPosition;
+    }
+
+    public void SetSavedPosition()
+    {
+        CalibrationStorage CalibrationStorageScript = CalibrationStorageObject.GetComponent<CalibrationStorage>();
+
+        CalibrationStorageScript.ReadCallibrationPosition();
+
+        transform.position = CalibrationStorageScript.position;
+        transform.rotation = CalibrationStorageScript.rotation;
     }
 
     public void SetControlPanel()
