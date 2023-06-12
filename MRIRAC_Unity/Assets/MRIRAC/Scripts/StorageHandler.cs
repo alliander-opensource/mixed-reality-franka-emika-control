@@ -6,9 +6,7 @@ using System.Text;
 
 public class StorageHandler : MonoBehaviour
 {
-    [SerializeField]
-    public GameObject ObjectToSave;
-
+   
     public void SaveCallibrationPosition()
     {
         string json_pos = JsonConvert.SerializeObject(transform.position, Formatting.Indented, new JsonSerializerSettings
