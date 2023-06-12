@@ -2915,7 +2915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5aeed70f7245b43922b340ea00db1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectToSave: {fileID: 1593470326}
+  ObjectToSave: {fileID: 0}
 --- !u!1001 &277340402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24027,51 +24027,6 @@ MonoBehaviour:
   cellWidth: 0.033
   cellHeight: 0.04
   assetVersion: 1
---- !u!1 &1593470326
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1593470327}
-  - component: {fileID: 1593470328}
-  m_Layer: 0
-  m_Name: CalibrationPositionStorage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1593470327
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593470326}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.05, z: 2.055}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1593470328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593470326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcb5f7ba498d70145a65525c21a58d5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  position: {x: 0, y: 0, z: 0}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1602688518
 GameObject:
   m_ObjectHideFlags: 0
@@ -26321,7 +26276,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1778474920}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
   m_Name: 
@@ -32272,7 +32227,7 @@ PrefabInstance:
     - target: {fileID: 7432322551406483656, guid: 3f8cd66901757c9489b148b3a868322e, type: 3}
       propertyPath: CalibrationStorageObject
       value: 
-      objectReference: {fileID: 1593470326}
+      objectReference: {fileID: 0}
     - target: {fileID: 7432322551406483657, guid: 3f8cd66901757c9489b148b3a868322e, type: 3}
       propertyPath: m_Enabled
       value: 0

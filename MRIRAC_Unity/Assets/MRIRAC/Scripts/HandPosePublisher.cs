@@ -32,7 +32,6 @@ public class HandPosePublisher : MonoBehaviour
         if (handRight == null)
         {
             handRight = HandJointUtils.FindHand(Handedness.Right);
-            Debug.Log("Finding hand...");
         }
         else 
         {

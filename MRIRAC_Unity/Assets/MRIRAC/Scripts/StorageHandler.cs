@@ -11,33 +11,40 @@ public class StorageHandler : MonoBehaviour
 
     public void SaveCallibrationPosition()
     {
-        ObjectToSave.GetComponent<CalibrationStorage>().position = transform.position;
-        ObjectToSave.GetComponent<CalibrationStorage>().rotation = transform.rotation;
-
-        string path = string.Format("{0}/mydata/stored_callibration_position.json", Application.persistentDataPath);
-
-        string json = JsonConvert.SerializeObject(ObjectToSave.GetComponent<CalibrationStorage>(), Formatting.Indented, new JsonSerializerSettings
+        string json_pos = JsonConvert.SerializeObject(transform.position, Formatting.Indented, new JsonSerializerSettings
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         });
 
-        Debug.Log(json);
+        string json_rot = JsonConvert.SerializeObject(transform.rotation, Formatting.Indented, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
 
-        byte[] data = Encoding.ASCII.GetBytes(json);
+        Debug.Log(json_pos);
+        Debug.Log(json_rot);
 
-        UnityEngine.Windows.File.WriteAllBytes(path, data);
+        PlayerPrefs.SetString("Position", json_pos);
+        PlayerPrefs.SetString("Rotation", json_rot);
+        PlayerPrefs.Save();
+
     }
 
     public void SetCallibrationPosition()
     {
-        string path = string.Format("{0}/mydata/stored_callibration_position.json", Application.persistentDataPath);
+        string json_pos = PlayerPrefs.GetString("Position");
+        Vector3 pos = JsonConvert.DeserializeObject<Vector3>(json_pos);
 
-        byte[] data = UnityEngine.Windows.File.ReadAllBytes(path);
-        string json = Encoding.ASCII.GetString(data);
+        string json_rot = PlayerPrefs.GetString("Rotation");
+        Quaternion rot = JsonConvert.DeserializeObject<Quaternion>(json_rot);
 
-        CalibrationStorage obj = JsonConvert.DeserializeObject<CalibrationStorage>(json);
+        Debug.Log(pos);
+        Debug.Log(rot);
 
-        transform.position = obj.position;
-        transform.rotation = obj.rotation;
+        transform.position = pos;
+        transform.rotation = rot;
     }
 }
+
+
+
