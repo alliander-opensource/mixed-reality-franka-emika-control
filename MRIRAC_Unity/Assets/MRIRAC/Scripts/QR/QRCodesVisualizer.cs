@@ -215,7 +215,7 @@ namespace Microsoft.MixedReality.SampleQRCodes
                     {
                         pickObject = Instantiate(pickObjectPrefab);
                         pickObject.name = "pickObject";
-                        pickObject.transform.SetParent(hologramObstacles.transform);
+                        //pickObject.transform.SetParent(hologramObstacles.transform);
                         pickActive = true;
                     }
                     if (pickActive)
