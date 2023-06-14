@@ -4,11 +4,31 @@ using UnityEngine;
 
 public class HandTriggerEvent : MonoBehaviour
 {
-    private void OnTriggerStay(Collider other)
+    private bool HandInEnv;
+
+    public void OnTriggerEnter(Collider other)
     {
+        
         if (other.tag == "DirectControlEnvironment")
         {
-            Debug.Log("Hand in environment");
+            Debug.Log("Entered object");
+            HandInEnv = true;
         }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+
+        if (other.tag == "DirectControlEnvironment")
+        {
+            Debug.Log("Exited object");
+            HandInEnv = false;
+        }
+    }
+
+    public bool GetHandInEnv()
+    {
+        //Debug.Log(HandInEnv);
+        return HandInEnv;
     }
 }
