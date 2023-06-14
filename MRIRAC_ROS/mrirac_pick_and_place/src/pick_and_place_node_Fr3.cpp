@@ -33,6 +33,10 @@ private:
     actionlib::SimpleActionClient<franka_gripper::MoveAction> *fr3_move_finger_client_;
     actionlib::SimpleActionClient<franka_gripper::GraspAction> *fr3_grasp_finger_client_; 
     moveit::planning_interface::MoveGroupInterface::Plan pre_grasp_motion_plan_;
+    moveit::planning_interface::MoveGroupInterface::Plan grasp_motion_plan_;
+    moveit::planning_interface::MoveGroupInterface::Plan pre_grasp_2_motion_plan_;
+    moveit::planning_interface::MoveGroupInterface::Plan pre_place_motion_plan_;
+    moveit::planning_interface::MoveGroupInterface::Plan place_motion_plan_;
     bool trajectory_planned_ = false;
 
     const double kFingerMax_ = 6400;
@@ -70,6 +74,11 @@ PickAndPlaceNode::PickAndPlaceNode(const std::string &pick_and_place_server_name
     abort_pick_and_place_server_ = node_handle_.advertiseService("abort", &PickAndPlaceNode::Abort, this);
     open_gripper_server_ = node_handle_.advertiseService("open_gripper", &PickAndPlaceNode::OpenGripper, this);
     close_gripper_server_ = node_handle_.advertiseService("close_gripper", &PickAndPlaceNode::CloseGripper, this);
+    move_group_interface_.setPlannerId("RRTstar");
+    move_group_interface_.setPlanningTime(5.0f);
+    planner_interface_.setPlannerId("RRTstar");
+    planner_interface_.setPlanningTime(5.0f);
+
 }
 
 PickAndPlaceNode::~PickAndPlaceNode()
@@ -91,70 +100,85 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
     moveit::core::RobotState robot_state(move_group_interface_.getRobotModel());
     robot_state.setToDefaultValues();
 
-    ROS_INFO("KOEN: start planning 1");
 
     success = RobotMovements::PlanMovementToPose(req.pre_grasp_pose, move_group_interface_, motion_plan);
     if (success)
     {
-        ROS_INFO("KOEN: planning 1 succes");
         pre_grasp_motion_plan_ = motion_plan;
         ROS_INFO("pre_grasp_motion_plan_");
         res.pre_grasp_trajectory = motion_plan.trajectory_.joint_trajectory;
     }
     else
     {
-        ROS_INFO("KOEN: planning 1 not succes");
         res.success = false;
         return true;
     }
+
+    move_group_interface_.setPlanningTime(10.0f);
+    planner_interface_.setPlanningTime(10.0f);
+
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
-    ROS_INFO("KOEN: start planning 2");
     success = RobotMovements::PlanMovementToPose(req.grasp_pose, planner_interface_, motion_plan);
     if (success)
     {
-        ROS_INFO("KOEN: planning 2 succes");
+        grasp_motion_plan_ = motion_plan;
+        ROS_INFO("grasp_motion_plan_");
         res.grasp_trajectory = motion_plan.trajectory_.joint_trajectory;
     }
     else
     {
-        ROS_INFO("KOEN: planning 2 not succes");
         res.success = false;
         return true;
     }
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
-    ROS_INFO("KOEN: start planning 3");
-    success = RobotMovements::PlanMovementToPose(req.pre_place_pose, planner_interface_, motion_plan);
+    success = RobotMovements::PlanMovementToPose(req.pre_grasp_pose, planner_interface_, motion_plan);
     if (success)
     {
-        ROS_INFO("KOEN: planning 3 succes");
-        res.pre_place_trajectory = motion_plan.trajectory_.joint_trajectory;
+        pre_grasp_2_motion_plan_ = motion_plan;
+        ROS_INFO("pre_grasp_2_plan_");
+        res.pre_grasp_trajectory = motion_plan.trajectory_.joint_trajectory;
     }
     else
     {
-        ROS_INFO("KOEN: planning 3 not succes");
         res.success = false;
         return true;
     }
+
+    move_group_interface_.setPlanningTime(5.0f);
+    planner_interface_.setPlanningTime(5.0f);
+
+    // RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
+
+    // success = RobotMovements::PlanMovementToPose(req.pre_place_pose, planner_interface_, motion_plan);
+    // if (success)
+    // {
+    //     pre_place_motion_plan_ = motion_plan;
+    //     ROS_INFO("pre_place_pose_plan_"); 
+    //     res.pre_place_trajectory = motion_plan.trajectory_.joint_trajectory;
+    // }
+    // else
+    // {
+    //     res.success = false;
+    //     return true;
+    // }
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
-    ROS_INFO("KOEN: start planning 4");
     success = RobotMovements::PlanMovementToPose(req.place_pose, planner_interface_, motion_plan);
     if (success)
     {
-        ROS_INFO("KOEN: planning 4 succes");
+        place_motion_plan_ = motion_plan;
+        ROS_INFO("place_pose_plan_");
         res.place_trajectory = motion_plan.trajectory_.joint_trajectory;
     }
     else
     {
-        ROS_INFO("KOEN: planning 4 not succes");
         res.success = false;
         return true;
     }
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
-    ROS_INFO("KOEN: planned all, sending back response");
     res.success = true;
     trajectory_planned_ = true;
 
@@ -163,7 +187,6 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
 
 bool PickAndPlaceNode::Start(mrirac_msgs::StartPickAndPlace::Request &req, mrirac_msgs::StartPickAndPlace::Response &res)
 {
-    ROS_INFO("KOEN: start pick and place execution");
     mrirac_msgs::PickAndPlaceGoal goal;
     goal.pre_grasp_pose = req.pre_grasp_pose;
     goal.grasp_pose = req.grasp_pose;
@@ -171,9 +194,7 @@ bool PickAndPlaceNode::Start(mrirac_msgs::StartPickAndPlace::Request &req, mrira
     goal.place_pose = req.place_pose;
 
     pick_and_place_client_.sendGoal(goal);
-    ROS_INFO("KOEN: goal send");
     pick_and_place_client_.waitForResult();
-    ROS_INFO("KOEN: done waiting for result");
     res.success = true;
     return true;
 }
@@ -189,7 +210,7 @@ bool PickAndPlaceNode::Abort(std_srvs::Empty::Request &req, std_srvs::Empty::Res
 bool PickAndPlaceNode::OpenGripper(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
     ROS_INFO("Opening gripper");
-    RobotMovements::Fr3_GripperAction(0.039, fr3_move_finger_client_);
+    RobotMovements::Fr3_GripperAction(0.08, fr3_move_finger_client_);
     return true;
 }
 
@@ -202,28 +223,25 @@ bool PickAndPlaceNode::CloseGripper(std_srvs::Empty::Request &req, std_srvs::Emp
 
 void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstPtr &goal)
 {
-    ROS_INFO("KOEN: in execute callback");
     if (!simulation)
     {
-        ROS_INFO("KOEN: in line 185");
-        RobotMovements::Fr3_GripperAction(0.039, fr3_move_finger_client_);
+        RobotMovements::Fr3_GripperAction(0.08, fr3_move_finger_client_);
     }
 
     bool action_success = true;
     if (trajectory_planned_)
     {
-        ROS_INFO("KOEN: in line 192");
         RobotMovements::ExecutePlannedTrajectory(move_group_interface_, pre_grasp_motion_plan_, goal->pre_grasp_pose, !simulation, pose_correction_client_);
-        trajectory_planned_ = false;
     }
+
     else
     {
-        ROS_INFO("KOEN: in line 198");
         action_success = RobotMovements::PickAndPlaceMovement(goal->pre_grasp_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
     }
 
     if (!action_success)
     {
+        trajectory_planned_ = false;
         pick_and_place_result_.success = false;
         ROS_INFO("Pick and Place Action: Failed");
         // set the action state to failed
@@ -234,9 +252,20 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
     object_ids.push_back("pickObject");
     planning_scene_interface_.removeCollisionObjects(object_ids);
 
-    action_success = RobotMovements::PickAndPlaceMovement(goal->grasp_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+
+    if (trajectory_planned_)
+    {
+        RobotMovements::ExecutePlannedTrajectory(move_group_interface_, grasp_motion_plan_, goal->grasp_pose, !simulation, pose_correction_client_);
+    }
+
+    else
+    {
+        action_success = RobotMovements::PickAndPlaceMovement(goal->grasp_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+    }
+    
     if (!action_success)
     {
+        trajectory_planned_ = false;
         pick_and_place_result_.success = false;
         ROS_INFO("Pick and Place Action: Failed");
         // set the action state to failed
@@ -246,21 +275,62 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
 
     if (!simulation)
     {
-        RobotMovements::Fr3_GripperGraspAction(5, fr3_grasp_finger_client_);
+        RobotMovements::Fr3_GripperGraspAction(20, fr3_grasp_finger_client_);
     }
 
-    action_success = RobotMovements::PickAndPlaceMovement(goal->pre_place_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+    if (trajectory_planned_)
+    {
+        RobotMovements::ExecutePlannedTrajectory(move_group_interface_, pre_grasp_2_motion_plan_, goal->pre_grasp_pose, !simulation, pose_correction_client_);
+    }
+
+    else
+    {
+        action_success = RobotMovements::PickAndPlaceMovement(goal->pre_grasp_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+    }
+
     if (!action_success)
     {
+        trajectory_planned_ = false;
         pick_and_place_result_.success = false;
         ROS_INFO("Pick and Place Action: Failed");
         // set the action state to failed
         pick_and_place_server_.setAborted(pick_and_place_result_);
         return;
     }
-    action_success = RobotMovements::PickAndPlaceMovement(goal->place_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+    
+    // if (trajectory_planned_)
+    // {
+    //     RobotMovements::ExecutePlannedTrajectory(move_group_interface_, pre_place_motion_plan_, goal->pre_place_pose, !simulation, pose_correction_client_);
+    // }
+
+    // else
+    // {
+    //     action_success = RobotMovements::PickAndPlaceMovement(goal->pre_place_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+    // }
+
+    // if (!action_success)
+    // {
+    //     trajectory_planned_ = false;
+    //     pick_and_place_result_.success = false;
+    //     ROS_INFO("Pick and Place Action: Failed");
+    //     // set the action state to failed
+    //     pick_and_place_server_.setAborted(pick_and_place_result_);
+    //     return;
+    // }
+
+    if (trajectory_planned_)
+    {
+        RobotMovements::ExecutePlannedTrajectory(move_group_interface_, place_motion_plan_, goal->place_pose, !simulation, pose_correction_client_);
+    }
+
+    else
+    {
+        action_success = RobotMovements::PickAndPlaceMovement(goal->place_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
+    }
+    
     if (!action_success)
     {
+        trajectory_planned_ = false;
         pick_and_place_result_.success = false;
         ROS_INFO("Pick and Place Action: Failed");
         // set the action state to failed
@@ -270,7 +340,7 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
 
     if (!simulation)
     {
-        RobotMovements::Fr3_GripperAction(0.039, fr3_move_finger_client_);
+        RobotMovements::Fr3_GripperAction(0.08, fr3_move_finger_client_);
     }
 
     if (action_success)
@@ -287,6 +357,8 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
         // set the action state to failed
         pick_and_place_server_.setAborted(pick_and_place_result_);
     }
+
+    trajectory_planned_ = false;
 }
 
 int main(int argc, char **argv)

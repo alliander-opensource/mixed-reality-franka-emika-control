@@ -24,7 +24,7 @@ bool RobotMovements::Fr3_GripperAction(const double width, actionlib::SimpleActi
 bool RobotMovements::Fr3_GripperGraspAction(const double force, actionlib::SimpleActionClient<franka_gripper::GraspAction> *fr3_finger_client)
 {
     franka_gripper::GraspGoal goal;
-    goal.width = 0.0015;
+    goal.width = 0.04;
     goal.force = force;
     goal.epsilon.inner = 0.04;
     goal.epsilon.outer = 0.04;

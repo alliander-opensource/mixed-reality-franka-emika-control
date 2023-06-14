@@ -204,23 +204,24 @@ namespace Microsoft.MixedReality.SampleQRCodes
                     float size = qrcode.Value.GetComponent<QRCode>().PhysicalSize;
                     Vector3 codePosition = code.transform.position;
                     Quaternion codeOrientation = code.transform.rotation;
-                    Vector3 centerPosition = codePosition + code.transform.right * size / 2 + code.transform.up * size / 2;
+                    Vector3 centerPosition = codePosition - code.transform.right * size / 2 - code.transform.up * size / 2;
 
-                    pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(180f, 0f, 0f);
-                    Vector3 pickPosition = centerPosition - 0.12f * pickTarget.transform.up - 0.05f * pickTarget.transform.forward;
+                    pickTarget.transform.rotation = codeOrientation * Quaternion.Euler(270f, 0f, 0f);
+                    // up = y, right = x, forward = z
+                    Vector3 pickPosition = codePosition + code.transform.up * 0.085f + code.transform.right * 0.025f + code.transform.forward * 0.08f; // z is real z, y is pointing forward, x is pointing right
                     pickTarget.transform.position = pickPosition;
 
                     if (!pickActive)
                     {
                         pickObject = Instantiate(pickObjectPrefab);
                         pickObject.name = "pickObject";
-                        pickObject.transform.SetParent(hologramObstacles.transform);
+                        //pickObject.transform.SetParent(hologramObstacles.transform);
                         pickActive = true;
                     }
                     if (pickActive)
                     {
                         pickObject.transform.rotation = codeOrientation * Quaternion.Euler(90f, 0f, 0f);
-                        pickObject.transform.position = centerPosition;
+                        pickObject.transform.position = codePosition + code.transform.up * 0.05f + code.transform.right * 0.025f + code.transform.forward * -0.025f;
                     }
                 }
 
