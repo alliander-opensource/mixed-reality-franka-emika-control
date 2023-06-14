@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2915,7 +2915,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5aeed70f7245b43922b340ea00db1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectToSave: {fileID: 0}
 --- !u!1001 &277340402
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3592,15 +3591,15 @@ PrefabInstance:
       objectReference: {fileID: 2012823388}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: robotOffset.x
-      value: 0.05
+      value: 0.053
       objectReference: {fileID: 0}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: robotOffset.y
-      value: 0.25
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: robotOffset.z
-      value: 0.055
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: buttonOffset.y
@@ -3616,7 +3615,11 @@ PrefabInstance:
       objectReference: {fileID: 1836232451}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: robotRotation.x
-      value: 90
+      value: 91
+      objectReference: {fileID: 0}
+    - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
+      propertyPath: robotRotation.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5731539863259288648, guid: cb562b9b9662c6f4b9fe04a41db67547, type: 3}
       propertyPath: pickObjectPrefab
@@ -26276,7 +26279,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1778474920}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf98dd1206224111a38765365e98e207, type: 3}
   m_Name: 

@@ -25,7 +25,6 @@ public class StorageHandler : MonoBehaviour
         PlayerPrefs.SetString("Position", json_pos);
         PlayerPrefs.SetString("Rotation", json_rot);
         PlayerPrefs.Save();
-
     }
 
     public void SetCallibrationPosition()
