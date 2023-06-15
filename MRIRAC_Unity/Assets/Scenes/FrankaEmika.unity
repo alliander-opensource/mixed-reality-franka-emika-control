@@ -24460,6 +24460,7 @@ MonoBehaviour:
   HandPosePublisherTopic: cartesian_impedance_example_controller/equilibrium_pose
   HandObject: {fileID: 1190078869}
   ServiceObject: {fileID: 1657489579}
+  DirectControlEnvObject: {fileID: 1503530495}
 --- !u!1001 &1640069471
 PrefabInstance:
   m_ObjectHideFlags: 0

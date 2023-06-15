@@ -29,9 +29,13 @@ public class HandPosePublisher : MonoBehaviour
     [SerializeField]
     private GameObject ServiceObject;
 
+    [SerializeField]
+    private GameObject DirectControlEnvObject;
+
     // Start is called before the first frame update
     void Start()
     {
+        //mrirac_trajectory_planner_Fr3/unity_hand_pose
         ros = ROSConnection.GetOrCreateInstance();
         ros.RegisterPublisher<PoseStampedMsg>(HandPosePublisherTopic);
 
@@ -85,7 +89,7 @@ public class HandPosePublisher : MonoBehaviour
 
             PoseMsg handPalmPose = new PoseMsg()
             {
-                position = new PointMsg(PalmPose.Position[0], PalmPose.Position[1], PalmPose.Position[2]),
+                position = new PointMsg((PalmPose.Position[0] - DirectControlEnvObject.transform.position.x) * 10, (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y) * 10, (PalmPose.Position[2] - DirectControlEnvObject.transform.position.z) * 10),
                 orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
             };
 
