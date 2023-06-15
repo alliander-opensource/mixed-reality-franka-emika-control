@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class HandTriggerEvent : MonoBehaviour
 {
-    private bool HandInEnv;
+    [SerializeField]
+    public GameObject PublisherObject;
+
+    private HandPosePublisher HandPosePublisherScript;
+
+    void Start()
+    {
+        HandPosePublisherScript = PublisherObject.GetComponent<HandPosePublisher>();
+    }
 
     public void OnTriggerEnter(Collider other)
     {
@@ -12,7 +20,7 @@ public class HandTriggerEvent : MonoBehaviour
         if (other.tag == "DirectControlEnvironment")
         {
             Debug.Log("Entered object");
-            HandInEnv = true;
+            HandPosePublisherScript.toggle_direct_control();
         }
     }
 
@@ -22,13 +30,7 @@ public class HandTriggerEvent : MonoBehaviour
         if (other.tag == "DirectControlEnvironment")
         {
             Debug.Log("Exited object");
-            HandInEnv = false;
+            HandPosePublisherScript.toggle_direct_control();
         }
-    }
-
-    public bool GetHandInEnv()
-    {
-        //Debug.Log(HandInEnv);
-        return HandInEnv;
     }
 }

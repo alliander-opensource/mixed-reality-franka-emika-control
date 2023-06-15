@@ -5,6 +5,7 @@ using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Geometry;
+using RosMessageTypes.Std;
 
 public class HandPosePublisher : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class HandPosePublisher : MonoBehaviour
     private MixedRealityPose Palmpose;
     private MixedRealityPose IndexTipPose;
     private MixedRealityPose ThumbTipPose;
-    public bool gripper_state_changed;
-    public string gripper_state;
-    public string prev_gripper_state;
+    private bool gripper_state_changed;
+    private string gripper_state;
+    private string prev_gripper_state;
+    private bool direct_control_active;
+
 
     ROSConnection ros;
     [SerializeField]
@@ -26,19 +29,16 @@ public class HandPosePublisher : MonoBehaviour
     [SerializeField]
     private GameObject ServiceObject;
 
-    [SerializeField]
-    private GameObject DirectControlEnvObject;
-
-
     // Start is called before the first frame update
     void Start()
     {
         ros = ROSConnection.GetOrCreateInstance();
-        ros.RegisterPublisher<PoseMsg>(HandPosePublisherTopic);
+        ros.RegisterPublisher<PoseStampedMsg>(HandPosePublisherTopic);
 
         gripper_state_changed = false;
         gripper_state = null;
         prev_gripper_state = null;
+        direct_control_active = false;
     }
 
     public bool check_gripper_change(string gripper_state, string prev_gripper_state)
@@ -51,6 +51,21 @@ public class HandPosePublisher : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public void toggle_direct_control()
+    {
+        Debug.Log("Toggling direct control");
+
+        if (direct_control_active)
+        {
+            direct_control_active = false;
+        }
+
+        else
+        {
+            direct_control_active = true;
         }
     }
 
@@ -74,9 +89,19 @@ public class HandPosePublisher : MonoBehaviour
                 orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
             };
 
-            //Debug.Log(DirectControlEnvObject.GetComponent<HandTriggerEvent>().GetHandInEnv());
+            HeaderMsg handPalmHeader = new HeaderMsg()
+            {
+                frame_id = "fr3_link0"
+            };
 
-            if (DirectControlEnvObject.GetComponent<HandTriggerEvent>().GetHandInEnv())
+            PoseStampedMsg handPalmMessage = new PoseStampedMsg()
+            {
+                header = handPalmHeader,
+                pose = handPalmPose
+            };
+
+
+            if (direct_control_active)
             {
                 
                 handRight.TryGetJoint(TrackedHandJoint.IndexTip, out MixedRealityPose IndexTipPose);
@@ -126,7 +151,7 @@ public class HandPosePublisher : MonoBehaviour
 
                 prev_gripper_state = gripper_state;
 
-                ros.Publish(HandPosePublisherTopic, handPalmPose);
+                ros.Publish(HandPosePublisherTopic, handPalmMessage);
             }
         }     
     }

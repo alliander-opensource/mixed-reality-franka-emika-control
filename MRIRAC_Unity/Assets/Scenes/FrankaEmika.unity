@@ -17488,7 +17488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b843106b367571489a261655fd58e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HandInEnv: 0
+  PublisherObject: {fileID: 1632255262}
 --- !u!54 &1190078875
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22957,7 +22957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b843106b367571489a261655fd58e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HandInEnv: 0
+  PublisherObject: {fileID: 0}
 --- !u!1 &1512954141
 GameObject:
   m_ObjectHideFlags: 0
@@ -24457,10 +24457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed5829c84574de248a17e71898c8afcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gripper_state_changed: 0
-  gripper_state: 
-  prev_gripper_state: 
-  HandPosePublisherTopic: mrirac_trajectory_planner_Fr3/unity_hand_pose
+  HandPosePublisherTopic: cartesian_impedance_example_controller/equilibrium_pose
   HandObject: {fileID: 1190078869}
   ServiceObject: {fileID: 1657489579}
 --- !u!1001 &1640069471
