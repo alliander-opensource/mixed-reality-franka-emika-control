@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- specify the planning pipeline -->
+    <!--arg name="pipeline" default="ompl" /-->
+
+    <!-- Fr3 specific options -->
+    <arg name="arm_id" default="fr3" />
+    <arg name="load_gripper" default="true" />
+    <arg name="controller" default="cartesian_impedance_example_controller" />
+    <arg name="rviz" default="true" />
+
+    <!-- Gazebo specific options -->
+    <arg name="gazebo_gui" default="false" />
+    <arg name="paused" default="false" />
+
+    <!-- Rviz specific options -->
+    <arg name="rviz_config" default="$(dirname)/moveit.rviz" />
+
+    <!-- Launch the gazebo simulator and spawn the robot -->
+    <include file="$(find franka_gazebo)/launch/fr3.launch" pass_all_args="true">
+        <!--arg name="headless" value="$(eval not arg('gazebo_gui'))" /-->
+        <arg name="use_gripper" default="$(arg load_gripper)" />
+        <arg name="controller" default="$(arg controller)" />
+    </include>
+
+    <include file="$(find panda_moveit_config)/launch/demo.launch" pass_all_args="true">
+        <!-- robot description is loaded by gazebo.launch, to enable Gazebo features -->
+        <arg name="load_robot_description" value="false" />
+        <!-- MoveItSimpleControllerManager provides ros_control's JointTrajectory controllers
+            as well as GripperCommand actions -->
+        <arg name="moveit_controller_manager" value="simple" />
+        <arg name="transmission" value="effort"/>
+    </include>
+
+    <!-- -->
+    <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>
+    <node name="mrirac_trajectory_planner_Fr3" pkg="mrirac" type="trajectory_planner_node_Fr3" output="screen" >
+        <param name="simulation" type="bool" value="true" />
+    </node>
+    <node name="mrirac_pick_and_place_Fr3" pkg="mrirac_pick_and_place" type="pick_and_place_node_Fr3" output="screen" >
+        <param name="simulation" type="bool" value="true" />
+    </node>
+    <!-- -->
+
+</launch>
