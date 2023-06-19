@@ -7,7 +7,7 @@
     <arg name="arm_id" default="fr3" />
     <arg name="load_gripper" default="true" />
     <arg name="controller" default="cartesian_impedance_example_controller" />
-    <arg name="rviz" default="true" />
+    <arg name="rviz" default="false" />
 
     <!-- Gazebo specific options -->
     <arg name="gazebo_gui" default="false" />
@@ -21,6 +21,7 @@
         <!--arg name="headless" value="$(eval not arg('gazebo_gui'))" /-->
         <arg name="use_gripper" default="$(arg load_gripper)" />
         <arg name="controller" default="$(arg controller)" />
+        <arg name="interactive_marker" default="false" />
     </include>
 
     <include file="$(find panda_moveit_config)/launch/demo.launch" pass_all_args="true">
