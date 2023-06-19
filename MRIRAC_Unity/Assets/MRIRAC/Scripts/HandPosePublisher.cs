@@ -60,7 +60,7 @@ public class HandPosePublisher : MonoBehaviour
 
     public void toggle_direct_control()
     {
-        Debug.Log("Toggling direct control");
+        //Debug.Log("Toggling direct control");
 
         if (direct_control_active)
         {
@@ -89,7 +89,7 @@ public class HandPosePublisher : MonoBehaviour
 
             PoseMsg handPalmPose = new PoseMsg()
             {
-                position = new PointMsg((PalmPose.Position[0] - DirectControlEnvObject.transform.position.x) * 10, (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y) * 10, (PalmPose.Position[2] - DirectControlEnvObject.transform.position.z) * 10),
+                position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z) * 5, -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x) * 5, (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y) * 5),
                 orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
             };
 
@@ -107,7 +107,10 @@ public class HandPosePublisher : MonoBehaviour
 
             if (direct_control_active)
             {
-                
+                //Debug.Log(handPalmPose.position.x);
+                Debug.Log(handPalmPose.position.y);
+                //Debug.Log(handPalmPose.position.z);
+
                 handRight.TryGetJoint(TrackedHandJoint.IndexTip, out MixedRealityPose IndexTipPose);
                 handRight.TryGetJoint(TrackedHandJoint.ThumbTip, out MixedRealityPose ThumbTipPose);             
 
@@ -135,7 +138,7 @@ public class HandPosePublisher : MonoBehaviour
                         CloseGripperScript.CallCloseGripper();
                     }
 
-                    Debug.Log("Hand Closed");
+                    //Debug.Log("Hand Closed");
 
                 }
 
@@ -150,7 +153,7 @@ public class HandPosePublisher : MonoBehaviour
                         OpenGripper OpenGripperScript = ServiceObject.GetComponent<OpenGripper>();
                         OpenGripperScript.CallOpenGripper();
                     }
-                    Debug.Log("Hand Open");
+                    //Debug.Log("Hand Open");
                 }
 
                 prev_gripper_state = gripper_state;
