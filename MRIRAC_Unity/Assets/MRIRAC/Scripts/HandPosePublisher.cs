@@ -89,7 +89,7 @@ public class HandPosePublisher : MonoBehaviour
 
             PoseMsg handPalmPose = new PoseMsg()
             {
-                position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z) * 5, -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x) * 5, (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y) * 5),
+                position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z), -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x), (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y)),
                 orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
             };
 
