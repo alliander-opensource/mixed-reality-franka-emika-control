@@ -43,6 +43,7 @@ public class HandPosePublisher : MonoBehaviour
         gripper_state = null;
         prev_gripper_state = null;
         direct_control_active = false;
+
     }
 
     public bool check_gripper_change(string gripper_state, string prev_gripper_state)
@@ -160,6 +161,29 @@ public class HandPosePublisher : MonoBehaviour
 
                 ros.Publish(HandPosePublisherTopic, handPalmMessage);
             }
-        }     
-    }
+
+            else 
+            {
+                PoseMsg readyPose = new PoseMsg()
+                {
+                    position = new PointMsg(0.4f, 0f, 0.5f),
+                    orientation = new QuaternionMsg(1f, 0f, 0f, 0f)
+                };
+
+                HeaderMsg readyHeader = new HeaderMsg()
+                {
+                    frame_id = "fr3_link0"
+                };
+
+                PoseStampedMsg readyMessage = new PoseStampedMsg()
+                {
+                    header = readyHeader,
+                    pose = readyPose
+                };
+
+                ros.Publish(HandPosePublisherTopic, readyMessage);
+            }
+
+        }
+    }     
 }
