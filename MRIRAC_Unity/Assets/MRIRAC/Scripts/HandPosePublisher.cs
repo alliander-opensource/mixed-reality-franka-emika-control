@@ -44,6 +44,8 @@ public class HandPosePublisher : MonoBehaviour
         prev_gripper_state = null;
         direct_control_active = false;
 
+        HandObject.transform.SetParent(DirectControlEnvObject.transform);
+
     }
 
     public bool check_gripper_change(string gripper_state, string prev_gripper_state)
@@ -89,7 +91,14 @@ public class HandPosePublisher : MonoBehaviour
             HandObject.transform.position = PalmPose.Position;
             HandObject.transform.rotation = PalmPose.Rotation;
 
-            Vector3 T_Hand_DirectEnv = DirectControlEnvObject.transform.InverseTransformPoint(HandObject.transform.position);
+            Vector3 T_Hand_DirectEnv = HandObject.transform.localPosition;
+            Quaternion R_Hand_DirectEnv = HandObject.transform.localRotation;
+
+            Quaternion R_Unity_EndEffector_z = Quaternion.Euler(new Vector3(0, 0, -90));
+            Quaternion R_Unity_EndEffector_y = Quaternion.Euler(new Vector3(0, 90, 0));
+            Quaternion R_Unity_EndEffector_x = Quaternion.Euler(new Vector3(90, 0, 0));
+
+            Quaternion R_EndEffector =  R_Hand_DirectEnv; //R_Unity_EndEffector_x * R_Unity_EndEffector_y * R_Unity_EndEffector_z *
 
             Debug.Log("Palm pose in world frame:");
             Debug.Log(HandObject.transform.position);
@@ -97,7 +106,7 @@ public class HandPosePublisher : MonoBehaviour
 
             Debug.Log("Palm pose in environment frame:");
             Debug.Log(T_Hand_DirectEnv);
-            //Debug.Log(PalmPose.Rotation.eulerAngles);
+            Debug.Log(R_Hand_DirectEnv.eulerAngles);
 
             
 
@@ -105,8 +114,9 @@ public class HandPosePublisher : MonoBehaviour
             {
                 //position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z), -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x), (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y)),
                 position = new PointMsg((T_Hand_DirectEnv[2] + 0.4f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)),
-                //orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
-                orientation = new QuaternionMsg(1f, 0f, 0f, 0f)
+                //position = new PointMsg((0.4f), -(0.0f), (0.5f)),
+                orientation = new QuaternionMsg(R_EndEffector[0], R_EndEffector[1], R_EndEffector[2], R_EndEffector[3])
+                //orientation = new QuaternionMsg(1f, 0f, 0f, 0f)
             };
 
             HeaderMsg handPalmHeader = new HeaderMsg()
