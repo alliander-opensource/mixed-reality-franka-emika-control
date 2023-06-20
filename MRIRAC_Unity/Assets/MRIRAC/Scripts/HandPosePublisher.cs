@@ -87,11 +87,26 @@ public class HandPosePublisher : MonoBehaviour
 
             handRight.TryGetJoint(TrackedHandJoint.Palm, out MixedRealityPose PalmPose);
             HandObject.transform.position = PalmPose.Position;
+            HandObject.transform.rotation = PalmPose.Rotation;
+
+            Vector3 T_Hand_DirectEnv = DirectControlEnvObject.transform.InverseTransformPoint(HandObject.transform.position);
+
+            Debug.Log("Palm pose in world frame:");
+            Debug.Log(HandObject.transform.position);
+            Debug.Log(HandObject.transform.rotation.eulerAngles);
+
+            Debug.Log("Palm pose in environment frame:");
+            Debug.Log(T_Hand_DirectEnv);
+            //Debug.Log(PalmPose.Rotation.eulerAngles);
+
+            
 
             PoseMsg handPalmPose = new PoseMsg()
             {
-                position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z), -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x), (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y)),
-                orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
+                //position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z), -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x), (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y)),
+                position = new PointMsg((T_Hand_DirectEnv[2] + 0.4f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)),
+                //orientation = new QuaternionMsg(PalmPose.Rotation[0], PalmPose.Rotation[1], PalmPose.Rotation[2], PalmPose.Rotation[3])
+                orientation = new QuaternionMsg(1f, 0f, 0f, 0f)
             };
 
             HeaderMsg handPalmHeader = new HeaderMsg()
@@ -109,7 +124,7 @@ public class HandPosePublisher : MonoBehaviour
             if (direct_control_active)
             {
                 //Debug.Log(handPalmPose.position.x);
-                Debug.Log(handPalmPose.position.y);
+                //Debug.Log(handPalmPose.position.y);
                 //Debug.Log(handPalmPose.position.z);
 
                 handRight.TryGetJoint(TrackedHandJoint.IndexTip, out MixedRealityPose IndexTipPose);
