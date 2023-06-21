@@ -32,6 +32,9 @@ public class HandPosePublisher : MonoBehaviour
     [SerializeField]
     private GameObject DirectControlEnvObject;
 
+    [SerializeField]
+    private GameObject RobotHandle;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,28 +95,45 @@ public class HandPosePublisher : MonoBehaviour
             HandObject.transform.rotation = PalmPose.Rotation;
 
             Vector3 T_Hand_DirectEnv = HandObject.transform.localPosition;
-            Quaternion R_Hand_DirectEnv = HandObject.transform.localRotation;
+            Quaternion R_Hand_DirectEnv_lh = HandObject.transform.localRotation;
+            Quaternion R_Hand_DirectEnv_rh = new Quaternion(-R_Hand_DirectEnv_lh.y, R_Hand_DirectEnv_lh.z, R_Hand_DirectEnv_lh.x, R_Hand_DirectEnv_lh.w);
+            // Quaternion R_DirectEnv_Unity = DirectControlEnvObject.transform.rotation;
+            // Quaternion R_RobotBase_Unity = RobotHandle.transform.rotation;
+            // Quaternion R_Ros_RobotBase = Quaternion.Euler(new Vector3(-90, -90, 0));
+            // Quaternion R_Hand_unity = R_Hand_DirectEnv * R_DirectEnv_Unity;
 
-            Quaternion R_Unity_EndEffector_z = Quaternion.Euler(new Vector3(0, 0, -90));
-            Quaternion R_Unity_EndEffector_y = Quaternion.Euler(new Vector3(0, 90, 0));
-            Quaternion R_Unity_EndEffector_x = Quaternion.Euler(new Vector3(90, 0, 0));
+            // Quaternion R_Unity_EndEffector_z = Quaternion.Euler(new Vector3(0, 0, -90));
+            // Quaternion R_Unity_EndEffector_y = Quaternion.Euler(new Vector3(0, 90, 0));
+            // Quaternion R_Unity_EndEffector_x = Quaternion.Euler(new Vector3(90, 0, 0));
 
-            Quaternion R_EndEffector =  R_Hand_DirectEnv; //R_Unity_EndEffector_x * R_Unity_EndEffector_y * R_Unity_EndEffector_z *
+            Quaternion R_EndEffector = R_Hand_DirectEnv_rh; //Quaternion.Euler(new Vector3(-180, 0, 0)) * 
 
-            Debug.Log("Palm pose in world frame:");
-            Debug.Log(HandObject.transform.position);
-            Debug.Log(HandObject.transform.rotation.eulerAngles);
+            Debug.Log("Palm pose rotation in environment frame left handed:");
+            //Debug.Log(HandObject.transform.position);
+            Debug.Log(R_Hand_DirectEnv_lh.eulerAngles);
 
-            Debug.Log("Palm pose in environment frame:");
-            Debug.Log(T_Hand_DirectEnv);
-            Debug.Log(R_Hand_DirectEnv.eulerAngles);
+            Debug.Log("Palm pose rotation in environment frame right handed:");
+            //Debug.Log(T_Hand_DirectEnv);
+            Debug.Log(R_Hand_DirectEnv_rh.eulerAngles);
+
+            Debug.Log("Hand rotation in robotbase frame:");
+            Debug.Log(R_EndEffector.eulerAngles);
+
+            // Debug.Log("Env rotation in unity frame:");
+            // Debug.Log(R_DirectEnv_Unity.eulerAngles);
+
+            // Debug.Log("Robotbase rotation in unity frame:");
+            // Debug.Log(R_RobotBase_Unity.eulerAngles);
+
+            // Debug.Log("Ros rotation in Robotbase frame:");
+            // Debug.Log(R_Ros_RobotBase.eulerAngles);
 
             
 
             PoseMsg handPalmPose = new PoseMsg()
             {
                 //position = new PointMsg((PalmPose.Position[2] - DirectControlEnvObject.transform.position.z), -(PalmPose.Position[0] - DirectControlEnvObject.transform.position.x), (PalmPose.Position[1] - DirectControlEnvObject.transform.position.y)),
-                position = new PointMsg((T_Hand_DirectEnv[2] + 0.4f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)),
+                position = new PointMsg((T_Hand_DirectEnv[2] + 0.6f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)), //[2] + 0.4f
                 //position = new PointMsg((0.4f), -(0.0f), (0.5f)),
                 orientation = new QuaternionMsg(R_EndEffector[0], R_EndEffector[1], R_EndEffector[2], R_EndEffector[3])
                 //orientation = new QuaternionMsg(1f, 0f, 0f, 0f)
