@@ -108,16 +108,16 @@ public class HandPosePublisher : MonoBehaviour
 
             Quaternion R_EndEffector = R_Hand_DirectEnv_rh; //Quaternion.Euler(new Vector3(-180, 0, 0)) * 
 
-            Debug.Log("Palm pose rotation in environment frame left handed:");
+            //Debug.Log("Palm pose rotation in environment frame left handed:");
             //Debug.Log(HandObject.transform.position);
-            Debug.Log(R_Hand_DirectEnv_lh.eulerAngles);
+            //Debug.Log(R_Hand_DirectEnv_lh.eulerAngles);
 
-            Debug.Log("Palm pose rotation in environment frame right handed:");
+            //Debug.Log("Palm pose rotation in environment frame right handed:");
             //Debug.Log(T_Hand_DirectEnv);
-            Debug.Log(R_Hand_DirectEnv_rh.eulerAngles);
+            //Debug.Log(R_Hand_DirectEnv_rh.eulerAngles);
 
-            Debug.Log("Hand rotation in robotbase frame:");
-            Debug.Log(R_EndEffector.eulerAngles);
+            //Debug.Log("Hand rotation in robotbase frame:");
+            //Debug.Log(R_EndEffector.eulerAngles);
 
             // Debug.Log("Env rotation in unity frame:");
             // Debug.Log(R_DirectEnv_Unity.eulerAngles);
