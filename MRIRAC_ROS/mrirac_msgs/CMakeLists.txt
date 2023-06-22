@@ -23,6 +23,7 @@ add_service_files(
   TrajectoryPlan.srv
   StartPickAndPlace.srv
   PlanPickAndPlace.srv
+  WaypointTrajectoryPlan.srv
 )
 
 add_action_files(
