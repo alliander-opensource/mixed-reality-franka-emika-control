@@ -10,7 +10,7 @@ namespace Microsoft.MixedReality.SampleQRCodes
     {
         public GameObject qrCodePrefab;
 
-        private SortedDictionary<System.Guid, GameObject> qrCodesObjectsList;
+        public SortedDictionary<System.Guid, GameObject> qrCodesObjectsList;
         private bool clearExisting = false;
 
         [SerializeField]

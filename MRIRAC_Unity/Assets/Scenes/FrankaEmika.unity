@@ -2915,6 +2915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df5aeed70f7245b43922b340ea00db1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  QRCodesManager: {fileID: 305549884}
 --- !u!1001 &277340402
 PrefabInstance:
   m_ObjectHideFlags: 0
