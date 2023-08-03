@@ -74,10 +74,10 @@ PickAndPlaceNode::PickAndPlaceNode(const std::string &pick_and_place_server_name
     abort_pick_and_place_server_ = node_handle_.advertiseService("abort", &PickAndPlaceNode::Abort, this);
     open_gripper_server_ = node_handle_.advertiseService("open_gripper", &PickAndPlaceNode::OpenGripper, this);
     close_gripper_server_ = node_handle_.advertiseService("close_gripper", &PickAndPlaceNode::CloseGripper, this);
-    move_group_interface_.setPlannerId("RRTstar");
-    move_group_interface_.setPlanningTime(5.0f);
-    planner_interface_.setPlannerId("RRTstar");
-    planner_interface_.setPlanningTime(5.0f);
+    //move_group_interface_.setPlannerId("RRTstar");
+    //move_group_interface_.setPlanningTime(5.0f);
+    //planner_interface_.setPlannerId("RRTstar");
+    //planner_interface_.setPlanningTime(5.0f);
 
 }
 
@@ -114,8 +114,8 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
         return true;
     }
 
-    move_group_interface_.setPlanningTime(10.0f);
-    planner_interface_.setPlanningTime(10.0f);
+    //move_group_interface_.setPlanningTime(10.0f);
+    //planner_interface_.setPlanningTime(10.0f);
 
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
@@ -146,8 +146,8 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
         return true;
     }
 
-    move_group_interface_.setPlanningTime(5.0f);
-    planner_interface_.setPlanningTime(5.0f);
+    //move_group_interface_.setPlanningTime(5.0f);
+    //planner_interface_.setPlanningTime(5.0f);
 
     // RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 

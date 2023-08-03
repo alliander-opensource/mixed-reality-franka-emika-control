@@ -4,11 +4,33 @@ using UnityEngine;
 
 public class HandTriggerEvent : MonoBehaviour
 {
-    private void OnTriggerStay(Collider other)
+    [SerializeField]
+    public GameObject PublisherObject;
+
+    private HandPosePublisher HandPosePublisherScript;
+
+    void Start()
     {
+        HandPosePublisherScript = PublisherObject.GetComponent<HandPosePublisher>();
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        
         if (other.tag == "DirectControlEnvironment")
         {
-            Debug.Log("Hand in environment");
+            Debug.Log("Entered object");
+            HandPosePublisherScript.toggle_direct_control();
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+
+        if (other.tag == "DirectControlEnvironment")
+        {
+            Debug.Log("Exited object");
+            HandPosePublisherScript.toggle_direct_control();
         }
     }
 }
