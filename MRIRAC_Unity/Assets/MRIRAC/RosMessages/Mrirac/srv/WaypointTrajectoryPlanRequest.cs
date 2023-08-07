@@ -13,14 +13,14 @@ namespace RosMessageTypes.Mrirac
         public const string k_RosMessageName = "mrirac_msgs/WaypointTrajectoryPlan";
         public override string RosMessageName => k_RosMessageName;
 
-        public Geometry.PoseMsg[] waypoints;
+        public Geometry.PoseArrayMsg waypoints;
 
         public WaypointTrajectoryPlanRequest()
         {
-            this.waypoints = new Geometry.PoseMsg[0];
+            this.waypoints = new Geometry.PoseArrayMsg();
         }
 
-        public WaypointTrajectoryPlanRequest(Geometry.PoseMsg[] waypoints)
+        public WaypointTrajectoryPlanRequest(Geometry.PoseArrayMsg waypoints)
         {
             this.waypoints = waypoints;
         }
@@ -29,19 +29,18 @@ namespace RosMessageTypes.Mrirac
 
         private WaypointTrajectoryPlanRequest(MessageDeserializer deserializer)
         {
-            deserializer.Read(out this.waypoints, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            this.waypoints = Geometry.PoseArrayMsg.Deserialize(deserializer);
         }
 
         public override void SerializeTo(MessageSerializer serializer)
         {
-            serializer.WriteLength(this.waypoints);
             serializer.Write(this.waypoints);
         }
 
         public override string ToString()
         {
             return "WaypointTrajectoryPlanRequest: " +
-            "\nwaypoints: " + System.String.Join(", ", waypoints.ToList());
+            "\nwaypoints: " + waypoints.ToString();
         }
 
 #if UNITY_EDITOR

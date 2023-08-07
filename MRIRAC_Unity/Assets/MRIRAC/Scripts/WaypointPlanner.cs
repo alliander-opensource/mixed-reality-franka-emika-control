@@ -10,7 +10,7 @@ using RosMessageTypes.Std;
 using System;
 using System.Linq;
 
-public class TrajectoryPlanner_Fr3 : MonoBehaviour
+public class WaypointPlanner : MonoBehaviour
 {
     private ROSConnection ros;
 
@@ -23,17 +23,30 @@ public class TrajectoryPlanner_Fr3 : MonoBehaviour
     private GameObject robot;
     [SerializeField]
     private GameObject root;
+
+
     [SerializeField]
     private GameObject targetObject;
-    [SerializeField]
-    private GameObject targetEndEffector;
-    SetTargetShaders setTargetShaders;
 
-    EndEffectorPos planningTarget;
+
+    [SerializeField]
+    private GameObject targetEndEffector1;
+    // private GameObject targetEndEffector2;
+    // private GameObject targetEndEffector3;
+
+    // private GameObject waypoint1;
+    // private GameObject waypoint2;
+    // private GameObject waypoint3;
+    SetTargetShaders setTargetShaders1;
+    // SetTargetShaders setTargetShaders2;
+    // SetTargetShaders setTargetShaders3;
+
+    EndEffectorPos planningTarget1;
+    // EndEffectorPos planningTarget2;
+    // EndEffectorPos planningTarget3;
 
     public UpdateRobot robotUpdater;
     RobotManager robotManager;
-
 
 
     // Trajectory Lines
@@ -44,7 +57,7 @@ public class TrajectoryPlanner_Fr3 : MonoBehaviour
     [SerializeField]
     [Range(10.0f, 100.0f)]
     private float planVizualizationSpeed;
-    static string[] linkLineTags = { "end_effector", "link_2", "link_3", "link_4", "link_5", "link_6" };
+    static string[] linkLineTags = { "link_1", "link_2", "link_3", "link_4", "link_5", "link_6", "link_7" };
     GameObject[] joints = new GameObject[linkLineTags.Length];
     GameObject[] lines = new GameObject[linkLineTags.Length];
     LineRenderer[] lineRenderers = new LineRenderer[linkLineTags.Length];
@@ -52,22 +65,34 @@ public class TrajectoryPlanner_Fr3 : MonoBehaviour
     float[] lastTrajAngles;
 
     // Waypoint trajectory
-    private PoseMsg[] waypoints;
+    [SerializeField]
+    private GameObject WaypointsGameObject;
+    [SerializeField]
+    private GameObject WaypointPrefab;
+    public PoseArrayMsg waypoints;
+    public List<PoseMsg> listOfWaypoints;
 
 
     void Awake()
     {
-        planningTarget = targetEndEffector.GetComponent<EndEffectorPos>();
+        planningTarget1 = targetEndEffector1.GetComponent<EndEffectorPos>();
+        // planningTarget2 = targetEndEffector2.GetComponent<EndEffectorPos>();
+        // planningTarget3 = targetEndEffector3.GetComponent<EndEffectorPos>();
+
         robotUpdater = robot.GetComponent<UpdateRobot>();
         robotManager = robot.GetComponent<RobotManager>();
-        setTargetShaders = targetObject.GetComponent<SetTargetShaders>();
+
+        setTargetShaders1 = targetObject.GetComponent<SetTargetShaders>();
+        // setTargetShaders2 = waypoint2.GetComponent<SetTargetShaders>();
+        // setTargetShaders3 = waypoint3.GetComponent<SetTargetShaders>();
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
         ros = ROSConnection.GetOrCreateInstance();
-        ros.RegisterRosService<TrajectoryPlanRequest, TrajectoryPlanResponse>(plannerServiceName);
+        ros.RegisterRosService<WaypointTrajectoryPlanRequest, WaypointTrajectoryPlanResponse>(plannerServiceName);
         ros.RegisterRosService<EmptyRequest, EmptyResponse>(executorServiceName);
 
 
@@ -82,19 +107,15 @@ public class TrajectoryPlanner_Fr3 : MonoBehaviour
 
     public void CallTrajectoryPlanner()
     {
-        PoseMsg targetPose = new PoseMsg()
-        {
-            position = new PointMsg(planningTarget.Position.x, planningTarget.Position.y, planningTarget.Position.z),
-            orientation = new QuaternionMsg(planningTarget.Orientation.x, planningTarget.Orientation.y, planningTarget.Orientation.z, planningTarget.Orientation.w)
-        };
+        waypoints.poses = listOfWaypoints.ToArray();
 
-        TrajectoryPlanRequest request = new TrajectoryPlanRequest(targetPose);
+        WaypointTrajectoryPlanRequest request = new WaypointTrajectoryPlanRequest(waypoints);
 
-        ros.SendServiceMessage<TrajectoryPlanResponse>(plannerServiceName, request, TrajectoryPlannerCallback);
+        ros.SendServiceMessage<WaypointTrajectoryPlanResponse>(plannerServiceName, request, TrajectoryPlannerCallback);
     }
 
 
-    void TrajectoryPlannerCallback(TrajectoryPlanResponse response)
+    void TrajectoryPlannerCallback(WaypointTrajectoryPlanResponse response)
     {
         if (response.success)
         {
@@ -109,7 +130,7 @@ public class TrajectoryPlanner_Fr3 : MonoBehaviour
         else
         {
             Debug.Log("No motion plan found!");
-            StartCoroutine(setTargetShaders.ShowError());
+            StartCoroutine(setTargetShaders1.ShowError());
         }
     }
 
@@ -185,4 +206,36 @@ public class TrajectoryPlanner_Fr3 : MonoBehaviour
 
     public void ToggleLines() { showLines = !showLines; }
 
+    public void addPoseToWaypointList()
+    {
+
+        PoseMsg new_waypoint = new PoseMsg()
+        {
+            position = new PointMsg(planningTarget1.Position.x, planningTarget1.Position.y, planningTarget1.Position.z),
+            orientation = new QuaternionMsg(planningTarget1.Orientation.x, planningTarget1.Orientation.y, planningTarget1.Orientation.z, planningTarget1.Orientation.w)
+        };
+
+        listOfWaypoints.Add(new_waypoint);
+
+        GameObject WaypointObject = Instantiate(WaypointPrefab);
+        WaypointObject.name = System.Guid.NewGuid().ToString();
+        WaypointObject.transform.SetParent(WaypointsGameObject.transform, false);
+        WaypointObject.transform.position = new Vector3(targetEndEffector1.transform.position.x, targetEndEffector1.transform.position.y, targetEndEffector1.transform.position.z);
+
+        
+
+        
+    }
+
+    public void resetWaypointList()
+    {
+        // Debug.Log(listOfWaypoints.Count);
+        listOfWaypoints.Clear();
+        // Debug.Log(listOfWaypoints.Count);
+
+        foreach (Transform WaypointTransform in WaypointsGameObject.transform)
+        {
+            Destroy(WaypointTransform.gameObject);
+        }
+    }
 }
