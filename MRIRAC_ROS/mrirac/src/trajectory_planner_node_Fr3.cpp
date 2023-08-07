@@ -9,8 +9,10 @@
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/AttachedCollisionObject.h>
 #include <moveit_msgs/CollisionObject.h>
+#include <geometry_msgs/PoseArray.h>
 
 #include "mrirac_msgs/TrajectoryPlan.h"
+#include "mrirac_msgs/WaypointTrajectoryPlan.h"
 #include "mrirac_msgs/MeshObstacle.h"
 #include "mrirac_msgs/MeshObstacles.h"
 #include "mrirac_msgs/PoseCorrectionAction.h"
@@ -23,6 +25,8 @@ private:
 
   ros::ServiceServer trajectory_server_;
   ros::ServiceServer execute_server_;
+  ros::ServiceServer waypoint_server_;
+  ros::ServiceServer execute_waypoint_server_;
   ros::ServiceServer clear_obstacles_server_;
   ros::ServiceServer home_service_;
   ros::ServiceServer set_standard_planner_server_;
@@ -30,6 +34,7 @@ private:
   ros::ServiceServer set_RRTStar_planner_server_;
 
   ros::Subscriber target_pose_subscriber_;
+  ros::Subscriber waypoint_subscriber_;
   ros::Subscriber hologram_obstacle_sub_;
   ros::Subscriber spatial_obstacle_sub_;
 
@@ -48,6 +53,7 @@ private:
   geometry_msgs::Pose target_pose_;
   geometry_msgs::Pose pre_grasp_pose_;
   geometry_msgs::Pose grasp_pose_;
+  geometry_msgs::PoseArray waypoints_;
 
   bool simulation;
 
@@ -55,11 +61,14 @@ private:
 
   bool PlanTrajectory(mrirac_msgs::TrajectoryPlan::Request &req, mrirac_msgs::TrajectoryPlan::Response &res);
   bool ExecuteTrajectory(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res);
+  bool ExecuteWaypoints(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   bool ClearObstacles(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   bool SetStandardPlanner(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   bool SetRRTConnectPlanner(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   bool SetRRTStarPlanner(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   void TargetPoseCallback(geometry_msgs::Pose target_pose);
+  void WaypointCallback(geometry_msgs::PoseArray waypoints);
   void UpdateHologramObstacles(const mrirac_msgs::MeshObstacles msg);
   void UpdateSpatialObstacles(const mrirac_msgs::MeshObstacle msg);
   bool HomeArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
@@ -70,6 +79,7 @@ public:
 };
 
 TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle) : node_handle_(node_handle), pose_correction_action_client_("/mrirac_pose_correction/pose_correction", true), move_group_interface_(kPlanningGroup_)
+
 {
   ros::param::param<bool>("~simulation", simulation, false);
 
@@ -83,6 +93,8 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
 
   trajectory_server_ = node_handle_.advertiseService("plan_trajectory", &TrajectoryPlannerNode::PlanTrajectory, this);
   execute_server_ = node_handle_.advertiseService("execute_trajectory", &TrajectoryPlannerNode::ExecuteTrajectory, this);
+  waypoint_server_ = node_handle_.advertiseService("plan_waypoints", &TrajectoryPlannerNode::PlanWaypoints, this);
+  execute_waypoint_server_ = node_handle_.advertiseService("execute_waypoints", &TrajectoryPlannerNode::ExecuteWaypoints, this);
 
   clear_obstacles_server_ = node_handle_.advertiseService("clear_obstacles", &TrajectoryPlannerNode::ClearObstacles, this);
   home_service_ = node_handle_.advertiseService("home_arm", &TrajectoryPlannerNode::HomeArm, this);
@@ -92,6 +104,7 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
   set_RRTStar_planner_server_ = node_handle_.advertiseService("set_RRTStar_planner", &TrajectoryPlannerNode::SetRRTStarPlanner, this);
 
   target_pose_subscriber_ = node_handle_.subscribe("unity_target_pose", 100, &TrajectoryPlannerNode::TargetPoseCallback, this);
+  waypoint_subscriber_ = node_handle_.subscribe("unity_waypoints", 100, &TrajectoryPlannerNode::WaypointCallback, this);
   hologram_obstacle_sub_ = node_handle_.subscribe("unity_hologram_obstacles", 100, &TrajectoryPlannerNode::UpdateHologramObstacles, this);
   spatial_obstacle_sub_ = node_handle_.subscribe("unity_spatial_obstacles", 100, &TrajectoryPlannerNode::UpdateSpatialObstacles, this);
 
@@ -146,6 +159,65 @@ bool TrajectoryPlannerNode::ExecuteTrajectory(std_srvs::Empty::Request &req, std
   return true;
 }
 
+bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
+{
+  // Store the received waypoints
+  waypoints_ = req.waypoints;
+  std::vector<geometry_msgs::Pose> waypoints;
+  waypoints.insert(waypoints.end(), waypoints_.poses.begin(), waypoints_.poses.end());
+
+  // Plan the trajectory passing through the waypoints
+  moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
+  moveit_msgs::RobotTrajectory robot_trajectory;
+  double jump_threshold = 0.0;
+  double eef_step = 0.01;
+  double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory);
+
+  if (fraction == 1.0)
+  {
+    motion_plan.trajectory_ = robot_trajectory;
+    res.trajectory = motion_plan.trajectory_.joint_trajectory;
+    res.success = true;
+
+    current_plan_ = motion_plan;
+    trajectory_planned_ = true;
+  }
+  else
+  {
+    res.trajectory = trajectory_msgs::JointTrajectory();
+    res.success = false;
+  }
+
+  return true;
+}
+
+bool TrajectoryPlannerNode::ExecuteWaypoints(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  if (trajectory_planned_)
+  {
+    move_group_interface_.execute(current_plan_);
+    trajectory_planned_ = false;
+
+    std::vector<geometry_msgs::Pose> waypoints;
+    waypoints.insert(waypoints.end(), waypoints_.poses.begin(), waypoints_.poses.end());
+
+    // Optionally, apply pose correction action after each waypoint execution
+    for (const auto& waypoint : waypoints)
+    {
+      mrirac_msgs::PoseCorrectionGoal goal;
+      goal.target_pose = waypoint;
+      pose_correction_action_client_.sendGoal(goal);
+      pose_correction_action_client_.waitForResult();
+    }
+  }
+  else
+  {
+    ROS_WARN("No trajectory is planned.");
+  }
+
+  return true;
+}
+
 bool TrajectoryPlannerNode::ClearObstacles(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
   ROS_INFO("clearing planning scene");
@@ -187,6 +259,11 @@ bool TrajectoryPlannerNode::SetRRTStarPlanner(std_srvs::Empty::Request &req, std
 void TrajectoryPlannerNode::TargetPoseCallback(geometry_msgs::Pose target_pose)
 {
   target_pose_ = target_pose;
+}
+
+void TrajectoryPlannerNode::WaypointCallback(geometry_msgs::PoseArray waypoints)
+{
+  waypoints_ = waypoints;
 }
 
 void TrajectoryPlannerNode::UpdateHologramObstacles(const mrirac_msgs::MeshObstacles msg)
