@@ -46,12 +46,6 @@ public class Environments : MonoBehaviour
         ros.RegisterPublisher<MeshObstaclesMsg>(hologramObstacleTopic);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void PublishHologramMeshes()
     {
         hologramObstacleMeshFilters = EnvironmentsObject.GetComponentsInChildren<MeshFilter>();
