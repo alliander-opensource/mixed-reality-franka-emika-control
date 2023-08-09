@@ -29,6 +29,7 @@ private:
   ros::ServiceServer execute_waypoint_server_;
   ros::ServiceServer clear_obstacles_server_;
   ros::ServiceServer home_service_;
+  ros::ServiceServer startPosition_service_;
   ros::ServiceServer set_standard_planner_server_;
   ros::ServiceServer set_RRTConnect_planner_server_;
   ros::ServiceServer set_RRTStar_planner_server_;
@@ -72,6 +73,7 @@ private:
   void UpdateHologramObstacles(const mrirac_msgs::MeshObstacles msg);
   void UpdateSpatialObstacles(const mrirac_msgs::MeshObstacle msg);
   bool HomeArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool StartPositionArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
 
 public:
   TrajectoryPlannerNode(const ros::NodeHandle &node_handle);
@@ -98,6 +100,7 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
 
   clear_obstacles_server_ = node_handle_.advertiseService("clear_obstacles", &TrajectoryPlannerNode::ClearObstacles, this);
   home_service_ = node_handle_.advertiseService("home_arm", &TrajectoryPlannerNode::HomeArm, this);
+  startPosition_service_ = node_handle_.advertiseService("start_position_arm", &TrajectoryPlannerNode::StartPositionArm, this);
 
   set_standard_planner_server_ = node_handle_.advertiseService("set_standard_planner", &TrajectoryPlannerNode::SetStandardPlanner, this);
   set_RRTConnect_planner_server_ = node_handle_.advertiseService("set_RRTConnect_planner", &TrajectoryPlannerNode::SetRRTConnectPlanner, this);
@@ -323,6 +326,24 @@ bool TrajectoryPlannerNode::HomeArm(std_srvs::Empty::Request &req, std_srvs::Emp
 {
   ROS_INFO("sending to home");
   move_group_interface_.setNamedTarget("ready");
+  moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
+  bool success = (move_group_interface_.plan(motion_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  ROS_INFO("planning complete");
+  if (success)
+  {
+    move_group_interface_.execute(motion_plan);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool TrajectoryPlannerNode::StartPositionArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  ROS_INFO("sending to starting position");
+  move_group_interface_.setNamedTarget("experiment_start");
   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
   bool success = (move_group_interface_.plan(motion_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   ROS_INFO("planning complete");
