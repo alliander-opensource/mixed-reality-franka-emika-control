@@ -45,6 +45,6 @@ public class Timer : MonoBehaviour
 
     private void SetTimerText()
     {
-        timerText.text = currentTime.ToString();
+        timerText.text = currentTime.ToString("0.0");
     }
 }

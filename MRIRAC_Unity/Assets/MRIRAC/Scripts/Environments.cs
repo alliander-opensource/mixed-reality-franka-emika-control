@@ -8,6 +8,9 @@ using RosMessageTypes.Mrirac;
 public class Environments : MonoBehaviour
 {
     [SerializeField]
+    private GameObject serviceObject;
+
+    [SerializeField]
     private string hologramObstacleTopic;
 
     // ROS Connector
@@ -90,11 +93,15 @@ public class Environments : MonoBehaviour
 
     public void ActivateEnvironment(GameObject PrefabEnvironment)
     {
-
         foreach (Transform environmentTransform in EnvironmentsObject.transform)
         {
             Destroy(environmentTransform.gameObject);
         }
+
+        PublishHologramMeshes();
+
+        StartPositionArm serviceStartPosition = serviceObject.GetComponent<StartPositionArm>();
+        serviceStartPosition.CallStartPositionArm();
 
         GameObject Environment = Instantiate(PrefabEnvironment, EnvironmentsObject.transform, false);
         Environment.name = "Environment";
