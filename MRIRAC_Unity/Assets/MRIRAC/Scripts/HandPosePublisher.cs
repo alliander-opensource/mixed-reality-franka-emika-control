@@ -84,6 +84,16 @@ public class HandPosePublisher : MonoBehaviour
         }
     }
 
+    public void activate_left_hand()
+    {
+        handedness = HandEnum.L;
+    }
+
+    public void activate_right_hand()
+    {
+        handedness = HandEnum.R;
+    }
+
     // Update is called once per frame
     void Update()
     {   
