@@ -10,6 +10,11 @@
 #include <moveit_msgs/AttachedCollisionObject.h>
 #include <moveit_msgs/CollisionObject.h>
 #include <geometry_msgs/PoseArray.h>
+#include <moveit_msgs/Constraints.h>
+#include <moveit_msgs/PositionConstraint.h>
+#include <geometry_msgs/Vector3.h>
+#include <shape_msgs/SolidPrimitive.h>
+#include <geometry_msgs/Pose.h>
 
 #include "mrirac_msgs/TrajectoryPlan.h"
 #include "mrirac_msgs/WaypointTrajectoryPlan.h"
@@ -33,6 +38,8 @@ private:
   ros::ServiceServer set_standard_planner_server_;
   ros::ServiceServer set_RRTConnect_planner_server_;
   ros::ServiceServer set_RRTStar_planner_server_;
+  ros::ServiceServer set_workspace_constraint_service_;
+  ros::ServiceServer clear_workspace_constraint_service_;
 
   ros::Subscriber target_pose_subscriber_;
   ros::Subscriber waypoint_subscriber_;
@@ -74,6 +81,8 @@ private:
   void UpdateSpatialObstacles(const mrirac_msgs::MeshObstacle msg);
   bool HomeArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   bool StartPositionArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool SetWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool ClearWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
 
 public:
   TrajectoryPlannerNode(const ros::NodeHandle &node_handle);
@@ -105,6 +114,8 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
   set_standard_planner_server_ = node_handle_.advertiseService("set_standard_planner", &TrajectoryPlannerNode::SetStandardPlanner, this);
   set_RRTConnect_planner_server_ = node_handle_.advertiseService("set_RRTConnect_planner", &TrajectoryPlannerNode::SetRRTConnectPlanner, this);
   set_RRTStar_planner_server_ = node_handle_.advertiseService("set_RRTStar_planner", &TrajectoryPlannerNode::SetRRTStarPlanner, this);
+  set_workspace_constraint_service_ = node_handle_.advertiseService("set_workspace_constraint", &TrajectoryPlannerNode::SetWorkspaceConstraint, this);
+  clear_workspace_constraint_service_ = node_handle_.advertiseService("clear_workspace_constraint", &TrajectoryPlannerNode::ClearWorkspaceConstraint, this);
 
   target_pose_subscriber_ = node_handle_.subscribe("unity_target_pose", 100, &TrajectoryPlannerNode::TargetPoseCallback, this);
   waypoint_subscriber_ = node_handle_.subscribe("unity_waypoints", 100, &TrajectoryPlannerNode::WaypointCallback, this);
@@ -255,6 +266,55 @@ bool TrajectoryPlannerNode::SetRRTConnectPlanner(std_srvs::Empty::Request &req, 
 bool TrajectoryPlannerNode::SetRRTStarPlanner(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
   move_group_interface_.setPlannerId("RRTstar");
+
+  return true;
+}
+
+bool TrajectoryPlannerNode::SetWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  moveit_msgs::Constraints constraints;
+  moveit_msgs::PositionConstraint position_constraint;
+  geometry_msgs::Vector3 target_point_offset;
+  shape_msgs::SolidPrimitive box;
+  geometry_msgs::Pose pose;
+
+  constraints.name = "Workspace constraint for the experiment";
+
+  position_constraint.header.frame_id = "fr3_link0";
+  position_constraint.link_name = "fr3_link8";
+
+  target_point_offset.x = 0.01;
+  target_point_offset.y = 0.01;
+  target_point_offset.z = 0.01;
+  position_constraint.target_point_offset = target_point_offset;
+
+  box.type = 1;
+  box.dimensions.push_back(0.2);
+  box.dimensions.push_back(2);
+  box.dimensions.push_back(0.8);
+  position_constraint.constraint_region.primitives.push_back(box);
+
+  pose.position.x = 0.4;
+  pose.position.y = 0;
+  pose.position.z = 0.4;
+  pose.orientation.x = 0;
+  pose.orientation.y = 0;
+  pose.orientation.z = 0;
+  pose.orientation.w = 1;
+  position_constraint.constraint_region.primitive_poses.push_back(pose);
+
+  constraints.position_constraints.push_back(position_constraint);
+
+  move_group_interface_.setPathConstraints(constraints);
+
+  ROS_INFO("set the constraint");
+
+  return true;
+}
+
+bool TrajectoryPlannerNode::ClearWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  move_group_interface_.clearPathConstraints();
 
   return true;
 }
