@@ -1,0 +1,15 @@
+{
+    "ros.distro": "noetic",
+    "python.autoComplete.extraPaths": [
+        "/home/koen/Projects/ws_MRIRAC_FR3/devel/lib/python3/dist-packages",
+        "/home/koen/Projects/ws_MRIRAC/devel/lib/python3/dist-packages",
+        "/home/koen/MRIRAC/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/koen/Projects/ws_MRIRAC_FR3/devel/lib/python3/dist-packages",
+        "/home/koen/Projects/ws_MRIRAC/devel/lib/python3/dist-packages",
+        "/home/koen/MRIRAC/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ]
+}

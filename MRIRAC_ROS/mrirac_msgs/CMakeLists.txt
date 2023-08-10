@@ -24,6 +24,7 @@ add_service_files(
   StartPickAndPlace.srv
   PlanPickAndPlace.srv
   WaypointTrajectoryPlan.srv
+  SwitchController.srv
 )
 
 add_action_files(

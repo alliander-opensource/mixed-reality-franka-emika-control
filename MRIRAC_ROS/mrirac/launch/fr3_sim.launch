@@ -8,7 +8,7 @@
     <arg name="transmission" default="effort" />
 
     <!-- Gazebo specific options -->
-    <arg name="gazebo_gui" default="true" />
+    <arg name="gazebo_gui" default="false" />
     <arg name="paused" default="false" />
 
     <!-- Rviz specific options -->
@@ -36,4 +36,13 @@
     <node name="mrirac_pick_and_place_Fr3" pkg="mrirac_pick_and_place" type="pick_and_place_node_Fr3" output="screen" >
         <param name="simulation" type="bool" value="true" />
     </node>
+
+    <rosparam file="$(find franka_example_controllers)/config/franka_example_controllers.yaml" subst_value="true" />
+
+    <node pkg="controller_manager"
+    type="spawner"
+    name="$(arg arm_id)_controller_spawner_2"
+    respawn="false" output="screen"
+    args="--stopped cartesian_impedance_example_controller"
+    />
 </launch>

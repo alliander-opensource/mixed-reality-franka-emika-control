@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/koen/Projects/ws_MRIRAC_FR3/devel/include/**",
+        "/home/koen/Projects/ws_MRIRAC/devel/include/**",
+        "/home/koen/MRIRAC/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/koen/Projects/ws_MRIRAC_FR3/src/franka_ros/franka_control/include/**",
+        "/home/koen/Projects/ws_MRIRAC_FR3/src/franka_ros/franka_example_controllers/include/**",
+        "/home/koen/Projects/ws_MRIRAC_FR3/src/franka_ros/franka_gazebo/include/**",
+        "/home/koen/Projects/ws_MRIRAC_FR3/src/franka_ros/franka_gripper/include/**",
+        "/home/koen/Projects/ws_MRIRAC_FR3/src/franka_ros/franka_hw/include/**",
+        "/home/koen/Projects/ws_MRIRAC/src/kinova-ros/kinova_moveit/inverse_kinematics_plugins/ikfast/j2n6s300_ikfast/include/**",
+        "/home/koen/Projects/ws_MRIRAC/src/kinova-ros/kinova_moveit/inverse_kinematics_plugins/ikfast/j2s6s300_ikfast/include/**",
+        "/home/koen/Projects/ws_MRIRAC/src/kinova-ros/kinova_moveit/inverse_kinematics_plugins/ikfast/j2s7s300_ikfast/include/**",
+        "/home/koen/Projects/ws_MRIRAC/src/kinova-ros/kinova_moveit/kinova_arm_moveit_demo/include/**",
+        "/home/koen/Projects/ws_MRIRAC/src/kinova-ros/kinova_driver/include/**",
+        "/home/koen/Projects/ws_MRIRAC/src/kinova-ros/kinova_moveit/inverse_kinematics_plugins/ikfast/m1n6s300_ikfast/include/**",
+        "/home/koen/Projects/ws_MRIRAC_FR3/src/rcdt_mrirac_fr3/MRIRAC_ROS/mrirac_lib/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
