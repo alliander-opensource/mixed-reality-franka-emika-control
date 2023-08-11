@@ -42,11 +42,17 @@ public class Environments : MonoBehaviour
     [SerializeField]
     private Vector3 GoalPositionCoordinates;
 
+    private SetWorkspaceConstraint serviceWorkspaceConstraint;
+    private StartPositionArm serviceStartPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         ros = ROSConnection.GetOrCreateInstance();
         ros.RegisterPublisher<MeshObstaclesMsg>(hologramObstacleTopic);
+
+        serviceWorkspaceConstraint = serviceObject.GetComponent<SetWorkspaceConstraint>();
+        serviceStartPosition = serviceObject.GetComponent<StartPositionArm>();
     }
 
     void PublishHologramMeshes()
@@ -93,6 +99,8 @@ public class Environments : MonoBehaviour
 
     public void ActivateEnvironment(GameObject PrefabEnvironment)
     {
+        serviceWorkspaceConstraint.CallClearWorkspaceConstraint();
+
         foreach (Transform environmentTransform in EnvironmentsObject.transform)
         {
             Destroy(environmentTransform.gameObject);
@@ -100,7 +108,6 @@ public class Environments : MonoBehaviour
 
         PublishHologramMeshes();
 
-        StartPositionArm serviceStartPosition = serviceObject.GetComponent<StartPositionArm>();
         serviceStartPosition.CallStartPositionArm();
 
         GameObject Environment = Instantiate(PrefabEnvironment, EnvironmentsObject.transform, false);
@@ -108,6 +115,8 @@ public class Environments : MonoBehaviour
         Environment.transform.localPosition = DistanceFromRobotArm;
 
         PublishHologramMeshes();
+
+        serviceWorkspaceConstraint.CallSetWorkspaceConstraint();
     }
 
     public void DestroyEnvironment()

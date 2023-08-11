@@ -12,11 +12,13 @@ public class TimerUI : MonoBehaviour
     private GameObject TimerUIObject;
 
     private bool TimerActive;
+    public GameObject timer;
 
     // Start is called before the first frame update
     void Start()
     {
         TimerActive = false;
+        TimerUIObject.transform.SetParent(Camera.main.transform, false);
     }
 
     // Update is called once per frame
@@ -24,9 +26,9 @@ public class TimerUI : MonoBehaviour
     {
         if (TimerActive)
         {
-            Vector3 inFrontOfCameraPos = new Vector3(-1.5f, 1.0f, 2.0f) + Camera.main.transform.position; // (Camera.main.transform.forward * 2.0f) + (Camera.main.transform.up * 1.0f) + (Camera.main.transform.right * -1.5f) 
-            transform.position = inFrontOfCameraPos;
-            transform.rotation = Quaternion.identity;
+            Vector3 inFrontOfCameraPos = new Vector3(-1.3f, 1.0f, 2.0f); // + Camera.main.transform.position; // (Camera.main.transform.forward * 2.0f) + (Camera.main.transform.up * 1.0f) + (Camera.main.transform.right * -1.5f) 
+            transform.localPosition = inFrontOfCameraPos;
+            transform.localRotation = Quaternion.identity; //Camera.main.transform.rotation;
         }
     }
 
@@ -37,7 +39,7 @@ public class TimerUI : MonoBehaviour
             Destroy(timerTransform.gameObject);
         }
 
-        GameObject timer = Instantiate(TimerPrefab, TimerUIObject.transform, true);
+        timer = Instantiate(TimerPrefab, TimerUIObject.transform, false);
         timer.name = "Timer";
         TimerActive = true;
     }
@@ -50,5 +52,17 @@ public class TimerUI : MonoBehaviour
         }
 
         TimerActive = false;
+    }
+
+    public void PauzeTimer()
+    {
+        Timer timer_script = timer.transform.GetChild(1).gameObject.GetComponent<Timer>();
+        timer_script.enabled = false;
+    }
+
+    public void ResumeTimer()
+    {
+        Timer timer_script = timer.transform.GetChild(1).gameObject.GetComponent<Timer>();
+        timer_script.enabled = true;
     }
 }

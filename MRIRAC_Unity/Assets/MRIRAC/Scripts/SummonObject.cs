@@ -9,4 +9,14 @@ public class SummonObject : MonoBehaviour
         transform.position = inFrontOfCameraPos;
         transform.rotation = Quaternion.identity;
     }
+
+    public void Rotate90Degrees()
+    {
+        transform.rotation = new Quaternion(0.0f, -0.7f, -0.7f, 0.0f);
+    }
+
+    // void Update()
+    // {
+    //     Debug.Log(transform.rotation);
+    // }
 }
