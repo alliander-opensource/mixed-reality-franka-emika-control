@@ -289,9 +289,9 @@ bool TrajectoryPlannerNode::SetWorkspaceConstraint(std_srvs::Empty::Request &req
   position_constraint.target_point_offset = target_point_offset;
 
   box.type = 1;
-  box.dimensions.push_back(0.2);
-  box.dimensions.push_back(2);
-  box.dimensions.push_back(0.8);
+  box.dimensions.push_back(0.4);  // x
+  box.dimensions.push_back(2);    // y
+  box.dimensions.push_back(0.8);  // z
   position_constraint.constraint_region.primitives.push_back(box);
 
   pose.position.x = 0.4;
