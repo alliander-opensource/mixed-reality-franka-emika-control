@@ -26,7 +26,7 @@ public class TimerUI : MonoBehaviour
     {
         if (TimerActive)
         {
-            Vector3 inFrontOfCameraPos = new Vector3(-1.3f, 1.0f, 2.0f); // + Camera.main.transform.position; // (Camera.main.transform.forward * 2.0f) + (Camera.main.transform.up * 1.0f) + (Camera.main.transform.right * -1.5f) 
+            Vector3 inFrontOfCameraPos = new Vector3(-0.5f, 0.5f, 2.0f); // + Camera.main.transform.position; // (Camera.main.transform.forward * 2.0f) + (Camera.main.transform.up * 1.0f) + (Camera.main.transform.right * -1.5f) 
             transform.localPosition = inFrontOfCameraPos;
             transform.localRotation = Quaternion.identity; //Camera.main.transform.rotation;
         }
