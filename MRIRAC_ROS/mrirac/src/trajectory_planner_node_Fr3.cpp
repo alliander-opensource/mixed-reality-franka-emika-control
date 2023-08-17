@@ -124,8 +124,11 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
 
   n_obstacles_pub_ = node_handle_.advertise<std_msgs::String>("n_obstacles", 100);
 
-  //move_group_interface_.setPlannerId("RRTstar");
-  //move_group_interface_.setPlanningTime(5.0f);
+  // move_group_interface_.setPlannerId("RRTstar");
+  // move_group_interface_.setPlanningTime(30.0f);
+  move_group_interface_.setMaxAccelerationScalingFactor(0.3f);
+  move_group_interface_.setMaxVelocityScalingFactor(0.3f);
+  // move_group_interface_.setWorkspace(-1.0f, -2.0f, 0.0f, 1.0f, 2.0f, 0.8f);
 }
 
 TrajectoryPlannerNode::~TrajectoryPlannerNode()
@@ -183,9 +186,9 @@ bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::R
   // Plan the trajectory passing through the waypoints
   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
   moveit_msgs::RobotTrajectory robot_trajectory;
-  double jump_threshold = 0.0;
+  double jump_threshold = 5.0;
   double eef_step = 0.01;
-  double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory);
+  double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
 
   if (fraction == 1.0)
   {
@@ -209,7 +212,8 @@ bool TrajectoryPlannerNode::ExecuteWaypoints(std_srvs::Empty::Request &req, std_
 {
   if (trajectory_planned_)
   {
-    move_group_interface_.execute(current_plan_);
+    RobotMovements::ExecutePlannedTrajectory(move_group_interface_, current_plan_, target_pose_, !simulation, pose_correction_action_client_);
+    // move_group_interface_.execute(current_plan_);
     trajectory_planned_ = false;
 
     std::vector<geometry_msgs::Pose> waypoints;
@@ -289,12 +293,12 @@ bool TrajectoryPlannerNode::SetWorkspaceConstraint(std_srvs::Empty::Request &req
   position_constraint.target_point_offset = target_point_offset;
 
   box.type = 1;
-  box.dimensions.push_back(0.4);  // x
+  box.dimensions.push_back(0.8);  // x
   box.dimensions.push_back(2);    // y
   box.dimensions.push_back(0.8);  // z
   position_constraint.constraint_region.primitives.push_back(box);
 
-  pose.position.x = 0.4;
+  pose.position.x = 0.6;
   pose.position.y = 0;
   pose.position.z = 0.4;
   pose.orientation.x = 0;
