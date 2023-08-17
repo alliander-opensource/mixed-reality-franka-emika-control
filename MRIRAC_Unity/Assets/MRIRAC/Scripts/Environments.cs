@@ -44,6 +44,8 @@ public class Environments : MonoBehaviour
 
     private SetWorkspaceConstraint serviceWorkspaceConstraint;
     private StartPositionArm serviceStartPosition;
+    private SetRRTConnectPlanner serviceSetRRTConnect;
+    private SetRRTStarPlanner serviceSetRRTStar;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,8 @@ public class Environments : MonoBehaviour
 
         serviceWorkspaceConstraint = serviceObject.GetComponent<SetWorkspaceConstraint>();
         serviceStartPosition = serviceObject.GetComponent<StartPositionArm>();
+        serviceSetRRTConnect =serviceObject.GetComponent<SetRRTConnectPlanner>();
+        serviceSetRRTStar =serviceObject.GetComponent<SetRRTStarPlanner>();
     }
 
     void PublishHologramMeshes()
@@ -99,6 +103,7 @@ public class Environments : MonoBehaviour
 
     public void ActivateEnvironment(GameObject PrefabEnvironment)
     {
+        serviceSetRRTConnect.CallSetRRTConnectPlanner();
         serviceWorkspaceConstraint.CallClearWorkspaceConstraint();
 
         foreach (Transform environmentTransform in EnvironmentsObject.transform)
@@ -115,8 +120,11 @@ public class Environments : MonoBehaviour
         Environment.transform.localPosition = DistanceFromRobotArm;
 
         PublishHologramMeshes();
+        
+        serviceSetRRTStar.CallSetRRTStarPlanner();
 
-        serviceWorkspaceConstraint.CallSetWorkspaceConstraint();
+        // serviceWorkspaceConstraint.CallSetWorkspaceConstraint();
+
     }
 
     public void DestroyEnvironment()
@@ -125,5 +133,7 @@ public class Environments : MonoBehaviour
         {
             Destroy(environmentTransform.gameObject);
         }
+
+        serviceSetRRTConnect.CallSetRRTConnectPlanner();
     }
 }
