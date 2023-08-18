@@ -8,6 +8,9 @@ public class ToggleRobotArmMesh : MonoBehaviour
     private Renderer[] renders;
     private bool RenderActive;
 
+    [SerializeField]
+    private GameObject EndEffectorObject;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,16 @@ public class ToggleRobotArmMesh : MonoBehaviour
             }
 
             RenderActive = true;
+        }
+    }
+
+    public void ActivateEndEffectorMesh()
+    {
+        Renderer[] EndEffectorRenders = EndEffectorObject.GetComponentsInChildren<Renderer>();
+
+        foreach(Renderer render in EndEffectorRenders)
+        {
+            render.enabled = true;
         }
     }
 }
