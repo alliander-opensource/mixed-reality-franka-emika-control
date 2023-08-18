@@ -10,9 +10,10 @@ public class SummonObject : MonoBehaviour
         transform.rotation = Quaternion.identity;
     }
 
-    public void Rotate90Degrees()
+    public void ExperimentTargetLocation()
     {
-        transform.rotation = new Quaternion(0.0f, -0.7f, -0.7f, 0.0f);
+        transform.localRotation = new Quaternion(0.0f, -0.7f, -0.7f, 0.0f);
+        transform.localPosition = new Vector3(0.0f, 0.4f, 0.32f);
     }
 
     // void Update()

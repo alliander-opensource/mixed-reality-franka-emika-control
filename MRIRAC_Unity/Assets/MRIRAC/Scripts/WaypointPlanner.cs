@@ -125,7 +125,6 @@ public class WaypointPlanner : MonoBehaviour
             JointTrajectoryPointMsg[] points = trajectory.points;
 
             StartCoroutine(ShowTrajectory(points, planVizualizationSpeed, endWait: 3.0f));
-
         }
         else
         {
