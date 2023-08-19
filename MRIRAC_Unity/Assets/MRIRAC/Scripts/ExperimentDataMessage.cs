@@ -52,6 +52,8 @@ public class ExperimentDataMessage : MonoBehaviour
     public EndEffectorPos EndEffectorCoordinates;
     public bool StoringEndEffectorPosition;
     public List<PoseStampedMsg> EndEffectorPositionList;
+    public JointTrajectoryMsg Trajectory;
+    public bool Success;
 
     void Start()
     {
@@ -149,13 +151,15 @@ public class ExperimentDataMessage : MonoBehaviour
         // Create function that tracks it from the moment start is entered
         Debug.Log(EndEffectorPositionList.Count);
 
+        PoseStampedMsg[] EndEffectorPositionArray = EndEffectorPositionList.ToArray();
+
         // Trajectory in joint values and succes
         // Find it in waypoint trajectory or normal trajectory script
         if (ControlMethod == "Waypoint Control")
         {
             Debug.Log("In WC");
-            JointTrajectoryMsg Trajectory = waypointPlanner.TrajectoryData;
-            bool Success = waypointPlanner.SuccessData;
+            Trajectory = waypointPlanner.TrajectoryData;
+            Success = waypointPlanner.SuccessData;
             Debug.Log(Trajectory.points.Length);
             Debug.Log(Success);
         }
@@ -163,8 +167,8 @@ public class ExperimentDataMessage : MonoBehaviour
         else if (ControlMethod == "Command Control")
         {
             Debug.Log("In CC");
-            JointTrajectoryMsg Trajectory = trajectoryPlanner.TrajectoryData;
-            bool Success = trajectoryPlanner.SuccessData;
+            Trajectory = trajectoryPlanner.TrajectoryData;
+            Success = trajectoryPlanner.SuccessData;
             Debug.Log(Trajectory.points.Length);
             Debug.Log(Success);
         }
@@ -172,8 +176,8 @@ public class ExperimentDataMessage : MonoBehaviour
         else
         {
             Debug.Log("In else");
-            JointTrajectoryMsg Trajectory = new JointTrajectoryMsg();
-            bool Success = false;
+            Trajectory = new JointTrajectoryMsg();
+            Success = false;
             Debug.Log(Trajectory.points.Length);
             Debug.Log(Success);
         }
@@ -181,14 +185,19 @@ public class ExperimentDataMessage : MonoBehaviour
         ExperimentDataMsg msg = new ExperimentDataMsg()
         {
             environment_name = EnvironmentName,
+            condition_number = "Coming Soon",
             control_method = ControlMethod,
+            collisions_amount = AmountCollisions,
             operation_time = time,
             target_end_effector_placement = TargetEndEffectorPlacement,
             end_effector_finishing_placement = EndCoordinates,
             start_coordinates = new PointMsg(StartCoordinates.z, -StartCoordinates.x, StartCoordinates.y), // Set into franka emika frame
             goal_coordinates = new PointMsg(GoalCoordinates.z, -GoalCoordinates.x, GoalCoordinates.y), // Set into franka emika frame
             euclidean_distance = dist,
-            waypoints_placements = waypoints
+            waypoints_placements = waypoints,
+            end_effector_position_list = EndEffectorPositionArray,
+            trajectory = Trajectory,
+            success = Success
         };
 
         ros.Publish(ExperimentDataTopic, msg);
