@@ -116,7 +116,7 @@ public class Environments : MonoBehaviour
         serviceStartPosition.CallStartPositionArm();
 
         GameObject Environment = Instantiate(PrefabEnvironment, EnvironmentsObject.transform, false);
-        Environment.name = "Environment";
+        // Environment.name = "Environment";
         Environment.transform.localPosition = DistanceFromRobotArm;
 
         PublishHologramMeshes();

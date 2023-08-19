@@ -14,10 +14,10 @@ public class CollisionTriggerEvent : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("In the OnTriggerEnter");
+        // Debug.Log("In the OnTriggerEnter");
         if (other.tag == "EnvironmentObstacle")
         {
-            Debug.Log("Entered obstacle");
+            // Debug.Log("Entered obstacle");
             counter += 1;
         }
     }
