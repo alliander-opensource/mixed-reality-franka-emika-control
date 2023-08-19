@@ -125,7 +125,7 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
   n_obstacles_pub_ = node_handle_.advertise<std_msgs::String>("n_obstacles", 100);
 
   // move_group_interface_.setPlannerId("RRTstar");
-  move_group_interface_.setPlanningTime(30.0f);
+  move_group_interface_.setPlanningTime(10.0f);
   move_group_interface_.setMaxAccelerationScalingFactor(0.3f);
   move_group_interface_.setMaxVelocityScalingFactor(0.3f);
   // move_group_interface_.setWorkspace(-1.0f, -2.0f, 0.0f, 1.0f, 2.0f, 0.8f);

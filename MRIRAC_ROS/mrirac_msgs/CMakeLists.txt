@@ -15,6 +15,7 @@ add_message_files(
   FILES
   MeshObstacle.msg
   MeshObstacles.msg
+  ExperimentData.msg
 )
 
 add_service_files(

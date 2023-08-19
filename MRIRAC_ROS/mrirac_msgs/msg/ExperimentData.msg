@@ -1,0 +1,9 @@
+string environment_name
+string control_method
+float64 operation_time
+geometry_msgs/Pose target_end_effector_placement
+geometry_msgs/Pose end_effector_finishing_placement
+geometry_msgs/Point start_coordinates
+geometry_msgs/Point goal_coordinates
+float64 euclidean_distance
+geometry_msgs/PoseArray waypoints_placements
