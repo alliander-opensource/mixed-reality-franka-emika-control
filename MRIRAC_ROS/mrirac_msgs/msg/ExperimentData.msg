@@ -1,5 +1,7 @@
 string environment_name
+string condition_number
 string control_method
+int64 collisions_amount
 float64 operation_time
 geometry_msgs/Pose target_end_effector_placement
 geometry_msgs/Pose end_effector_finishing_placement
@@ -7,3 +9,6 @@ geometry_msgs/Point start_coordinates
 geometry_msgs/Point goal_coordinates
 float64 euclidean_distance
 geometry_msgs/PoseArray waypoints_placements
+geometry_msgs/PoseStamped[] end_effector_position_list
+trajectory_msgs/JointTrajectory trajectory
+bool success
