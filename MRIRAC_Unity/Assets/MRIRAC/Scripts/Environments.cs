@@ -34,13 +34,13 @@ public class Environments : MonoBehaviour
     private GameObject StartPositionPrefab;
 
     [SerializeField]
-    private Vector3 StartPositionCoordinates;
+    public Vector3 StartPositionCoordinates;
 
      [SerializeField]
     private GameObject GoalPositionPrefab;
 
     [SerializeField]
-    private Vector3 GoalPositionCoordinates;
+    public Vector3 GoalPositionCoordinates;
 
     private SetWorkspaceConstraint serviceWorkspaceConstraint;
     private StartPositionArm serviceStartPosition;
