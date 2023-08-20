@@ -48,12 +48,16 @@ public class ExperimentDataMessage : MonoBehaviour
     private TrajectoryPlanner trajectoryPlanner;
 
     private string ControlMethod;
+    private string Condition;
 
     public EndEffectorPos EndEffectorCoordinates;
     public bool StoringEndEffectorPosition;
     public List<PoseStampedMsg> EndEffectorPositionList;
     public JointTrajectoryMsg Trajectory;
     public bool Success;
+    private int timer;
+    private int interval;
+    private float elapsedtime;
 
     void Start()
     {
@@ -63,22 +67,37 @@ public class ExperimentDataMessage : MonoBehaviour
         EndEffectorCoordinates = EndEffectorObject.GetComponent<EndEffectorPos>();
 
         StoringEndEffectorPosition = false;
+
+        timer = 0;
+        interval = 60;
+        elapsedtime = 0f;
     }
 
     void Update()
     {
-        if (StoringEndEffectorPosition)
+        elapsedtime += Time.deltaTime;
+
+        if (timer%interval == 0)
         {
-            PoseStampedMsg msg = new PoseStampedMsg()
+            if (StoringEndEffectorPosition)
             {
-                pose = new PoseMsg()
+                PoseStampedMsg msg = new PoseStampedMsg()
                 {
-                    position = new PointMsg(EndEffectorCoordinates.Position.x, EndEffectorCoordinates.Position.y, EndEffectorCoordinates.Position.z),
-                    orientation = new QuaternionMsg(EndEffectorCoordinates.Orientation.x, EndEffectorCoordinates.Orientation.y, EndEffectorCoordinates.Orientation.z, EndEffectorCoordinates.Orientation.w)
-                }
-            };
-            EndEffectorPositionList.Add(msg);
+                    pose = new PoseMsg()
+                    {
+                        position = new PointMsg(EndEffectorCoordinates.Position.x, EndEffectorCoordinates.Position.y, EndEffectorCoordinates.Position.z),
+                        orientation = new QuaternionMsg(EndEffectorCoordinates.Orientation.x, EndEffectorCoordinates.Orientation.y, EndEffectorCoordinates.Orientation.z, EndEffectorCoordinates.Orientation.w)
+                    }
+                };
+
+                msg.header.stamp.sec = (uint)elapsedtime;
+                msg.header.stamp.nanosec = (uint)(elapsedtime - (int)elapsedtime);
+
+                EndEffectorPositionList.Add(msg);
+            }
         }
+
+        timer++;
     }
 
     public void ExperimentData()
@@ -94,6 +113,8 @@ public class ExperimentDataMessage : MonoBehaviour
         Debug.Log(EnvironmentName);
 
         // Environment condition
+        FindCondition();
+        Debug.Log(Condition);
 
         // Environment control method
         FindControlMethod();
@@ -185,7 +206,7 @@ public class ExperimentDataMessage : MonoBehaviour
         ExperimentDataMsg msg = new ExperimentDataMsg()
         {
             environment_name = EnvironmentName,
-            condition_number = "Coming Soon",
+            condition_number = Condition,
             control_method = ControlMethod,
             collisions_amount = AmountCollisions,
             operation_time = time,
@@ -220,6 +241,26 @@ public class ExperimentDataMessage : MonoBehaviour
         if (ExperimentCommandControlUI.activeSelf)
         {
             ControlMethod = "Command Control";
+        }
+    }
+
+    void FindCondition()
+    {
+        Condition = "Error";
+
+        if (EnvironmentsObject.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+        {
+            Condition = "Condition 1";
+        }
+
+        if (EnvironmentsObject.transform.GetChild(0).GetChild(1).gameObject.activeSelf)
+        {
+            Condition = "Condition 2";
+        }
+
+        if (EnvironmentsObject.transform.GetChild(0).GetChild(2).gameObject.activeSelf)
+        {
+            Condition = "Condition 3";
         }
     }
 

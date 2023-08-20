@@ -13,7 +13,7 @@ public class SummonObject : MonoBehaviour
     public void ExperimentTargetLocation()
     {
         transform.localRotation = new Quaternion(0.0f, -0.7f, -0.7f, 0.0f);
-        transform.localPosition = new Vector3(0.0f, 0.4f, 0.32f);
+        transform.localPosition = new Vector3(0.0f, 0.4f, 0.5f);
     }
 
     // void Update()

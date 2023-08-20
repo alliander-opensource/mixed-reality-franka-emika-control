@@ -136,4 +136,15 @@ public class Environments : MonoBehaviour
 
         serviceSetRRTConnect.CallSetRRTConnectPlanner();
     }
+
+    public void AcitvateCondition(int condition_number)
+    {
+        // Debug.Log(condition_number);
+        EnvironmentsObject.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        EnvironmentsObject.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
+        EnvironmentsObject.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
+
+        EnvironmentsObject.transform.GetChild(0).GetChild(condition_number).gameObject.SetActive(true);
+        PublishHologramMeshes();
+    }
 }
