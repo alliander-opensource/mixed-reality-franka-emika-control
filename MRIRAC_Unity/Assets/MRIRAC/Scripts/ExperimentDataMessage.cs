@@ -69,7 +69,7 @@ public class ExperimentDataMessage : MonoBehaviour
         StoringEndEffectorPosition = false;
 
         timer = 0;
-        interval = 60;
+        interval = 6;
         elapsedtime = 0f;
     }
 
