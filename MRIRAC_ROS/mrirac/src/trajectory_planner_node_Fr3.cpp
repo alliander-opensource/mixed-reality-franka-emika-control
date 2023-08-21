@@ -223,6 +223,8 @@ bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::R
 
   unsigned int vecSize = waypoints.size();
 
+  move_group_interface_.setPlannerId("RRTConnect");
+
   for(unsigned int i = 0; i < vecSize; i++)
   {
     moveit::planning_interface::MoveGroupInterface::Plan temp_motion_plan;
