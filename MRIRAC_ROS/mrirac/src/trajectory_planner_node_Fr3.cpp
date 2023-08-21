@@ -176,6 +176,38 @@ bool TrajectoryPlannerNode::ExecuteTrajectory(std_srvs::Empty::Request &req, std
   return true;
 }
 
+// bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
+// {
+//   // Store the received waypoints
+//   waypoints_ = req.waypoints;
+//   std::vector<geometry_msgs::Pose> waypoints;
+//   waypoints.insert(waypoints.end(), waypoints_.poses.begin(), waypoints_.poses.end());
+
+//   // Plan the trajectory passing through the waypoints
+//   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
+//   moveit_msgs::RobotTrajectory robot_trajectory;
+//   double jump_threshold = 10.0;
+//   double eef_step = 0.01;
+//   double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
+
+//   if (fraction == 1.0)
+//   {
+//     motion_plan.trajectory_ = robot_trajectory;
+//     res.trajectory = motion_plan.trajectory_.joint_trajectory;
+//     res.success = true;
+
+//     current_plan_ = motion_plan;
+//     trajectory_planned_ = true;
+//   }
+//   else
+//   {
+//     res.trajectory = trajectory_msgs::JointTrajectory();
+//     res.success = false;
+//   }
+
+//   return true;
+// }
+
 bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
 {
   // Store the received waypoints
@@ -186,13 +218,47 @@ bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::R
   // Plan the trajectory passing through the waypoints
   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
   moveit_msgs::RobotTrajectory robot_trajectory;
-  double jump_threshold = 5.0;
-  double eef_step = 0.01;
-  double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
+  std::vector<trajectory_msgs::JointTrajectoryPoint> trajectory_vector;
+  bool overall_succes = false;
 
-  if (fraction == 1.0)
+  unsigned int vecSize = waypoints.size();
+
+  for(unsigned int i = 0; i < vecSize; i++)
   {
+    moveit::planning_interface::MoveGroupInterface::Plan temp_motion_plan;
+    bool success = RobotMovements::PlanMovementToPose(waypoints[i], move_group_interface_, temp_motion_plan);
+
+    if (success)
+    {
+      std::vector<trajectory_msgs::JointTrajectoryPoint> temp_vector;
+      temp_vector.insert(temp_vector.begin(), std::begin(temp_motion_plan.trajectory_.joint_trajectory.points), std::end(temp_motion_plan.trajectory_.joint_trajectory.points));
+      trajectory_vector.insert(trajectory_vector.end(), temp_vector.begin(), temp_vector.end());
+
+      RobotMovements::ExecutePlannedTrajectory(move_group_interface_, temp_motion_plan, waypoints[i], !simulation, pose_correction_action_client_);
+
+      overall_succes = true;
+    }
+
+    else
+    {
+      overall_succes = false;
+      break;
+    }
+
+  };
+
+  if (overall_succes)
+  {
+    unsigned int n = trajectory_vector.size();
+
+    for(unsigned int j = 0; j < n; j++)
+    {
+      robot_trajectory.joint_trajectory.points.push_back(trajectory_vector[j]);
+    }
+    
     motion_plan.trajectory_ = robot_trajectory;
+
+
     res.trajectory = motion_plan.trajectory_.joint_trajectory;
     res.success = true;
 
