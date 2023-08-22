@@ -84,6 +84,8 @@ private:
   bool SetWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
   bool ClearWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
 
+  bool SetJointspaceConstraint();
+
 public:
   TrajectoryPlannerNode(const ros::NodeHandle &node_handle);
   ~TrajectoryPlannerNode();

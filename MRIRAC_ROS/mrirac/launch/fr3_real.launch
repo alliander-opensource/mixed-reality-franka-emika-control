@@ -21,4 +21,6 @@
     args="--stopped cartesian_impedance_example_controller"
     />
 
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" required="false" />
+
 </launch>

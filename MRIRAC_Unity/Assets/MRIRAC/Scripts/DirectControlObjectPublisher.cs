@@ -33,7 +33,7 @@ public class DirectControlObjectPublisher : MonoBehaviour
     {   
         PoseMsg cmdPose = new PoseMsg();        
                     
-        Vector3 T_Hand_DirectEnv = ControlObject.transform.localPosition * 2f;
+        Vector3 T_Hand_DirectEnv = ControlObject.transform.localPosition; // *2f
         Quaternion R_Hand_DirectEnv_unity = ControlObject.transform.localRotation;         
             
         //Rotation Matrices (ZXY)
