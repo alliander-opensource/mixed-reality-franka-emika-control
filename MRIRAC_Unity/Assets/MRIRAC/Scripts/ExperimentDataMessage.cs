@@ -108,27 +108,27 @@ public class ExperimentDataMessage : MonoBehaviour
         // Positive z is moving upwards from the robot base
         // ROS FRAME (x, y, z) = UNITY FRAME (z, -x , y)
 
-        // Environment number
+        // Environment number    CONSTANT
         string EnvironmentName = EnvironmentsObject.transform.GetChild(0).gameObject.name[12].ToString();
         Debug.Log(EnvironmentName);
 
-        // Environment condition
+        // Environment condition    CONSTANT
         FindCondition();
         Debug.Log(Condition);
 
-        // Environment control method
+        // Environment control method    CONSTANT
         FindControlMethod();
         Debug.Log(ControlMethod);
 
-        // Number of collisions
+        // Number of collisions    CONSTANT
         int AmountCollisions = CollisionCounter.counter;
         Debug.Log(AmountCollisions);
 
-        // Time of human operation
+        // Time of human operation left over   CONSTANT
         float time =  TimerUI.transform.GetChild(0).GetChild(1).gameObject.GetComponent<Timer>().currentTime;
         Debug.Log(time);
 
-        // Target End Effector transform in Franka Emika frame
+        // Target End Effector transform in Franka Emika frame    CONSTANT
         EndEffectorPos PlanningTarget = TargetEndEffector.GetComponent<EndEffectorPos>();
         PoseMsg TargetEndEffectorPlacement = new PoseMsg()
         {
@@ -138,7 +138,7 @@ public class ExperimentDataMessage : MonoBehaviour
         Debug.Log(TargetEndEffectorPlacement.position);
         Debug.Log(TargetEndEffectorPlacement.orientation);
 
-        // End Effector transform at the end in Franka Emika frame
+        // End Effector transform at the end in Franka Emika frame    CONSTANT
         PoseMsg EndCoordinates = new PoseMsg()
         {
             position = new PointMsg(EndEffectorCoordinates.Position.x, EndEffectorCoordinates.Position.y, EndEffectorCoordinates.Position.z),
@@ -147,19 +147,19 @@ public class ExperimentDataMessage : MonoBehaviour
         Debug.Log(EndCoordinates.position);
         Debug.Log(EndCoordinates.orientation);
 
-        // Start coordinates In unity frame 
+        // Start coordinates In unity frame     CONSTANT
         Vector3 StartCoordinates = EnvironmentsScript.StartPositionCoordinates;
         Debug.Log(StartCoordinates);
 
-        // Goal position in Unity frame 
+        // Goal position in Unity frame     CONSTANT
         Vector3 GoalCoordinates = EnvironmentsScript.GoalPositionCoordinates;
         Debug.Log(GoalCoordinates);
         
-        // Euclidean distance between target end effector and goal
+        // Euclidean distance between target end effector and goal    CONSTANT
         float dist = Vector3.Distance(new Vector3(GoalCoordinates.z, -GoalCoordinates.x, GoalCoordinates.y), new Vector3((float)EndCoordinates.position.x, (float)EndCoordinates.position.y, (float)EndCoordinates.position.z));
         Debug.Log(dist);
 
-        // Waypoints used for waypoint control in Franka Emika Frame
+        // Waypoints used for waypoint control in Franka Emika Frame    CONSTANT
         List<PoseMsg> WaypointsList = waypointPlanner.listOfWaypoints;
         Debug.Log(WaypointsList.Count);
 

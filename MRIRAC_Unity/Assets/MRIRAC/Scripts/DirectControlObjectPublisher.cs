@@ -41,12 +41,19 @@ public class DirectControlObjectPublisher : MonoBehaviour
 
         //Rotation steps taken (Unity_lh --> ROS_rh --> End_Effector)
         Quaternion R_Hand_DirectEnv_ROS = new Quaternion(-R_Hand_DirectEnv_unity.z, -R_Hand_DirectEnv_unity.x, R_Hand_DirectEnv_unity.y, R_Hand_DirectEnv_unity.w);  // HOW???
-        Quaternion R_EndEffector = ROS2Panda_R * R_Hand_DirectEnv_ROS;            
+        Quaternion R_EndEffector = ROS2Panda_R * R_Hand_DirectEnv_ROS;
+
+        float safedistance = T_Hand_DirectEnv[2] + 0.6f;
+
+        if (safedistance < 0.4f)
+        {
+            safedistance = 0.4f;
+        }
 
         cmdPose = new PoseMsg()
         {
             // position = new PointMsg((T_Hand_DirectEnv[2] + 0.6f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)), //[2] + 0.4f
-            position = new PointMsg((T_Hand_DirectEnv[2] + 0.6f), -(T_Hand_DirectEnv[0]-0.6), (T_Hand_DirectEnv[1] + 0.4f)), //
+            position = new PointMsg((safedistance), -(T_Hand_DirectEnv[0]-0.6), (T_Hand_DirectEnv[1] + 0.4f)), //
             // orientation = new QuaternionMsg(R_EndEffector[0], R_EndEffector[1], R_EndEffector[2], R_EndEffector[3])
             orientation = new QuaternionMsg(0.7f, 0f, 0.7f, 0f)
         };
