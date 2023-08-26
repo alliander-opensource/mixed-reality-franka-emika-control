@@ -6,6 +6,9 @@ using RosMessageTypes.Trajectory;
 using RosMessageTypes.Std;
 using RosMessageTypes.Mrirac;
 using Unity.Robotics.ROSTCPConnector;
+using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.Utilities;
+using Microsoft.MixedReality.Toolkit;
 
 public class ExperimentDataMessage : MonoBehaviour
 {
@@ -13,6 +16,8 @@ public class ExperimentDataMessage : MonoBehaviour
     [SerializeField]
     private string ExperimentDataTopic;
 
+    [SerializeField]
+    private GameObject RobotBaseObject;
 
     [SerializeField]
     private GameObject EnvironmentsObject;
@@ -58,6 +63,22 @@ public class ExperimentDataMessage : MonoBehaviour
     private int timer;
     private int interval;
     private float elapsedtime;
+    public List<float> time_list;
+
+    private IMixedRealityHand handTarget;
+    private MixedRealityPose Palmpose;
+    public List<PoseMsg> handtracking_list;
+    private PoseMsg handpose;
+
+    [SerializeField]
+    private HandPosePublisher HandPosePublisher;
+
+    public List<Vector3> gazedirection_list;
+    public List<Vector3> gazeorigin_list;
+    public List<string> gazetargetname_list;
+    public List<Vector3> gazetargetposition_list;
+    public List<Vector3> headvelocity_list;
+    public List<Vector3> headmovementdirection_list;
 
     void Start()
     {
@@ -71,6 +92,7 @@ public class ExperimentDataMessage : MonoBehaviour
         timer = 0;
         interval = 6;
         elapsedtime = 0f;
+       
     }
 
     void Update()
@@ -81,6 +103,8 @@ public class ExperimentDataMessage : MonoBehaviour
         {
             if (StoringEndEffectorPosition)
             {
+
+                // Timeseries end effector position
                 PoseStampedMsg msg = new PoseStampedMsg()
                 {
                     pose = new PoseMsg()
@@ -91,9 +115,59 @@ public class ExperimentDataMessage : MonoBehaviour
                 };
 
                 msg.header.stamp.sec = (uint)elapsedtime;
-                msg.header.stamp.nanosec = (uint)(elapsedtime - (int)elapsedtime);
 
                 EndEffectorPositionList.Add(msg);
+                // Debug.Log("added end-effector");
+                // Debug.Log(msg);
+
+                // Time timeseries
+                time_list.Add(elapsedtime);
+                // Debug.Log("added elapsed time");
+                // Debug.Log(elapsedtime);
+
+                // Hand tracking timeseries
+                handTarget = (HandPosePublisher.handedness == HandEnum.R) ? HandJointUtils.FindHand(Handedness.Right) : HandJointUtils.FindHand(Handedness.Left);
+                if (handTarget != null)
+                {
+                    handTarget.TryGetJoint(TrackedHandJoint.Palm, out MixedRealityPose PalmPose);
+
+                    handpose = new PoseMsg()
+                    {
+                        position = new PointMsg(PalmPose.Position.x, PalmPose.Position.y, PalmPose.Position.z),
+                        orientation = new QuaternionMsg(PalmPose.Rotation.x, PalmPose.Rotation.y, PalmPose.Rotation.z, PalmPose.Rotation.w)
+                    };
+                }
+                else
+                {
+                    handpose = new PoseMsg();
+                }
+
+                handtracking_list.Add(handpose);
+                // Debug.Log("added handpose");
+                // Debug.Log(handpose);
+
+                // Eye tracking timeseries
+                gazedirection_list.Add(CoreServices.InputSystem.GazeProvider.GazeDirection);
+                // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeDirection);
+                gazeorigin_list.Add(CoreServices.InputSystem.GazeProvider.GazeOrigin);
+                // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeOrigin);
+                if (CoreServices.InputSystem.GazeProvider.GazeTarget)
+                {
+                    gazetargetname_list.Add(CoreServices.InputSystem.GazeProvider.GazeTarget.name.ToString());
+                    gazetargetposition_list.Add(CoreServices.InputSystem.GazeProvider.GazeTarget.transform.position);
+                }
+                else
+                {
+                    gazetargetname_list.Add(null);
+                    gazetargetposition_list.Add(new Vector3(999999f, 999999f, 999999f));
+                }
+                // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeTarget);
+
+                // Head tracking timeseries
+                headvelocity_list.Add(CoreServices.InputSystem.GazeProvider.HeadMovementDirection);
+                headmovementdirection_list.Add(CoreServices.InputSystem.GazeProvider.HeadVelocity);
+
+
             }
         }
 
@@ -154,6 +228,14 @@ public class ExperimentDataMessage : MonoBehaviour
         // Goal position in Unity frame     CONSTANT
         Vector3 GoalCoordinates = EnvironmentsScript.GoalPositionCoordinates;
         Debug.Log(GoalCoordinates);
+
+        // Robot base in Unity frame        CONSTANT
+        PoseMsg RobotBaseCoordinates = new PoseMsg()
+        {
+            position = new PointMsg(RobotBaseObject.transform.position.x, RobotBaseObject.transform.position.y, RobotBaseObject.transform.position.z),
+            orientation = new QuaternionMsg(RobotBaseObject.transform.rotation.x, RobotBaseObject.transform.rotation.y, RobotBaseObject.transform.rotation.z, RobotBaseObject.transform.rotation.w)
+        };
+        Debug.Log(RobotBaseCoordinates);
         
         // Euclidean distance between target end effector and goal    CONSTANT
         float dist = Vector3.Distance(new Vector3(GoalCoordinates.z, -GoalCoordinates.x, GoalCoordinates.y), new Vector3((float)EndCoordinates.position.x, (float)EndCoordinates.position.y, (float)EndCoordinates.position.z));
@@ -173,6 +255,22 @@ public class ExperimentDataMessage : MonoBehaviour
         Debug.Log(EndEffectorPositionList.Count);
 
         PoseStampedMsg[] EndEffectorPositionArray = EndEffectorPositionList.ToArray();
+
+        // Time timeseries
+        Debug.Log(time_list.Count);
+
+        // Handtracking timeseries
+        Debug.Log(handtracking_list.Count);
+
+        //Gazetracking timeseries
+        Debug.Log(gazedirection_list.Count);
+        Debug.Log(gazeorigin_list.Count);
+        Debug.Log(gazetargetname_list.Count);
+        Debug.Log(gazetargetposition_list.Count);
+
+        //Headtracking timeseiers
+        Debug.Log(headmovementdirection_list.Count);
+        Debug.Log(headvelocity_list.Count);
 
         // Trajectory in joint values and succes
         // Find it in waypoint trajectory or normal trajectory script
@@ -267,6 +365,19 @@ public class ExperimentDataMessage : MonoBehaviour
     public void StartEndEffectorStoring()
     {
         EndEffectorPositionList.Clear();
+        time_list.Clear();
+        handtracking_list.Clear();
+        gazedirection_list.Clear();
+        gazeorigin_list.Clear();
+        gazetargetname_list.Clear();
+        gazetargetposition_list.Clear();
+        headmovementdirection_list.Clear();
+        headvelocity_list.Clear();
         StoringEndEffectorPosition = true;
+    }
+
+    public void StopEndEffectorStoring()
+    {
+        StoringEndEffectorPosition = false;
     }
 }
