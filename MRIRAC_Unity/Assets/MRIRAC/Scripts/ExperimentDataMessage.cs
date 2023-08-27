@@ -258,19 +258,27 @@ public class ExperimentDataMessage : MonoBehaviour
 
         // Time timeseries
         Debug.Log(time_list.Count);
+        float[] TimeArray = time_list.ToArray();
 
         // Handtracking timeseries
         Debug.Log(handtracking_list.Count);
+        PoseMsg[] HandTrackingArray = handtracking_list.ToArray();
 
         //Gazetracking timeseries
         Debug.Log(gazedirection_list.Count);
+        PointMsg[] GazeDirectionArray = gazedirection_list.ToArray();
         Debug.Log(gazeorigin_list.Count);
+        PointMsg[] GazeOriginArray = gazeorigin_list.ToArray();
         Debug.Log(gazetargetname_list.Count);
+        string[] GazeTargetNameArray = gazetargetname_list.ToArray();
         Debug.Log(gazetargetposition_list.Count);
+        PointMsg[] GazeTargetPositionArray = gazetargetposition_list.ToArray();
 
         //Headtracking timeseiers
         Debug.Log(headmovementdirection_list.Count);
+        PointMsg[] HeadMovementDirectionArray = headmovementdirection_list.ToArray();
         Debug.Log(headvelocity_list.Count);
+        PointMsg[] HeadVelocityArray = headvelocity_list.ToArray();
 
         // Trajectory in joint values and succes
         // Find it in waypoint trajectory or normal trajectory script
@@ -312,9 +320,18 @@ public class ExperimentDataMessage : MonoBehaviour
             end_effector_finishing_placement = EndCoordinates,
             start_coordinates = new PointMsg(StartCoordinates.z, -StartCoordinates.x, StartCoordinates.y), // Set into franka emika frame
             goal_coordinates = new PointMsg(GoalCoordinates.z, -GoalCoordinates.x, GoalCoordinates.y), // Set into franka emika frame
+            robot_base_coordinates = RobotBaseCoordinates,
             euclidean_distance = dist,
             waypoints_placements = waypoints,
             end_effector_position_list = EndEffectorPositionArray,
+            time_list = TimeArray,
+            handtracking_list = HandTrackingArray,
+            gazedirection_list = GazeDirectionArray,
+            gazeorigin_list = GazeOriginArray,
+            gazetargetname_list = GazeTargetNameArray,
+            gazetargetposition_list = GazeTargetPositionArray,
+            headvelocity_list = HeadVelocityArray,
+            headmovementdirection_list = HeadMovementDirectionArray,
             trajectory = Trajectory,
             success = Success
         };

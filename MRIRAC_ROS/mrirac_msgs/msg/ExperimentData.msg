@@ -7,8 +7,17 @@ geometry_msgs/Pose target_end_effector_placement
 geometry_msgs/Pose end_effector_finishing_placement
 geometry_msgs/Point start_coordinates
 geometry_msgs/Point goal_coordinates
+geometry_msgs/Pose robot_base_coordinates
 float64 euclidean_distance
 geometry_msgs/PoseArray waypoints_placements
 geometry_msgs/PoseStamped[] end_effector_position_list
+float64[] time_list
+geometry_msgs/Pose[] handtracking_list
+geometry_msgs/Point[] gazedirection_list
+geometry_msgs/Point[] gazeorigin_list
+string[] gazetargetname_list
+geometry_msgs/Point[] gazetargetposition_list
+geometry_msgs/Point[] headvelocity_list
+geometry_msgs/Point[] headmovementdirection_list
 trajectory_msgs/JointTrajectory trajectory
 bool success
