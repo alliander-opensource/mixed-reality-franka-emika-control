@@ -22,9 +22,19 @@ namespace RosMessageTypes.Mrirac
         public Geometry.PoseMsg end_effector_finishing_placement;
         public Geometry.PointMsg start_coordinates;
         public Geometry.PointMsg goal_coordinates;
+        public Geometry.PoseMsg robot_base_coordinates;
         public double euclidean_distance;
         public Geometry.PoseArrayMsg waypoints_placements;
+        public long[] waypointcount_list;
         public Geometry.PoseStampedMsg[] end_effector_position_list;
+        public double[] time_list;
+        public Geometry.PoseMsg[] handtracking_list;
+        public Geometry.PointMsg[] gazedirection_list;
+        public Geometry.PointMsg[] gazeorigin_list;
+        public string[] gazetargetname_list;
+        public Geometry.PointMsg[] gazetargetposition_list;
+        public Geometry.PointMsg[] headvelocity_list;
+        public Geometry.PointMsg[] headmovementdirection_list;
         public Trajectory.JointTrajectoryMsg trajectory;
         public bool success;
 
@@ -39,14 +49,24 @@ namespace RosMessageTypes.Mrirac
             this.end_effector_finishing_placement = new Geometry.PoseMsg();
             this.start_coordinates = new Geometry.PointMsg();
             this.goal_coordinates = new Geometry.PointMsg();
+            this.robot_base_coordinates = new Geometry.PoseMsg();
             this.euclidean_distance = 0.0;
             this.waypoints_placements = new Geometry.PoseArrayMsg();
+            this.waypointcount_list = new long[0];
             this.end_effector_position_list = new Geometry.PoseStampedMsg[0];
+            this.time_list = new double[0];
+            this.handtracking_list = new Geometry.PoseMsg[0];
+            this.gazedirection_list = new Geometry.PointMsg[0];
+            this.gazeorigin_list = new Geometry.PointMsg[0];
+            this.gazetargetname_list = new string[0];
+            this.gazetargetposition_list = new Geometry.PointMsg[0];
+            this.headvelocity_list = new Geometry.PointMsg[0];
+            this.headmovementdirection_list = new Geometry.PointMsg[0];
             this.trajectory = new Trajectory.JointTrajectoryMsg();
             this.success = false;
         }
 
-        public ExperimentDataMsg(string environment_name, string condition_number, string control_method, long collisions_amount, double operation_time, Geometry.PoseMsg target_end_effector_placement, Geometry.PoseMsg end_effector_finishing_placement, Geometry.PointMsg start_coordinates, Geometry.PointMsg goal_coordinates, double euclidean_distance, Geometry.PoseArrayMsg waypoints_placements, Geometry.PoseStampedMsg[] end_effector_position_list, Trajectory.JointTrajectoryMsg trajectory, bool success)
+        public ExperimentDataMsg(string environment_name, string condition_number, string control_method, long collisions_amount, double operation_time, Geometry.PoseMsg target_end_effector_placement, Geometry.PoseMsg end_effector_finishing_placement, Geometry.PointMsg start_coordinates, Geometry.PointMsg goal_coordinates, Geometry.PoseMsg robot_base_coordinates, double euclidean_distance, Geometry.PoseArrayMsg waypoints_placements, long[] waypointcount_list, Geometry.PoseStampedMsg[] end_effector_position_list, double[] time_list, Geometry.PoseMsg[] handtracking_list, Geometry.PointMsg[] gazedirection_list, Geometry.PointMsg[] gazeorigin_list, string[] gazetargetname_list, Geometry.PointMsg[] gazetargetposition_list, Geometry.PointMsg[] headvelocity_list, Geometry.PointMsg[] headmovementdirection_list, Trajectory.JointTrajectoryMsg trajectory, bool success)
         {
             this.environment_name = environment_name;
             this.condition_number = condition_number;
@@ -57,9 +77,19 @@ namespace RosMessageTypes.Mrirac
             this.end_effector_finishing_placement = end_effector_finishing_placement;
             this.start_coordinates = start_coordinates;
             this.goal_coordinates = goal_coordinates;
+            this.robot_base_coordinates = robot_base_coordinates;
             this.euclidean_distance = euclidean_distance;
             this.waypoints_placements = waypoints_placements;
+            this.waypointcount_list = waypointcount_list;
             this.end_effector_position_list = end_effector_position_list;
+            this.time_list = time_list;
+            this.handtracking_list = handtracking_list;
+            this.gazedirection_list = gazedirection_list;
+            this.gazeorigin_list = gazeorigin_list;
+            this.gazetargetname_list = gazetargetname_list;
+            this.gazetargetposition_list = gazetargetposition_list;
+            this.headvelocity_list = headvelocity_list;
+            this.headmovementdirection_list = headmovementdirection_list;
             this.trajectory = trajectory;
             this.success = success;
         }
@@ -77,9 +107,19 @@ namespace RosMessageTypes.Mrirac
             this.end_effector_finishing_placement = Geometry.PoseMsg.Deserialize(deserializer);
             this.start_coordinates = Geometry.PointMsg.Deserialize(deserializer);
             this.goal_coordinates = Geometry.PointMsg.Deserialize(deserializer);
+            this.robot_base_coordinates = Geometry.PoseMsg.Deserialize(deserializer);
             deserializer.Read(out this.euclidean_distance);
             this.waypoints_placements = Geometry.PoseArrayMsg.Deserialize(deserializer);
+            deserializer.Read(out this.waypointcount_list, sizeof(long), deserializer.ReadLength());
             deserializer.Read(out this.end_effector_position_list, Geometry.PoseStampedMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.time_list, sizeof(double), deserializer.ReadLength());
+            deserializer.Read(out this.handtracking_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.gazedirection_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.gazeorigin_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.gazetargetname_list, deserializer.ReadLength());
+            deserializer.Read(out this.gazetargetposition_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.headvelocity_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.headmovementdirection_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
             this.trajectory = Trajectory.JointTrajectoryMsg.Deserialize(deserializer);
             deserializer.Read(out this.success);
         }
@@ -95,10 +135,29 @@ namespace RosMessageTypes.Mrirac
             serializer.Write(this.end_effector_finishing_placement);
             serializer.Write(this.start_coordinates);
             serializer.Write(this.goal_coordinates);
+            serializer.Write(this.robot_base_coordinates);
             serializer.Write(this.euclidean_distance);
             serializer.Write(this.waypoints_placements);
+            serializer.WriteLength(this.waypointcount_list);
+            serializer.Write(this.waypointcount_list);
             serializer.WriteLength(this.end_effector_position_list);
             serializer.Write(this.end_effector_position_list);
+            serializer.WriteLength(this.time_list);
+            serializer.Write(this.time_list);
+            serializer.WriteLength(this.handtracking_list);
+            serializer.Write(this.handtracking_list);
+            serializer.WriteLength(this.gazedirection_list);
+            serializer.Write(this.gazedirection_list);
+            serializer.WriteLength(this.gazeorigin_list);
+            serializer.Write(this.gazeorigin_list);
+            serializer.WriteLength(this.gazetargetname_list);
+            serializer.Write(this.gazetargetname_list);
+            serializer.WriteLength(this.gazetargetposition_list);
+            serializer.Write(this.gazetargetposition_list);
+            serializer.WriteLength(this.headvelocity_list);
+            serializer.Write(this.headvelocity_list);
+            serializer.WriteLength(this.headmovementdirection_list);
+            serializer.Write(this.headmovementdirection_list);
             serializer.Write(this.trajectory);
             serializer.Write(this.success);
         }
@@ -115,9 +174,19 @@ namespace RosMessageTypes.Mrirac
             "\nend_effector_finishing_placement: " + end_effector_finishing_placement.ToString() +
             "\nstart_coordinates: " + start_coordinates.ToString() +
             "\ngoal_coordinates: " + goal_coordinates.ToString() +
+            "\nrobot_base_coordinates: " + robot_base_coordinates.ToString() +
             "\neuclidean_distance: " + euclidean_distance.ToString() +
             "\nwaypoints_placements: " + waypoints_placements.ToString() +
+            "\nwaypointcount_list: " + System.String.Join(", ", waypointcount_list.ToList()) +
             "\nend_effector_position_list: " + System.String.Join(", ", end_effector_position_list.ToList()) +
+            "\ntime_list: " + System.String.Join(", ", time_list.ToList()) +
+            "\nhandtracking_list: " + System.String.Join(", ", handtracking_list.ToList()) +
+            "\ngazedirection_list: " + System.String.Join(", ", gazedirection_list.ToList()) +
+            "\ngazeorigin_list: " + System.String.Join(", ", gazeorigin_list.ToList()) +
+            "\ngazetargetname_list: " + System.String.Join(", ", gazetargetname_list.ToList()) +
+            "\ngazetargetposition_list: " + System.String.Join(", ", gazetargetposition_list.ToList()) +
+            "\nheadvelocity_list: " + System.String.Join(", ", headvelocity_list.ToList()) +
+            "\nheadmovementdirection_list: " + System.String.Join(", ", headmovementdirection_list.ToList()) +
             "\ntrajectory: " + trajectory.ToString() +
             "\nsuccess: " + success.ToString();
         }

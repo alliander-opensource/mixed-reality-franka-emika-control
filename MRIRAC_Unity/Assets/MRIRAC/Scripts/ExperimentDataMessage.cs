@@ -63,7 +63,7 @@ public class ExperimentDataMessage : MonoBehaviour
     private int timer;
     private int interval;
     private float elapsedtime;
-    public List<float> time_list;
+    public List<double> time_list;
 
     private IMixedRealityHand handTarget;
     private MixedRealityPose Palmpose;
@@ -73,14 +73,14 @@ public class ExperimentDataMessage : MonoBehaviour
     [SerializeField]
     private HandPosePublisher HandPosePublisher;
 
-    public List<Vector3> gazedirection_list;
-    public List<Vector3> gazeorigin_list;
+    public List<PointMsg> gazedirection_list;
+    public List<PointMsg> gazeorigin_list;
     public List<string> gazetargetname_list;
-    public List<Vector3> gazetargetposition_list;
-    public List<Vector3> headvelocity_list;
-    public List<Vector3> headmovementdirection_list;
+    public List<PointMsg> gazetargetposition_list;
+    public List<PointMsg> headvelocity_list;
+    public List<PointMsg> headmovementdirection_list;
 
-    public List<int> waypointcount_list;
+    public List<long> waypointcount_list;
 
     void Start()
     {
@@ -149,25 +149,63 @@ public class ExperimentDataMessage : MonoBehaviour
                 // Debug.Log(handpose);
 
                 // Eye tracking timeseries
-                gazedirection_list.Add(CoreServices.InputSystem.GazeProvider.GazeDirection);
+                PointMsg gazedirection_msg = new PointMsg()
+                {
+                    x = CoreServices.InputSystem.GazeProvider.GazeDirection.x,
+                    y = CoreServices.InputSystem.GazeProvider.GazeDirection.y,
+                    z = CoreServices.InputSystem.GazeProvider.GazeDirection.z
+                };
+                gazedirection_list.Add(gazedirection_msg);
                 // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeDirection);
-                gazeorigin_list.Add(CoreServices.InputSystem.GazeProvider.GazeOrigin);
+                PointMsg gazeoriging_msg = new PointMsg()
+                {
+                    x = CoreServices.InputSystem.GazeProvider.GazeOrigin.x,
+                    y = CoreServices.InputSystem.GazeProvider.GazeOrigin.y,
+                    z = CoreServices.InputSystem.GazeProvider.GazeOrigin.z
+                };
+                gazeorigin_list.Add(gazeoriging_msg);
                 // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeOrigin);
                 if (CoreServices.InputSystem.GazeProvider.GazeTarget)
                 {
                     gazetargetname_list.Add(CoreServices.InputSystem.GazeProvider.GazeTarget.name.ToString());
-                    gazetargetposition_list.Add(CoreServices.InputSystem.GazeProvider.GazeTarget.transform.position);
+
+                    PointMsg gazetargetposition_msg = new PointMsg()
+                    {
+                        x = CoreServices.InputSystem.GazeProvider.GazeTarget.transform.position.x,
+                        y = CoreServices.InputSystem.GazeProvider.GazeTarget.transform.position.y,
+                        z = CoreServices.InputSystem.GazeProvider.GazeTarget.transform.position.z
+                    };
+                    gazetargetposition_list.Add(gazetargetposition_msg);
                 }
                 else
                 {
                     gazetargetname_list.Add(null);
-                    gazetargetposition_list.Add(new Vector3(999999f, 999999f, 999999f));
+
+                    PointMsg gazetargetposition_msg = new PointMsg()
+                    {
+                        x = 999999f,
+                        y = 999999f,
+                        z = 999999f
+                    };
+                    gazetargetposition_list.Add(gazetargetposition_msg);
                 }
                 // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeTarget);
 
                 // Head tracking timeseries
-                headvelocity_list.Add(CoreServices.InputSystem.GazeProvider.HeadMovementDirection);
-                headmovementdirection_list.Add(CoreServices.InputSystem.GazeProvider.HeadVelocity);
+                PointMsg headvelocity_msg = new PointMsg()
+                    {
+                        x = CoreServices.InputSystem.GazeProvider.HeadVelocity.x,
+                        y = CoreServices.InputSystem.GazeProvider.HeadVelocity.y,
+                        z = CoreServices.InputSystem.GazeProvider.HeadVelocity.z
+                    };
+                headvelocity_list.Add(headvelocity_msg);
+                PointMsg headmovementdirection_msg = new PointMsg()
+                    {
+                        x = CoreServices.InputSystem.GazeProvider.HeadMovementDirection.x,
+                        y = CoreServices.InputSystem.GazeProvider.HeadMovementDirection.y,
+                        z = CoreServices.InputSystem.GazeProvider.HeadMovementDirection.z
+                    };
+                headmovementdirection_list.Add(headmovementdirection_msg);
 
                 // Waypoint count timeseries
                 waypointcount_list.Add(waypointPlanner.listOfWaypoints.Count);
@@ -254,8 +292,8 @@ public class ExperimentDataMessage : MonoBehaviour
         };
 
         // Waypoint counter timeseries
-        Debug.Log(waypointcount_list.Count)
-        int[] WaypointCountArray = waypointcount_list.ToArray();
+        Debug.Log(waypointcount_list.Count);
+        long[] WaypointCountArray = waypointcount_list.ToArray();
 
         // Time series end effector
         // Create function that tracks it from the moment start is entered
@@ -265,7 +303,7 @@ public class ExperimentDataMessage : MonoBehaviour
 
         // Time timeseries
         Debug.Log(time_list.Count);
-        float[] TimeArray = time_list.ToArray();
+        double[] TimeArray = time_list.ToArray();
 
         // Handtracking timeseries
         Debug.Log(handtracking_list.Count);
