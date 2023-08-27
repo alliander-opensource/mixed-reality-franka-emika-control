@@ -80,6 +80,8 @@ public class ExperimentDataMessage : MonoBehaviour
     public List<Vector3> headvelocity_list;
     public List<Vector3> headmovementdirection_list;
 
+    public List<int> waypointcount_list;
+
     void Start()
     {
         ros = ROSConnection.GetOrCreateInstance();
@@ -167,7 +169,8 @@ public class ExperimentDataMessage : MonoBehaviour
                 headvelocity_list.Add(CoreServices.InputSystem.GazeProvider.HeadMovementDirection);
                 headmovementdirection_list.Add(CoreServices.InputSystem.GazeProvider.HeadVelocity);
 
-
+                // Waypoint count timeseries
+                waypointcount_list.Add(waypointPlanner.listOfWaypoints.Count);
             }
         }
 
@@ -250,6 +253,10 @@ public class ExperimentDataMessage : MonoBehaviour
             poses = WaypointsList.ToArray()
         };
 
+        // Waypoint counter timeseries
+        Debug.Log(waypointcount_list.Count)
+        int[] WaypointCountArray = waypointcount_list.ToArray();
+
         // Time series end effector
         // Create function that tracks it from the moment start is entered
         Debug.Log(EndEffectorPositionList.Count);
@@ -323,6 +330,7 @@ public class ExperimentDataMessage : MonoBehaviour
             robot_base_coordinates = RobotBaseCoordinates,
             euclidean_distance = dist,
             waypoints_placements = waypoints,
+            waypointcount_list = WaypointCountArray,
             end_effector_position_list = EndEffectorPositionArray,
             time_list = TimeArray,
             handtracking_list = HandTrackingArray,

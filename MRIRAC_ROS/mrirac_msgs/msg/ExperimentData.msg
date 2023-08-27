@@ -10,6 +10,7 @@ geometry_msgs/Point goal_coordinates
 geometry_msgs/Pose robot_base_coordinates
 float64 euclidean_distance
 geometry_msgs/PoseArray waypoints_placements
+int64[] waypointcount_list
 geometry_msgs/PoseStamped[] end_effector_position_list
 float64[] time_list
 geometry_msgs/Pose[] handtracking_list
