@@ -92,7 +92,7 @@ public class ExperimentDataMessage : MonoBehaviour
         StoringEndEffectorPosition = false;
 
         timer = 0;
-        interval = 6;
+        interval = 2;//6;
         elapsedtime = 0f;
        
     }
@@ -179,7 +179,7 @@ public class ExperimentDataMessage : MonoBehaviour
                 }
                 else
                 {
-                    gazetargetname_list.Add(null);
+                    gazetargetname_list.Add("null");
 
                     PointMsg gazetargetposition_msg = new PointMsg()
                     {

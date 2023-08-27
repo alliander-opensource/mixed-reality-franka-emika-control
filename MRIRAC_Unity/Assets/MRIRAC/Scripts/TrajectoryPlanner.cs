@@ -113,6 +113,7 @@ public class TrajectoryPlanner : MonoBehaviour
 
             StartCoroutine(ShowTrajectory(points, planVizualizationSpeed, endWait: 3.0f));
 
+            CallTrajectoryExecutor();
         }
         else
         {
