@@ -1,6 +1,7 @@
 using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
+using System.Collections;
 
 public class StartPositionArm : MonoBehaviour
 {
@@ -29,7 +30,14 @@ public class StartPositionArm : MonoBehaviour
     public void CallStartPositionArm()
     {
         serviceSetRRTConnect.CallSetRRTConnectPlanner();
+        StartCoroutine(WaitASecond());
         ros.SendServiceMessage<EmptyResponse>(startPositionServiceName, new EmptyRequest());
         serviceSetRRTStar.CallSetRRTStarPlanner();
+    }
+
+    private IEnumerator WaitASecond()
+    {
+        // suspend execution for 1 seconds
+        yield return new WaitForSeconds(1);
     }
 }
