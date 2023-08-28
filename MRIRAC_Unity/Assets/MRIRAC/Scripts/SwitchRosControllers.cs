@@ -47,12 +47,12 @@ public class SwitchRosControllers : MonoBehaviour
 
     public void AcitaveTrajectoryControl()
     {
-        CallSwitchController("effort_joint_trajectory_controller", "cartesian_impedance_example_controller");
+        CallSwitchController("position_joint_trajectory_controller", "cartesian_impedance_example_controller");
     }
 
     public void AcitaveCartesianImpedanceControl()
     {
-        CallSwitchController("cartesian_impedance_example_controller", "effort_joint_trajectory_controller");
+        CallSwitchController("cartesian_impedance_example_controller", "position_joint_trajectory_controller");
     }
 
 }

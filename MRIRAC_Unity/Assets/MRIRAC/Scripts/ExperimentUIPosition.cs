@@ -30,10 +30,10 @@ public class ExperimentUIPosition : MonoBehaviour
         ExperimentDirectControlUIObject.transform.SetParent(ExperimentEnvironmentObject.transform, true);
         ExperimentCommandControlUIObject.transform.SetParent(ExperimentEnvironmentObject.transform, true);
 
-        ExperimentUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition + new Vector3(-0.7f, 0.2f, 0f);
-        ExperimentWaypointControlUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition +  new Vector3(-1f, 0.2f, 0f);
-        ExperimentDirectControlUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition +  new Vector3(-1f, 0.2f, 0f);
-        ExperimentCommandControlUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition +  new Vector3(-1f, 0.2f, 0f);
+        ExperimentUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition + new Vector3(-0.5f, 0.2f, 0f);
+        ExperimentWaypointControlUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition +  new Vector3(-0.8f, 0.2f, 0f);
+        ExperimentDirectControlUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition +  new Vector3(-0.8f, 0.2f, 0f);
+        ExperimentCommandControlUIObject.transform.localPosition = ExperimentDirectControlEnvironmentObject.transform.localPosition +  new Vector3(-0.8f, 0.2f, 0f);
 
         ExperimentUIObject.transform.localRotation = new Quaternion(0f, 1f, 0f, 0f);
         ExperimentWaypointControlUIObject.transform.localRotation = new Quaternion(0f, 1f, 0f, 0f);

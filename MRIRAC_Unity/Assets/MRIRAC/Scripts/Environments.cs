@@ -55,8 +55,8 @@ public class Environments : MonoBehaviour
 
         serviceWorkspaceConstraint = serviceObject.GetComponent<SetWorkspaceConstraint>();
         serviceStartPosition = serviceObject.GetComponent<StartPositionArm>();
-        serviceSetRRTConnect =serviceObject.GetComponent<SetRRTConnectPlanner>();
-        serviceSetRRTStar =serviceObject.GetComponent<SetRRTStarPlanner>();
+        serviceSetRRTConnect = serviceObject.GetComponent<SetRRTConnectPlanner>();
+        serviceSetRRTStar = serviceObject.GetComponent<SetRRTStarPlanner>();
     }
 
     void PublishHologramMeshes()
