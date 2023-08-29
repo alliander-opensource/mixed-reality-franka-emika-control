@@ -21,6 +21,7 @@ public class SetRRTConnectPlanner : MonoBehaviour
 
     public void CallSetRRTConnectPlanner()
     {
+        Debug.Log("Set RRTConnect");
         ros.SendServiceMessage<EmptyResponse>(setRRTConnectPlannerServiceName, new EmptyRequest());
     }
 }

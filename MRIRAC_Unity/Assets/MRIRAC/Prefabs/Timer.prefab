@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 4309048347173722610}
-  currentTime: 60
+  currentTime: 90
   countDown: 1
   hasLimit: 1
   timerLimit: 0

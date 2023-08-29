@@ -29,10 +29,10 @@ public class StartPositionArm : MonoBehaviour
 
     public void CallStartPositionArm()
     {
-        serviceSetRRTConnect.CallSetRRTConnectPlanner();
-        StartCoroutine(WaitASecond());
+        // serviceSetRRTConnect.CallSetRRTConnectPlanner();
+        // StartCoroutine(WaitASecond());
         ros.SendServiceMessage<EmptyResponse>(startPositionServiceName, new EmptyRequest());
-        serviceSetRRTStar.CallSetRRTStarPlanner();
+        // serviceSetRRTStar.CallSetRRTStarPlanner();
     }
 
     private IEnumerator WaitASecond()
