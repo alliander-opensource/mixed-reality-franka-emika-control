@@ -111,7 +111,7 @@ public class TrajectoryPlanner : MonoBehaviour
 
             JointTrajectoryPointMsg[] points = trajectory.points;
 
-            // StartCoroutine(ShowTrajectory(points, planVizualizationSpeed, endWait: 3.0f));
+            StartCoroutine(ShowTrajectory(points, 200f, endWait: 3.0f)); //planVizualizationSpeed
 
             CallTrajectoryExecutor();
         }

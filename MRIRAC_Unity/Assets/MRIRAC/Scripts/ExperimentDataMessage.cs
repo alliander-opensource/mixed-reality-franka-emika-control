@@ -145,8 +145,8 @@ public class ExperimentDataMessage : MonoBehaviour
                 }
 
                 handtracking_list.Add(handpose);
-                // Debug.Log("added handpose");
-                // Debug.Log(handpose);
+                Debug.Log("added handpose");
+                Debug.Log(handpose);
 
                 // Eye tracking timeseries
                 PointMsg gazedirection_msg = new PointMsg()
