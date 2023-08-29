@@ -52,6 +52,9 @@ public class ExperimentDataMessage : MonoBehaviour
     [SerializeField]
     private TrajectoryPlanner trajectoryPlanner;
 
+    [SerializeField]
+    private GameObject cameraObject;
+
     private string ControlMethod;
     private string Condition;
 
@@ -68,7 +71,17 @@ public class ExperimentDataMessage : MonoBehaviour
     private IMixedRealityHand handTarget;
     private MixedRealityPose Palmpose;
     public List<PoseMsg> handtracking_list;
+    public List<PoseMsg> handtrackingthumb_list;
+    public List<PoseMsg> handtrackingindex_list;
+    public List<PoseMsg> handtrackingmiddle_list;
+    public List<PoseMsg> handtrackingring_list;
+    public List<PoseMsg> handtrackingpink_list;
     private PoseMsg handpose;
+    private PoseMsg handthumbpose;
+    private PoseMsg handindexpose;
+    private PoseMsg handmiddlepose;
+    private PoseMsg handringpose;
+    private PoseMsg handpinkpose;
 
     [SerializeField]
     private HandPosePublisher HandPosePublisher;
@@ -79,6 +92,7 @@ public class ExperimentDataMessage : MonoBehaviour
     public List<PointMsg> gazetargetposition_list;
     public List<PointMsg> headvelocity_list;
     public List<PointMsg> headmovementdirection_list;
+    public List<PoseMsg> headcamera_list;
 
     public List<long> waypointcount_list;
 
@@ -138,15 +152,70 @@ public class ExperimentDataMessage : MonoBehaviour
                         position = new PointMsg(PalmPose.Position.x, PalmPose.Position.y, PalmPose.Position.z),
                         orientation = new QuaternionMsg(PalmPose.Rotation.x, PalmPose.Rotation.y, PalmPose.Rotation.z, PalmPose.Rotation.w)
                     };
+
+                    handTarget.TryGetJoint(TrackedHandJoint.ThumbTip, out MixedRealityPose ThumbTipPose);
+
+                    handthumbpose = new PoseMsg()
+                    {
+                        position = new PointMsg(ThumbTipPose.Position.x, ThumbTipPose.Position.y, ThumbTipPose.Position.z),
+                        orientation = new QuaternionMsg(ThumbTipPose.Rotation.x, ThumbTipPose.Rotation.y, ThumbTipPose.Rotation.z, ThumbTipPose.Rotation.w)
+                    };
+
+                    handTarget.TryGetJoint(TrackedHandJoint.IndexTip, out MixedRealityPose IndexTipPose);
+
+                    handindexpose = new PoseMsg()
+                    {
+                        position = new PointMsg(IndexTipPose.Position.x, IndexTipPose.Position.y, IndexTipPose.Position.z),
+                        orientation = new QuaternionMsg(IndexTipPose.Rotation.x, IndexTipPose.Rotation.y, IndexTipPose.Rotation.z, IndexTipPose.Rotation.w)
+                    };
+
+                    handTarget.TryGetJoint(TrackedHandJoint.MiddleTip, out MixedRealityPose MiddleTipPose);
+
+                    handmiddlepose = new PoseMsg()
+                    {
+                        position = new PointMsg(MiddleTipPose.Position.x, MiddleTipPose.Position.y, MiddleTipPose.Position.z),
+                        orientation = new QuaternionMsg(MiddleTipPose.Rotation.x, MiddleTipPose.Rotation.y, MiddleTipPose.Rotation.z, MiddleTipPose.Rotation.w)
+                    };
+
+                    handTarget.TryGetJoint(TrackedHandJoint.RingTip, out MixedRealityPose RingTipPose);
+
+                    handringpose = new PoseMsg()
+                    {
+                        position = new PointMsg(RingTipPose.Position.x, RingTipPose.Position.y, RingTipPose.Position.z),
+                        orientation = new QuaternionMsg(RingTipPose.Rotation.x, RingTipPose.Rotation.y, RingTipPose.Rotation.z, RingTipPose.Rotation.w)
+                    };
+
+                    handTarget.TryGetJoint(TrackedHandJoint.PinkyTip, out MixedRealityPose PinkTipPose);
+
+                    handpinkpose = new PoseMsg()
+                    {
+                        position = new PointMsg(PinkTipPose.Position.x, PinkTipPose.Position.y, PinkTipPose.Position.z),
+                        orientation = new QuaternionMsg(PinkTipPose.Rotation.x, PinkTipPose.Rotation.y, PinkTipPose.Rotation.z, PinkTipPose.Rotation.w)
+                    };
                 }
                 else
                 {
                     handpose = new PoseMsg();
+                    handthumbpose = new PoseMsg();
+                    handindexpose = new PoseMsg();
+                    handmiddlepose = new PoseMsg();
+                    handringpose = new PoseMsg();
+                    handpinkpose = new PoseMsg();
                 }
 
                 handtracking_list.Add(handpose);
-                Debug.Log("added handpose");
+                handtrackingthumb_list.Add(handthumbpose);
+                handtrackingindex_list.Add(handindexpose);
+                handtrackingmiddle_list.Add(handmiddlepose);
+                handtrackingring_list.Add(handringpose);
+                handtrackingpink_list.Add(handpinkpose);
+                Debug.Log("added handposes");
                 Debug.Log(handpose);
+                Debug.Log(handthumbpose);
+                Debug.Log(handindexpose);
+                Debug.Log(handmiddlepose);
+                Debug.Log(handringpose);
+                Debug.Log(handpinkpose);
 
                 // Eye tracking timeseries
                 PointMsg gazedirection_msg = new PointMsg()
@@ -206,6 +275,13 @@ public class ExperimentDataMessage : MonoBehaviour
                         z = CoreServices.InputSystem.GazeProvider.HeadMovementDirection.z
                     };
                 headmovementdirection_list.Add(headmovementdirection_msg);
+
+                PoseMsg headcamerapose_msg = new PoseMsg()
+                    {
+                        position = new PointMsg(cameraObject.transform.position.x, cameraObject.transform.position.y, cameraObject.transform.position.z),
+                        orientation = new QuaternionMsg(cameraObject.transform.rotation.x, cameraObject.transform.rotation.y, cameraObject.transform.rotation.z, cameraObject.transform.rotation.w)
+                    };
+                headcamera_list.Add(headcamerapose_msg);
 
                 // Waypoint count timeseries
                 waypointcount_list.Add(waypointPlanner.listOfWaypoints.Count);
@@ -308,6 +384,16 @@ public class ExperimentDataMessage : MonoBehaviour
         // Handtracking timeseries
         Debug.Log(handtracking_list.Count);
         PoseMsg[] HandTrackingArray = handtracking_list.ToArray();
+        Debug.Log(handtrackingthumb_list.Count);
+        PoseMsg[] HandTrackingThumbArray = handtrackingthumb_list.ToArray();
+        Debug.Log(handtrackingindex_list.Count);
+        PoseMsg[] HandTrackingIndexArray = handtrackingindex_list.ToArray();
+        Debug.Log(handtrackingmiddle_list.Count);
+        PoseMsg[] HandTrackingMiddleArray = handtrackingmiddle_list.ToArray();
+        Debug.Log(handtrackingring_list.Count);
+        PoseMsg[] HandTrackingRingArray = handtrackingring_list.ToArray();
+        Debug.Log(handtrackingpink_list.Count);
+        PoseMsg[] HandTrackingPinkArray = handtrackingpink_list.ToArray();
 
         //Gazetracking timeseries
         Debug.Log(gazedirection_list.Count);
@@ -324,6 +410,8 @@ public class ExperimentDataMessage : MonoBehaviour
         PointMsg[] HeadMovementDirectionArray = headmovementdirection_list.ToArray();
         Debug.Log(headvelocity_list.Count);
         PointMsg[] HeadVelocityArray = headvelocity_list.ToArray();
+        Debug.Log(headcamera_list.Count);
+        PoseMsg[] HeadCameraArray = headcamera_list.ToArray();
 
         // Trajectory in joint values and succes
         // Find it in waypoint trajectory or normal trajectory script
@@ -372,12 +460,18 @@ public class ExperimentDataMessage : MonoBehaviour
             end_effector_position_list = EndEffectorPositionArray,
             time_list = TimeArray,
             handtracking_list = HandTrackingArray,
+            handtracking_thumb_list = HandTrackingThumbArray,
+            handtracking_index_list = HandTrackingIndexArray,
+            handtracking_middle_list = HandTrackingMiddleArray,
+            handtracking_ring_list = HandTrackingRingArray,
+            handtracking_pink_list = HandTrackingPinkArray,
             gazedirection_list = GazeDirectionArray,
             gazeorigin_list = GazeOriginArray,
             gazetargetname_list = GazeTargetNameArray,
             gazetargetposition_list = GazeTargetPositionArray,
             headvelocity_list = HeadVelocityArray,
             headmovementdirection_list = HeadMovementDirectionArray,
+            head_camera_list = HeadCameraArray,
             trajectory = Trajectory,
             success = Success
         };

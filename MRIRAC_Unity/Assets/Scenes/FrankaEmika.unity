@@ -55919,6 +55919,7 @@ MonoBehaviour:
   EnvironmentsScript: {fileID: 1657489586}
   waypointPlanner: {fileID: 1657489580}
   trajectoryPlanner: {fileID: 7432322551136909512}
+  cameraObject: {fileID: 1778474920}
   EndEffectorCoordinates: {fileID: 0}
   StoringEndEffectorPosition: 0
   EndEffectorPositionList: []
@@ -55928,6 +55929,11 @@ MonoBehaviour:
   Success: 0
   time_list: []
   handtracking_list: []
+  handtrackingthumb_list: []
+  handtrackingindex_list: []
+  handtrackingmiddle_list: []
+  handtrackingring_list: []
+  handtrackingpink_list: []
   HandPosePublisher: {fileID: 1632255265}
   gazedirection_list: []
   gazeorigin_list: []
@@ -55935,6 +55941,7 @@ MonoBehaviour:
   gazetargetposition_list: []
   headvelocity_list: []
   headmovementdirection_list: []
+  headcamera_list: []
   waypointcount_list: 
 --- !u!1001 &1657983775
 PrefabInstance:

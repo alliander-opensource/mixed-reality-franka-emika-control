@@ -29,12 +29,18 @@ namespace RosMessageTypes.Mrirac
         public Geometry.PoseStampedMsg[] end_effector_position_list;
         public double[] time_list;
         public Geometry.PoseMsg[] handtracking_list;
+        public Geometry.PoseMsg[] handtracking_thumb_list;
+        public Geometry.PoseMsg[] handtracking_index_list;
+        public Geometry.PoseMsg[] handtracking_middle_list;
+        public Geometry.PoseMsg[] handtracking_ring_list;
+        public Geometry.PoseMsg[] handtracking_pink_list;
         public Geometry.PointMsg[] gazedirection_list;
         public Geometry.PointMsg[] gazeorigin_list;
         public string[] gazetargetname_list;
         public Geometry.PointMsg[] gazetargetposition_list;
         public Geometry.PointMsg[] headvelocity_list;
         public Geometry.PointMsg[] headmovementdirection_list;
+        public Geometry.PoseMsg[] head_camera_list;
         public Trajectory.JointTrajectoryMsg trajectory;
         public bool success;
 
@@ -56,17 +62,23 @@ namespace RosMessageTypes.Mrirac
             this.end_effector_position_list = new Geometry.PoseStampedMsg[0];
             this.time_list = new double[0];
             this.handtracking_list = new Geometry.PoseMsg[0];
+            this.handtracking_thumb_list = new Geometry.PoseMsg[0];
+            this.handtracking_index_list = new Geometry.PoseMsg[0];
+            this.handtracking_middle_list = new Geometry.PoseMsg[0];
+            this.handtracking_ring_list = new Geometry.PoseMsg[0];
+            this.handtracking_pink_list = new Geometry.PoseMsg[0];
             this.gazedirection_list = new Geometry.PointMsg[0];
             this.gazeorigin_list = new Geometry.PointMsg[0];
             this.gazetargetname_list = new string[0];
             this.gazetargetposition_list = new Geometry.PointMsg[0];
             this.headvelocity_list = new Geometry.PointMsg[0];
             this.headmovementdirection_list = new Geometry.PointMsg[0];
+            this.head_camera_list = new Geometry.PoseMsg[0];
             this.trajectory = new Trajectory.JointTrajectoryMsg();
             this.success = false;
         }
 
-        public ExperimentDataMsg(string environment_name, string condition_number, string control_method, long collisions_amount, double operation_time, Geometry.PoseMsg target_end_effector_placement, Geometry.PoseMsg end_effector_finishing_placement, Geometry.PointMsg start_coordinates, Geometry.PointMsg goal_coordinates, Geometry.PoseMsg robot_base_coordinates, double euclidean_distance, Geometry.PoseArrayMsg waypoints_placements, long[] waypointcount_list, Geometry.PoseStampedMsg[] end_effector_position_list, double[] time_list, Geometry.PoseMsg[] handtracking_list, Geometry.PointMsg[] gazedirection_list, Geometry.PointMsg[] gazeorigin_list, string[] gazetargetname_list, Geometry.PointMsg[] gazetargetposition_list, Geometry.PointMsg[] headvelocity_list, Geometry.PointMsg[] headmovementdirection_list, Trajectory.JointTrajectoryMsg trajectory, bool success)
+        public ExperimentDataMsg(string environment_name, string condition_number, string control_method, long collisions_amount, double operation_time, Geometry.PoseMsg target_end_effector_placement, Geometry.PoseMsg end_effector_finishing_placement, Geometry.PointMsg start_coordinates, Geometry.PointMsg goal_coordinates, Geometry.PoseMsg robot_base_coordinates, double euclidean_distance, Geometry.PoseArrayMsg waypoints_placements, long[] waypointcount_list, Geometry.PoseStampedMsg[] end_effector_position_list, double[] time_list, Geometry.PoseMsg[] handtracking_list, Geometry.PoseMsg[] handtracking_thumb_list, Geometry.PoseMsg[] handtracking_index_list, Geometry.PoseMsg[] handtracking_middle_list, Geometry.PoseMsg[] handtracking_ring_list, Geometry.PoseMsg[] handtracking_pink_list, Geometry.PointMsg[] gazedirection_list, Geometry.PointMsg[] gazeorigin_list, string[] gazetargetname_list, Geometry.PointMsg[] gazetargetposition_list, Geometry.PointMsg[] headvelocity_list, Geometry.PointMsg[] headmovementdirection_list, Geometry.PoseMsg[] head_camera_list, Trajectory.JointTrajectoryMsg trajectory, bool success)
         {
             this.environment_name = environment_name;
             this.condition_number = condition_number;
@@ -84,12 +96,18 @@ namespace RosMessageTypes.Mrirac
             this.end_effector_position_list = end_effector_position_list;
             this.time_list = time_list;
             this.handtracking_list = handtracking_list;
+            this.handtracking_thumb_list = handtracking_thumb_list;
+            this.handtracking_index_list = handtracking_index_list;
+            this.handtracking_middle_list = handtracking_middle_list;
+            this.handtracking_ring_list = handtracking_ring_list;
+            this.handtracking_pink_list = handtracking_pink_list;
             this.gazedirection_list = gazedirection_list;
             this.gazeorigin_list = gazeorigin_list;
             this.gazetargetname_list = gazetargetname_list;
             this.gazetargetposition_list = gazetargetposition_list;
             this.headvelocity_list = headvelocity_list;
             this.headmovementdirection_list = headmovementdirection_list;
+            this.head_camera_list = head_camera_list;
             this.trajectory = trajectory;
             this.success = success;
         }
@@ -114,12 +132,18 @@ namespace RosMessageTypes.Mrirac
             deserializer.Read(out this.end_effector_position_list, Geometry.PoseStampedMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.time_list, sizeof(double), deserializer.ReadLength());
             deserializer.Read(out this.handtracking_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.handtracking_thumb_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.handtracking_index_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.handtracking_middle_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.handtracking_ring_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.handtracking_pink_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.gazedirection_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.gazeorigin_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.gazetargetname_list, deserializer.ReadLength());
             deserializer.Read(out this.gazetargetposition_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.headvelocity_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
             deserializer.Read(out this.headmovementdirection_list, Geometry.PointMsg.Deserialize, deserializer.ReadLength());
+            deserializer.Read(out this.head_camera_list, Geometry.PoseMsg.Deserialize, deserializer.ReadLength());
             this.trajectory = Trajectory.JointTrajectoryMsg.Deserialize(deserializer);
             deserializer.Read(out this.success);
         }
@@ -146,6 +170,16 @@ namespace RosMessageTypes.Mrirac
             serializer.Write(this.time_list);
             serializer.WriteLength(this.handtracking_list);
             serializer.Write(this.handtracking_list);
+            serializer.WriteLength(this.handtracking_thumb_list);
+            serializer.Write(this.handtracking_thumb_list);
+            serializer.WriteLength(this.handtracking_index_list);
+            serializer.Write(this.handtracking_index_list);
+            serializer.WriteLength(this.handtracking_middle_list);
+            serializer.Write(this.handtracking_middle_list);
+            serializer.WriteLength(this.handtracking_ring_list);
+            serializer.Write(this.handtracking_ring_list);
+            serializer.WriteLength(this.handtracking_pink_list);
+            serializer.Write(this.handtracking_pink_list);
             serializer.WriteLength(this.gazedirection_list);
             serializer.Write(this.gazedirection_list);
             serializer.WriteLength(this.gazeorigin_list);
@@ -158,6 +192,8 @@ namespace RosMessageTypes.Mrirac
             serializer.Write(this.headvelocity_list);
             serializer.WriteLength(this.headmovementdirection_list);
             serializer.Write(this.headmovementdirection_list);
+            serializer.WriteLength(this.head_camera_list);
+            serializer.Write(this.head_camera_list);
             serializer.Write(this.trajectory);
             serializer.Write(this.success);
         }
@@ -181,12 +217,18 @@ namespace RosMessageTypes.Mrirac
             "\nend_effector_position_list: " + System.String.Join(", ", end_effector_position_list.ToList()) +
             "\ntime_list: " + System.String.Join(", ", time_list.ToList()) +
             "\nhandtracking_list: " + System.String.Join(", ", handtracking_list.ToList()) +
+            "\nhandtracking_thumb_list: " + System.String.Join(", ", handtracking_thumb_list.ToList()) +
+            "\nhandtracking_index_list: " + System.String.Join(", ", handtracking_index_list.ToList()) +
+            "\nhandtracking_middle_list: " + System.String.Join(", ", handtracking_middle_list.ToList()) +
+            "\nhandtracking_ring_list: " + System.String.Join(", ", handtracking_ring_list.ToList()) +
+            "\nhandtracking_pink_list: " + System.String.Join(", ", handtracking_pink_list.ToList()) +
             "\ngazedirection_list: " + System.String.Join(", ", gazedirection_list.ToList()) +
             "\ngazeorigin_list: " + System.String.Join(", ", gazeorigin_list.ToList()) +
             "\ngazetargetname_list: " + System.String.Join(", ", gazetargetname_list.ToList()) +
             "\ngazetargetposition_list: " + System.String.Join(", ", gazetargetposition_list.ToList()) +
             "\nheadvelocity_list: " + System.String.Join(", ", headvelocity_list.ToList()) +
             "\nheadmovementdirection_list: " + System.String.Join(", ", headmovementdirection_list.ToList()) +
+            "\nhead_camera_list: " + System.String.Join(", ", head_camera_list.ToList()) +
             "\ntrajectory: " + trajectory.ToString() +
             "\nsuccess: " + success.ToString();
         }
