@@ -3,7 +3,7 @@
     <arg name="load_gripper" />
     <arg name="arm_id" default="fr3" />
     <arg name="robot" default="fr3" />
-    <arg name="transmission" default="effort" />
+    <arg name="transmission" default="position" />
 
     <include file="$(find panda_moveit_config)/launch/franka_control.launch" pass_all_args="true" />
     <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>

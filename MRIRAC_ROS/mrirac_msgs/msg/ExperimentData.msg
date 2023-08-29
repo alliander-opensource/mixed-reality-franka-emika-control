@@ -14,11 +14,17 @@ int64[] waypointcount_list
 geometry_msgs/PoseStamped[] end_effector_position_list
 float64[] time_list
 geometry_msgs/Pose[] handtracking_list
+geometry_msgs/Pose[] handtracking_thumb_list
+geometry_msgs/Pose[] handtracking_index_list
+geometry_msgs/Pose[] handtracking_middle_list
+geometry_msgs/Pose[] handtracking_ring_list
+geometry_msgs/Pose[] handtracking_pink_list
 geometry_msgs/Point[] gazedirection_list
 geometry_msgs/Point[] gazeorigin_list
 string[] gazetargetname_list
 geometry_msgs/Point[] gazetargetposition_list
 geometry_msgs/Point[] headvelocity_list
 geometry_msgs/Point[] headmovementdirection_list
+geometry_msgs/Pose[] head_camera_list
 trajectory_msgs/JointTrajectory trajectory
 bool success
