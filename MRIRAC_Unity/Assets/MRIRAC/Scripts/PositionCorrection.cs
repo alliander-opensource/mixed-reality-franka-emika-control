@@ -116,6 +116,6 @@ public class PositionCorrection : MonoBehaviour
         controlPanel.SetActive(true);
 
         controlPanel.transform.rotation = gameObject.transform.rotation * Quaternion.Euler(0f, -90f, 0f);
-        controlPanel.transform.position = gameObject.transform.position + gameObject.transform.right * 0.2f; //0.1f;
+        controlPanel.transform.position = gameObject.transform.position + gameObject.transform.right * 0.2f;
     }
 }

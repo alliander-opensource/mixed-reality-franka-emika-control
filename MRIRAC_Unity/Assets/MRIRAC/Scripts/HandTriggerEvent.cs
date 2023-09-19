@@ -19,7 +19,6 @@ public class HandTriggerEvent : MonoBehaviour
         
         if (other.tag == "DirectControlEnvironment")
         {
-            // Debug.Log("Entered object");
             HandPosePublisherScript.toggle_direct_control();
         }
     }
@@ -29,7 +28,6 @@ public class HandTriggerEvent : MonoBehaviour
 
         if (other.tag == "DirectControlEnvironment")
         {
-            // Debug.Log("Exited object");
             HandPosePublisherScript.toggle_direct_control();
         }
     }

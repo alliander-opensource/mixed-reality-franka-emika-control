@@ -197,22 +197,4 @@ public class TrajectoryPlanner : MonoBehaviour
 
     public void ToggleLines() { showLines = !showLines; }
 
-    public void addPoseToWaypointList()
-    {
-        Debug.Log(waypoints);
-        PoseMsg new_waypoint = new PoseMsg()
-        {
-            position = new PointMsg(planningTarget.Position.x, planningTarget.Position.y, planningTarget.Position.z),
-            orientation = new QuaternionMsg(planningTarget.Orientation.x, planningTarget.Orientation.y, planningTarget.Orientation.z, planningTarget.Orientation.w)
-        };
-
-        waypoints.Append(new_waypoint).ToArray();
-        Debug.Log(new_waypoint);
-        Debug.Log(waypoints);
-    }
-
-    //public void resetWaypointList()
-    //{
-    //    waypoints.Clear(waypoints,0,waypoints.Length());
-    //}
 }

@@ -106,7 +106,7 @@ public class ExperimentDataMessage : MonoBehaviour
         StoringEndEffectorPosition = false;
 
         timer = 0;
-        interval = 2;//6;
+        interval = 2;
         elapsedtime = 0f;
        
     }
@@ -133,13 +133,9 @@ public class ExperimentDataMessage : MonoBehaviour
                 msg.header.stamp.sec = (uint)elapsedtime;
 
                 EndEffectorPositionList.Add(msg);
-                // Debug.Log("added end-effector");
-                // Debug.Log(msg);
 
                 // Time timeseries
                 time_list.Add(elapsedtime);
-                // Debug.Log("added elapsed time");
-                // Debug.Log(elapsedtime);
 
                 // Hand tracking timeseries
                 handTarget = (HandPosePublisher.handedness == HandEnum.R) ? HandJointUtils.FindHand(Handedness.Right) : HandJointUtils.FindHand(Handedness.Left);
@@ -225,7 +221,7 @@ public class ExperimentDataMessage : MonoBehaviour
                     z = CoreServices.InputSystem.GazeProvider.GazeDirection.z
                 };
                 gazedirection_list.Add(gazedirection_msg);
-                // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeDirection);
+
                 PointMsg gazeoriging_msg = new PointMsg()
                 {
                     x = CoreServices.InputSystem.GazeProvider.GazeOrigin.x,
@@ -233,7 +229,7 @@ public class ExperimentDataMessage : MonoBehaviour
                     z = CoreServices.InputSystem.GazeProvider.GazeOrigin.z
                 };
                 gazeorigin_list.Add(gazeoriging_msg);
-                // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeOrigin);
+
                 if (CoreServices.InputSystem.GazeProvider.GazeTarget)
                 {
                     gazetargetname_list.Add(CoreServices.InputSystem.GazeProvider.GazeTarget.name.ToString());
@@ -258,7 +254,6 @@ public class ExperimentDataMessage : MonoBehaviour
                     };
                     gazetargetposition_list.Add(gazetargetposition_msg);
                 }
-                // Debug.Log(CoreServices.InputSystem.GazeProvider.GazeTarget);
 
                 // Head tracking timeseries
                 PointMsg headvelocity_msg = new PointMsg()

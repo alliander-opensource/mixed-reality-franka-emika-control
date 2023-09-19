@@ -12,7 +12,6 @@ public class StorageHandler : MonoBehaviour
 
     public void SaveCallibrationPosition()
     {
-        //Debug.Log("In Save Function");
         var qrcodelist = QRCodesManager.GetComponent<QRCodesVisualizer>().qrCodesObjectsList;
 
         foreach (var qrcode in qrcodelist)
@@ -24,12 +23,8 @@ public class StorageHandler : MonoBehaviour
             }
 
         #if WINDOWS_UWP
-            //Debug.Log("In if");
            
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-
-            //Debug.Log("Position_x");
-            //Debug.Log(transform.localPosition[0]);
 
             localSettings.Values["Position_x"] = transform.localPosition[0];
             localSettings.Values["Position_y"] = transform.localPosition[1];
@@ -44,7 +39,6 @@ public class StorageHandler : MonoBehaviour
 
     public void SetCallibrationPosition()
     {
-        //Debug.Log("In Set Function");
 
         var qrcodelist = QRCodesManager.GetComponent<QRCodesVisualizer>().qrCodesObjectsList;
 
@@ -57,7 +51,7 @@ public class StorageHandler : MonoBehaviour
             }
 
         #if WINDOWS_UWP
-            //Debug.Log("In if");
+
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
             var position_x = localSettings.Values["Position_x"].ToString();
@@ -75,11 +69,6 @@ public class StorageHandler : MonoBehaviour
             float rotation_y_float = float.Parse(rotation_y);
             float rotation_z_float = float.Parse(rotation_z);
             float rotation_w_float = float.Parse(rotation_w);
-
-            //Debug.Log("Position_x");
-            //Debug.Log(position_x);
-            //Debug.Log(position_x.ToString());
-            //Debug.Log(position_x_float);
 
             Vector3 pos = new Vector3(position_x_float, position_y_float, position_z_float);
             Quaternion rot = new Quaternion(rotation_x_float, rotation_y_float, rotation_z_float, rotation_w_float);

@@ -74,11 +74,6 @@ PickAndPlaceNode::PickAndPlaceNode(const std::string &pick_and_place_server_name
     abort_pick_and_place_server_ = node_handle_.advertiseService("abort", &PickAndPlaceNode::Abort, this);
     open_gripper_server_ = node_handle_.advertiseService("open_gripper", &PickAndPlaceNode::OpenGripper, this);
     close_gripper_server_ = node_handle_.advertiseService("close_gripper", &PickAndPlaceNode::CloseGripper, this);
-    //move_group_interface_.setPlannerId("RRTstar");
-    //move_group_interface_.setPlanningTime(5.0f);
-    //planner_interface_.setPlannerId("RRTstar");
-    //planner_interface_.setPlanningTime(5.0f);
-
 }
 
 PickAndPlaceNode::~PickAndPlaceNode()
@@ -93,9 +88,6 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
         move_group_interface_.getRobotModel()->getJointModelGroup(kPlanningGroup_);
 
     std::vector<std::string> joint_names = joint_model_group->getJointModelNames();
-    // removing unactuated joints
-    //joint_names.erase(joint_names.begin());
-    //joint_names.pop_back();
 
     moveit::core::RobotState robot_state(move_group_interface_.getRobotModel());
     robot_state.setToDefaultValues();
@@ -113,9 +105,6 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
         res.success = false;
         return true;
     }
-
-    //move_group_interface_.setPlanningTime(10.0f);
-    //planner_interface_.setPlanningTime(10.0f);
 
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
@@ -146,23 +135,6 @@ bool PickAndPlaceNode::PlanPickAndPlace(mrirac_msgs::PlanPickAndPlace::Request &
         return true;
     }
 
-    //move_group_interface_.setPlanningTime(5.0f);
-    //planner_interface_.setPlanningTime(5.0f);
-
-    // RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
-
-    // success = RobotMovements::PlanMovementToPose(req.pre_place_pose, planner_interface_, motion_plan);
-    // if (success)
-    // {
-    //     pre_place_motion_plan_ = motion_plan;
-    //     ROS_INFO("pre_place_pose_plan_"); 
-    //     res.pre_place_trajectory = motion_plan.trajectory_.joint_trajectory;
-    // }
-    // else
-    // {
-    //     res.success = false;
-    //     return true;
-    // }
     RobotMovements::SetPlannerStartState(motion_plan.trajectory_.joint_trajectory.points.back().positions, joint_names, planner_interface_, robot_state);
 
     success = RobotMovements::PlanMovementToPose(req.place_pose, planner_interface_, motion_plan);
@@ -297,26 +269,6 @@ void PickAndPlaceNode::ExecuteCallback(const mrirac_msgs::PickAndPlaceGoalConstP
         pick_and_place_server_.setAborted(pick_and_place_result_);
         return;
     }
-    
-    // if (trajectory_planned_)
-    // {
-    //     RobotMovements::ExecutePlannedTrajectory(move_group_interface_, pre_place_motion_plan_, goal->pre_place_pose, !simulation, pose_correction_client_);
-    // }
-
-    // else
-    // {
-    //     action_success = RobotMovements::PickAndPlaceMovement(goal->pre_place_pose, move_group_interface_, pick_and_place_server_, !simulation, pose_correction_client_);
-    // }
-
-    // if (!action_success)
-    // {
-    //     trajectory_planned_ = false;
-    //     pick_and_place_result_.success = false;
-    //     ROS_INFO("Pick and Place Action: Failed");
-    //     // set the action state to failed
-    //     pick_and_place_server_.setAborted(pick_and_place_result_);
-    //     return;
-    // }
 
     if (trajectory_planned_)
     {
