@@ -2,7 +2,10 @@
 
 Programming industrial robot arms can be a tedious and unintuitive process with conventional control methods, such as joysticks or 2D GUIs.
 
-This repository contains both a Unity application and ROS packages that enable users to control a Franka Emika Research 3 robot arm using the Microsoft HoloLens 2 through a Mixed Reality experience. Besides being able to intuitivKinovaely set pose targets for the robot directly in task space, there is also a demonstration for planning a simple pick and place task. Furthermore, the application utilizes the spatial awareness capabilities of the HoloLens 2 to provide information on obstacles that are in the robot workspace, enabling collision-aware motion planning of robot movements.
+This repository contains both a Unity application and ROS packages that enable users to control a Franka Emika Research 3 robot arm using the Microsoft HoloLens 2 through a Mixed Reality experience. Besides being able to intuitively set pose targets for the robot directly in task space, there is also a demonstration for planning a simple pick and place task. Furthermore, the application utilizes the spatial awareness capabilities of the HoloLens 2 to provide information on obstacles that are in the robot workspace, enabling collision-aware motion planning of robot movements. There are three different control methods implemented into this apllication:
+- Command Control: specifying a pose goal target that the arm has to move towards.
+- Waypoint Control: specifying mutliple pose goal target that the arm has to move towards in the same order as placed.
+- Direct Control: manual control of the robotic arm by moving either the operators hand around or using a hologram as a joystick.
 
 This package is an adaption of the original [MRIRAC repository](https://github.com/microsoft/mixed-reality-robot-arm-control-demo/tree/main)
 
@@ -130,6 +133,8 @@ From the Application Menu, start the `MRIRAC` app
 
 ## Credits
 This project was developed as part of the Master Thesis for my (Koen Bessels) MSc. Robotics at the TU Delft. The project was supervised by Yke Bauke Eisema (Human Robot Interaction Lab, TU Delft) and Luc Nies (Research Center for Digital Technologies, Alliander).
+
+This package is an adaption of the original [MRIRAC repository](https://github.com/microsoft/mixed-reality-robot-arm-control-demo/tree/main). Created by Matthew Hanlon and supervised by Eric Vollenweider from the ETH Zurich.
 
 # Trademark Notice
 Trademarks This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft’s Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party’s policies.
