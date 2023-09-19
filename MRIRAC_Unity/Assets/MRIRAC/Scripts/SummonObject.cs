@@ -9,4 +9,15 @@ public class SummonObject : MonoBehaviour
         transform.position = inFrontOfCameraPos;
         transform.rotation = Quaternion.identity;
     }
+
+    public void ExperimentTargetLocation()
+    {
+        transform.localRotation = new Quaternion(0.0f, -0.7f, -0.7f, 0.0f);
+        transform.localPosition = new Vector3(0.0f, 0.4f, 0.8f);
+    }
+
+    // void Update()
+    // {
+    //     Debug.Log(transform.rotation);
+    // }
 }

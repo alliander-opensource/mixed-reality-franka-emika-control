@@ -15,6 +15,7 @@ add_message_files(
   FILES
   MeshObstacle.msg
   MeshObstacles.msg
+  ExperimentData.msg
 )
 
 add_service_files(
@@ -24,6 +25,7 @@ add_service_files(
   StartPickAndPlace.srv
   PlanPickAndPlace.srv
   WaypointTrajectoryPlan.srv
+  SwitchController.srv
 )
 
 add_action_files(

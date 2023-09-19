@@ -72,6 +72,9 @@ public class WaypointPlanner : MonoBehaviour
     public PoseArrayMsg waypoints;
     public List<PoseMsg> listOfWaypoints;
 
+    public JointTrajectoryMsg TrajectoryData;
+    public bool SuccessData;
+
 
     void Awake()
     {
@@ -103,6 +106,9 @@ public class WaypointPlanner : MonoBehaviour
             joints[i] = GameObject.FindGameObjectWithTag(linkLineTags[i]);
         }
 
+        TrajectoryData = new JointTrajectoryMsg();
+        SuccessData = false;
+
     }
 
     public void CallTrajectoryPlanner()
@@ -119,16 +125,21 @@ public class WaypointPlanner : MonoBehaviour
     {
         if (response.success)
         {
+            TrajectoryData = response.trajectory;
+            SuccessData = response.success;
+
             robotUpdater.enabled = false;
             JointTrajectoryMsg trajectory = response.trajectory;
 
             JointTrajectoryPointMsg[] points = trajectory.points;
 
-            StartCoroutine(ShowTrajectory(points, planVizualizationSpeed, endWait: 3.0f));
-
+            StartCoroutine(ShowTrajectory(points, 200f, endWait: 3.0f)); //planVizualizationSpeed
         }
         else
         {
+            TrajectoryData = response.trajectory;
+            SuccessData = response.success;
+
             Debug.Log("No motion plan found!");
             StartCoroutine(setTargetShaders1.ShowError());
         }

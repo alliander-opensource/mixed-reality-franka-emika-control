@@ -3,10 +3,24 @@
     <arg name="load_gripper" />
     <arg name="arm_id" default="fr3" />
     <arg name="robot" default="fr3" />
+    <arg name="transmission" default="position" />
 
     <include file="$(find panda_moveit_config)/launch/franka_control.launch" pass_all_args="true" />
     <include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>
     <node name="mrirac_pose_correction" pkg="mrirac_pose_correction" type="pose_correction_node" output="screen" />
     <node name="mrirac_trajectory_planner_Fr3" pkg="mrirac" type="trajectory_planner_node_Fr3" output="screen" />
     <node name="mrirac_pick_and_place_Fr3" pkg="mrirac_pick_and_place" type="pick_and_place_node_Fr3" output="screen" />
+    <node name='recovery_Fr3' pkg="mrirac" type="recovery_node" output="screen" />
+
+    <rosparam file="$(find franka_example_controllers)/config/franka_example_controllers.yaml" subst_value="true" />
+
+    <node pkg="controller_manager"
+    type="spawner"
+    name="$(arg arm_id)_controller_spawner_2"
+    respawn="false" output="screen"
+    args="--stopped cartesian_impedance_example_controller"
+    />
+
+    <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" required="false" />
+
 </launch>

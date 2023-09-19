@@ -21,6 +21,7 @@ public class SetRRTStarPlanner : MonoBehaviour
 
     public void CallSetRRTStarPlanner()
     {
+        Debug.Log("Set RRTStar");
         ros.SendServiceMessage<EmptyResponse>(setRRTStarPlannerServiceName, new EmptyRequest());
     }
 }

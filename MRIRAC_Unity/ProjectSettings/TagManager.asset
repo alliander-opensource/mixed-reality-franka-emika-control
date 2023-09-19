@@ -22,6 +22,7 @@ TagManager:
   - rightfinger
   - leftfinger
   - DirectControlEnvironment
+  - EnvironmentObstacle
   layers:
   - Default
   - TransparentFX

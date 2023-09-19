@@ -10,6 +10,11 @@
 #include <moveit_msgs/AttachedCollisionObject.h>
 #include <moveit_msgs/CollisionObject.h>
 #include <geometry_msgs/PoseArray.h>
+#include <moveit_msgs/Constraints.h>
+#include <moveit_msgs/PositionConstraint.h>
+#include <geometry_msgs/Vector3.h>
+#include <shape_msgs/SolidPrimitive.h>
+#include <geometry_msgs/Pose.h>
 
 #include "mrirac_msgs/TrajectoryPlan.h"
 #include "mrirac_msgs/WaypointTrajectoryPlan.h"
@@ -29,9 +34,12 @@ private:
   ros::ServiceServer execute_waypoint_server_;
   ros::ServiceServer clear_obstacles_server_;
   ros::ServiceServer home_service_;
+  ros::ServiceServer startPosition_service_;
   ros::ServiceServer set_standard_planner_server_;
   ros::ServiceServer set_RRTConnect_planner_server_;
   ros::ServiceServer set_RRTStar_planner_server_;
+  ros::ServiceServer set_workspace_constraint_service_;
+  ros::ServiceServer clear_workspace_constraint_service_;
 
   ros::Subscriber target_pose_subscriber_;
   ros::Subscriber waypoint_subscriber_;
@@ -72,6 +80,11 @@ private:
   void UpdateHologramObstacles(const mrirac_msgs::MeshObstacles msg);
   void UpdateSpatialObstacles(const mrirac_msgs::MeshObstacle msg);
   bool HomeArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool StartPositionArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool SetWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+  bool ClearWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res);
+
+  bool SetJointspaceConstraint();
 
 public:
   TrajectoryPlannerNode(const ros::NodeHandle &node_handle);
@@ -98,10 +111,13 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
 
   clear_obstacles_server_ = node_handle_.advertiseService("clear_obstacles", &TrajectoryPlannerNode::ClearObstacles, this);
   home_service_ = node_handle_.advertiseService("home_arm", &TrajectoryPlannerNode::HomeArm, this);
+  startPosition_service_ = node_handle_.advertiseService("start_position_arm", &TrajectoryPlannerNode::StartPositionArm, this);
 
   set_standard_planner_server_ = node_handle_.advertiseService("set_standard_planner", &TrajectoryPlannerNode::SetStandardPlanner, this);
   set_RRTConnect_planner_server_ = node_handle_.advertiseService("set_RRTConnect_planner", &TrajectoryPlannerNode::SetRRTConnectPlanner, this);
   set_RRTStar_planner_server_ = node_handle_.advertiseService("set_RRTStar_planner", &TrajectoryPlannerNode::SetRRTStarPlanner, this);
+  set_workspace_constraint_service_ = node_handle_.advertiseService("set_workspace_constraint", &TrajectoryPlannerNode::SetWorkspaceConstraint, this);
+  clear_workspace_constraint_service_ = node_handle_.advertiseService("clear_workspace_constraint", &TrajectoryPlannerNode::ClearWorkspaceConstraint, this);
 
   target_pose_subscriber_ = node_handle_.subscribe("unity_target_pose", 100, &TrajectoryPlannerNode::TargetPoseCallback, this);
   waypoint_subscriber_ = node_handle_.subscribe("unity_waypoints", 100, &TrajectoryPlannerNode::WaypointCallback, this);
@@ -110,8 +126,11 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
 
   n_obstacles_pub_ = node_handle_.advertise<std_msgs::String>("n_obstacles", 100);
 
-  //move_group_interface_.setPlannerId("RRTstar");
-  //move_group_interface_.setPlanningTime(5.0f);
+  // move_group_interface_.setPlannerId("RRTstar");
+  move_group_interface_.setPlanningTime(10.0f);
+  move_group_interface_.setMaxAccelerationScalingFactor(0.3f);
+  move_group_interface_.setMaxVelocityScalingFactor(0.3f);
+  // move_group_interface_.setWorkspace(-1.0f, -2.0f, 0.0f, 1.0f, 2.0f, 0.8f);
 }
 
 TrajectoryPlannerNode::~TrajectoryPlannerNode()
@@ -159,6 +178,38 @@ bool TrajectoryPlannerNode::ExecuteTrajectory(std_srvs::Empty::Request &req, std
   return true;
 }
 
+// bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
+// {
+//   // Store the received waypoints
+//   waypoints_ = req.waypoints;
+//   std::vector<geometry_msgs::Pose> waypoints;
+//   waypoints.insert(waypoints.end(), waypoints_.poses.begin(), waypoints_.poses.end());
+
+//   // Plan the trajectory passing through the waypoints
+//   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
+//   moveit_msgs::RobotTrajectory robot_trajectory;
+//   double jump_threshold = 10.0;
+//   double eef_step = 0.01;
+//   double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
+
+//   if (fraction == 1.0)
+//   {
+//     motion_plan.trajectory_ = robot_trajectory;
+//     res.trajectory = motion_plan.trajectory_.joint_trajectory;
+//     res.success = true;
+
+//     current_plan_ = motion_plan;
+//     trajectory_planned_ = true;
+//   }
+//   else
+//   {
+//     res.trajectory = trajectory_msgs::JointTrajectory();
+//     res.success = false;
+//   }
+
+//   return true;
+// }
+
 bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
 {
   // Store the received waypoints
@@ -169,13 +220,49 @@ bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::R
   // Plan the trajectory passing through the waypoints
   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
   moveit_msgs::RobotTrajectory robot_trajectory;
-  double jump_threshold = 0.0;
-  double eef_step = 0.01;
-  double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory);
+  std::vector<trajectory_msgs::JointTrajectoryPoint> trajectory_vector;
+  bool overall_succes = false;
 
-  if (fraction == 1.0)
+  unsigned int vecSize = waypoints.size();
+
+  move_group_interface_.setPlannerId("RRTConnect");
+
+  for(unsigned int i = 0; i < vecSize; i++)
   {
+    moveit::planning_interface::MoveGroupInterface::Plan temp_motion_plan;
+    bool success = RobotMovements::PlanMovementToPose(waypoints[i], move_group_interface_, temp_motion_plan);
+
+    if (success)
+    {
+      std::vector<trajectory_msgs::JointTrajectoryPoint> temp_vector;
+      temp_vector.insert(temp_vector.begin(), std::begin(temp_motion_plan.trajectory_.joint_trajectory.points), std::end(temp_motion_plan.trajectory_.joint_trajectory.points));
+      trajectory_vector.insert(trajectory_vector.end(), temp_vector.begin(), temp_vector.end());
+
+      RobotMovements::ExecutePlannedTrajectory(move_group_interface_, temp_motion_plan, waypoints[i], !simulation, pose_correction_action_client_);
+
+      overall_succes = true;
+    }
+
+    else
+    {
+      overall_succes = false;
+      break;
+    }
+
+  };
+
+  if (overall_succes)
+  {
+    unsigned int n = trajectory_vector.size();
+
+    for(unsigned int j = 0; j < n; j++)
+    {
+      robot_trajectory.joint_trajectory.points.push_back(trajectory_vector[j]);
+    }
+    
     motion_plan.trajectory_ = robot_trajectory;
+
+
     res.trajectory = motion_plan.trajectory_.joint_trajectory;
     res.success = true;
 
@@ -195,7 +282,8 @@ bool TrajectoryPlannerNode::ExecuteWaypoints(std_srvs::Empty::Request &req, std_
 {
   if (trajectory_planned_)
   {
-    move_group_interface_.execute(current_plan_);
+    RobotMovements::ExecutePlannedTrajectory(move_group_interface_, current_plan_, target_pose_, !simulation, pose_correction_action_client_);
+    // move_group_interface_.execute(current_plan_);
     trajectory_planned_ = false;
 
     std::vector<geometry_msgs::Pose> waypoints;
@@ -252,6 +340,55 @@ bool TrajectoryPlannerNode::SetRRTConnectPlanner(std_srvs::Empty::Request &req, 
 bool TrajectoryPlannerNode::SetRRTStarPlanner(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
   move_group_interface_.setPlannerId("RRTstar");
+
+  return true;
+}
+
+bool TrajectoryPlannerNode::SetWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  moveit_msgs::Constraints constraints;
+  moveit_msgs::PositionConstraint position_constraint;
+  geometry_msgs::Vector3 target_point_offset;
+  shape_msgs::SolidPrimitive box;
+  geometry_msgs::Pose pose;
+
+  constraints.name = "Workspace constraint for the experiment";
+
+  position_constraint.header.frame_id = "fr3_link0";
+  position_constraint.link_name = "fr3_link8";
+
+  target_point_offset.x = 0.01;
+  target_point_offset.y = 0.01;
+  target_point_offset.z = 0.01;
+  position_constraint.target_point_offset = target_point_offset;
+
+  box.type = 1;
+  box.dimensions.push_back(0.8);  // x
+  box.dimensions.push_back(2);    // y
+  box.dimensions.push_back(0.8);  // z
+  position_constraint.constraint_region.primitives.push_back(box);
+
+  pose.position.x = 0.6;
+  pose.position.y = 0;
+  pose.position.z = 0.4;
+  pose.orientation.x = 0;
+  pose.orientation.y = 0;
+  pose.orientation.z = 0;
+  pose.orientation.w = 1;
+  position_constraint.constraint_region.primitive_poses.push_back(pose);
+
+  constraints.position_constraints.push_back(position_constraint);
+
+  move_group_interface_.setPathConstraints(constraints);
+
+  ROS_INFO("set the constraint");
+
+  return true;
+}
+
+bool TrajectoryPlannerNode::ClearWorkspaceConstraint(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  move_group_interface_.clearPathConstraints();
 
   return true;
 }
@@ -323,6 +460,24 @@ bool TrajectoryPlannerNode::HomeArm(std_srvs::Empty::Request &req, std_srvs::Emp
 {
   ROS_INFO("sending to home");
   move_group_interface_.setNamedTarget("ready");
+  moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
+  bool success = (move_group_interface_.plan(motion_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  ROS_INFO("planning complete");
+  if (success)
+  {
+    move_group_interface_.execute(motion_plan);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool TrajectoryPlannerNode::StartPositionArm(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  ROS_INFO("sending to starting position");
+  move_group_interface_.setNamedTarget("experiment_start");
   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
   bool success = (move_group_interface_.plan(motion_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   ROS_INFO("planning complete");

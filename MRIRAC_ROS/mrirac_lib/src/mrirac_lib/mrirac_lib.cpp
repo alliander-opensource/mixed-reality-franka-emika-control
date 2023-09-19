@@ -113,9 +113,22 @@ bool RobotMovements::PlanMovementToPose(const geometry_msgs::Pose &target_pose,
 {
 
     move_group_interface.setPoseTarget(target_pose);
+    // std::vector<geometry_msgs::Pose> waypoints;
+    // waypoints.insert(waypoints.end(), target_pose);
     ROS_INFO("planning");
     bool success = (move_group_interface.plan(motion_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    // moveit_msgs::RobotTrajectory robot_trajectory;
+    // bool success = false;
+    // double jump_threshold = 5.0;
+    // double eef_step = 0.01;
+    // double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
+    // motion_plan.trajectory_ = robot_trajectory;
     ROS_INFO("planning complete");
+
+    // if (fraction == 1.0)
+    // {
+    //     success = true;
+    // }
 
     return success;
 }
