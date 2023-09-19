@@ -33,7 +33,7 @@ public class DirectControlObjectPublisher : MonoBehaviour
     {   
         PoseMsg cmdPose = new PoseMsg();        
                     
-        Vector3 T_Hand_DirectEnv = ControlObject.transform.localPosition * 1.5f; // *2f
+        Vector3 T_Hand_DirectEnv = ControlObject.transform.localPosition * 1.5f; 
         Quaternion R_Hand_DirectEnv_unity = ControlObject.transform.localRotation;         
             
         //Rotation Matrices (ZXY)
@@ -52,8 +52,8 @@ public class DirectControlObjectPublisher : MonoBehaviour
 
         cmdPose = new PoseMsg()
         {
-            // position = new PointMsg((T_Hand_DirectEnv[2] + 0.6f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)), //[2] + 0.4f
             position = new PointMsg((safedistance), -(T_Hand_DirectEnv[0]-0.6), (T_Hand_DirectEnv[1] + 0.4f)), //
+            // Change orientation of the hand with following code
             // orientation = new QuaternionMsg(R_EndEffector[0], R_EndEffector[1], R_EndEffector[2], R_EndEffector[3])
             orientation = new QuaternionMsg(0.7f, 0f, 0.7f, 0f)
         };

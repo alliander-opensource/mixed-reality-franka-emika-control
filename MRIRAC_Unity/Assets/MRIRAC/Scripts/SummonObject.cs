@@ -16,8 +16,4 @@ public class SummonObject : MonoBehaviour
         transform.localPosition = new Vector3(0.0f, 0.4f, 0.8f);
     }
 
-    // void Update()
-    // {
-    //     Debug.Log(transform.rotation);
-    // }
 }

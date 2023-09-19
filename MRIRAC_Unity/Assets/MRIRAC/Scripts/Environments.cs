@@ -116,14 +116,11 @@ public class Environments : MonoBehaviour
         serviceStartPosition.CallStartPositionArm();
 
         GameObject Environment = Instantiate(PrefabEnvironment, EnvironmentsObject.transform, false);
-        // Environment.name = "Environment";
         Environment.transform.localPosition = DistanceFromRobotArm;
 
         PublishHologramMeshes();
         
         serviceSetRRTStar.CallSetRRTStarPlanner();
-
-        // serviceWorkspaceConstraint.CallSetWorkspaceConstraint();
 
     }
 
@@ -139,7 +136,6 @@ public class Environments : MonoBehaviour
 
     public void AcitvateCondition(int condition_number)
     {
-        // Debug.Log(condition_number);
         EnvironmentsObject.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         EnvironmentsObject.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         EnvironmentsObject.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);

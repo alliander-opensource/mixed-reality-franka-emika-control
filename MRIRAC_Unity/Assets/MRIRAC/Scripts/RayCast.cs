@@ -16,13 +16,6 @@ public class RayCast : MonoBehaviour
 
     private IEnumerator coroutine;
 
-    // Start is called before the first frame update
-    //void Start()
-    //{
-    //    Debug.Log("Activated Ray Cast");
-
-    //}
-
     private IEnumerator WaitAndRemoveLine(float waitTime, LineRenderer x)
     {
         yield return new WaitForSeconds(waitTime);

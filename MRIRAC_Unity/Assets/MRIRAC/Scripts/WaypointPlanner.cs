@@ -79,15 +79,11 @@ public class WaypointPlanner : MonoBehaviour
     void Awake()
     {
         planningTarget1 = targetEndEffector1.GetComponent<EndEffectorPos>();
-        // planningTarget2 = targetEndEffector2.GetComponent<EndEffectorPos>();
-        // planningTarget3 = targetEndEffector3.GetComponent<EndEffectorPos>();
 
         robotUpdater = robot.GetComponent<UpdateRobot>();
         robotManager = robot.GetComponent<RobotManager>();
 
         setTargetShaders1 = targetObject.GetComponent<SetTargetShaders>();
-        // setTargetShaders2 = waypoint2.GetComponent<SetTargetShaders>();
-        // setTargetShaders3 = waypoint3.GetComponent<SetTargetShaders>();
 
     }
 
@@ -147,7 +143,6 @@ public class WaypointPlanner : MonoBehaviour
 
     public IEnumerator ShowTrajectory(JointTrajectoryPointMsg[] points, float vizSpeed, float endWait)
     {
-        //float[] prevJointAnglesDeg = robotManager.prevAnglesDeg;
         float[] prevJointAnglesDeg = robotManager.PreviousJointAnglesDeg;
 
         for (int pointIdx = 0; pointIdx < points.Length; pointIdx++)
@@ -232,18 +227,13 @@ public class WaypointPlanner : MonoBehaviour
         WaypointObject.name = System.Guid.NewGuid().ToString();
         WaypointObject.transform.SetParent(WaypointsGameObject.transform, false);
         WaypointObject.transform.position = new Vector3(targetEndEffector1.transform.position.x, targetEndEffector1.transform.position.y, targetEndEffector1.transform.position.z);
-
-        
-
-        
+ 
     }
 
     public void resetWaypointList()
     {
-        // Debug.Log(listOfWaypoints.Count);
         listOfWaypoints.Clear();
-        // Debug.Log(listOfWaypoints.Count);
-
+        
         foreach (Transform WaypointTransform in WaypointsGameObject.transform)
         {
             Destroy(WaypointTransform.gameObject);

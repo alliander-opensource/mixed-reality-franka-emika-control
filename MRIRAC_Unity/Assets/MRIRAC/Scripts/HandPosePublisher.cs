@@ -42,7 +42,7 @@ public class HandPosePublisher : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //mrirac_trajectory_planner_Fr3/unity_hand_pose
+
         ros = ROSConnection.GetOrCreateInstance();
         ros.RegisterPublisher<PoseStampedMsg>(HandPosePublisherTopic);
 
@@ -119,7 +119,7 @@ public class HandPosePublisher : MonoBehaviour
 
             cmdPose = new PoseMsg()
             {
-                position = new PointMsg((T_Hand_DirectEnv[2] + 0.6f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)), //[2] + 0.4f
+                position = new PointMsg((T_Hand_DirectEnv[2] + 0.6f), -(T_Hand_DirectEnv[0]), (T_Hand_DirectEnv[1] + 0.5f)),
                 orientation = new QuaternionMsg(R_EndEffector[0], R_EndEffector[1], R_EndEffector[2], R_EndEffector[3])
                 // orientation = new QuaternionMsg(0.7f, 0f, 0.7f, 0f)
             };
