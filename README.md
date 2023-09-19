@@ -129,7 +129,7 @@ From the Application Menu, start the `MRIRAC` app
 * **Close gripper**: Close the grippers of the end-effector
 
 ## Credits
-This project was developed as part of the Semester Thesis for my (Matthew Hanlon) MSc. Robotics, Systems and Control at ETH Zurich. The project was supervised by Eric Vollenweider (Microsoft Mixed Reality and AI Lab Zurich), in collaboration with the [Computer Vision and Geometry Group](https://cvg.ethz.ch/).
+This project was developed as part of the Master Thesis for my (Koen Bessels) MSc. Robotics at the TU Delft. The project was supervised by Yke Bauke Eisema (Human Robot Interaction Lab, TU Delft) and Luc Nies (Research Center for Digital Technologies, Alliander).
 
 # Trademark Notice
 Trademarks This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft’s Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party’s policies.
