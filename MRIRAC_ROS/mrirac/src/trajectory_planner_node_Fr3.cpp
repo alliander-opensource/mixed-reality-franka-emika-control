@@ -126,11 +126,9 @@ TrajectoryPlannerNode::TrajectoryPlannerNode(const ros::NodeHandle &node_handle)
 
   n_obstacles_pub_ = node_handle_.advertise<std_msgs::String>("n_obstacles", 100);
 
-  // move_group_interface_.setPlannerId("RRTstar");
   move_group_interface_.setPlanningTime(10.0f);
   move_group_interface_.setMaxAccelerationScalingFactor(0.3f);
   move_group_interface_.setMaxVelocityScalingFactor(0.3f);
-  // move_group_interface_.setWorkspace(-1.0f, -2.0f, 0.0f, 1.0f, 2.0f, 0.8f);
 }
 
 TrajectoryPlannerNode::~TrajectoryPlannerNode()
@@ -177,38 +175,6 @@ bool TrajectoryPlannerNode::ExecuteTrajectory(std_srvs::Empty::Request &req, std
   }
   return true;
 }
-
-// bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
-// {
-//   // Store the received waypoints
-//   waypoints_ = req.waypoints;
-//   std::vector<geometry_msgs::Pose> waypoints;
-//   waypoints.insert(waypoints.end(), waypoints_.poses.begin(), waypoints_.poses.end());
-
-//   // Plan the trajectory passing through the waypoints
-//   moveit::planning_interface::MoveGroupInterface::Plan motion_plan;
-//   moveit_msgs::RobotTrajectory robot_trajectory;
-//   double jump_threshold = 10.0;
-//   double eef_step = 0.01;
-//   double fraction = move_group_interface_.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
-
-//   if (fraction == 1.0)
-//   {
-//     motion_plan.trajectory_ = robot_trajectory;
-//     res.trajectory = motion_plan.trajectory_.joint_trajectory;
-//     res.success = true;
-
-//     current_plan_ = motion_plan;
-//     trajectory_planned_ = true;
-//   }
-//   else
-//   {
-//     res.trajectory = trajectory_msgs::JointTrajectory();
-//     res.success = false;
-//   }
-
-//   return true;
-// }
 
 bool TrajectoryPlannerNode::PlanWaypoints(mrirac_msgs::WaypointTrajectoryPlan::Request &req, mrirac_msgs::WaypointTrajectoryPlan::Response &res)
 {
@@ -283,7 +249,6 @@ bool TrajectoryPlannerNode::ExecuteWaypoints(std_srvs::Empty::Request &req, std_
   if (trajectory_planned_)
   {
     RobotMovements::ExecutePlannedTrajectory(move_group_interface_, current_plan_, target_pose_, !simulation, pose_correction_action_client_);
-    // move_group_interface_.execute(current_plan_);
     trajectory_planned_ = false;
 
     std::vector<geometry_msgs::Pose> waypoints;

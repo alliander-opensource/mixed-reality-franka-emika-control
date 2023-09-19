@@ -113,22 +113,9 @@ bool RobotMovements::PlanMovementToPose(const geometry_msgs::Pose &target_pose,
 {
 
     move_group_interface.setPoseTarget(target_pose);
-    // std::vector<geometry_msgs::Pose> waypoints;
-    // waypoints.insert(waypoints.end(), target_pose);
     ROS_INFO("planning");
     bool success = (move_group_interface.plan(motion_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-    // moveit_msgs::RobotTrajectory robot_trajectory;
-    // bool success = false;
-    // double jump_threshold = 5.0;
-    // double eef_step = 0.01;
-    // double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, robot_trajectory, true);
-    // motion_plan.trajectory_ = robot_trajectory;
     ROS_INFO("planning complete");
-
-    // if (fraction == 1.0)
-    // {
-    //     success = true;
-    // }
 
     return success;
 }
@@ -141,10 +128,6 @@ void RobotMovements::SetPlannerStartState(const std::vector<double> &joint_angle
     for (size_t i = 0; i < joint_angles.size(); i++)
     {
         double joint_angle = joint_angles.at(i);
-        //if (joint_angle < 0)
-        //{
-        //    joint_angle = joint_angle + 2 * M_PI;
-        //}
 
         const std::vector<double> value = {joint_angle};
         robot_state.setJointPositions(joint_names.at(i), value);
