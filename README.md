@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 Microsoft Corporation, Alliander N.V.
+
+SPDX-License-Identifier: MIT
+-->
+
 # Mixed Reality Industrial Robot Arm Control
 
 Programming industrial robot arms can be a tedious and unintuitive process with conventional control methods, such as joysticks or 2D GUIs.
