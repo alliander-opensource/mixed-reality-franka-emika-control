@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2023 Alliander N.V.
+
+SPDX-License-Identifier: MIT
+-->
+
 # Getting Help
 
 There are a few ways to connect with the `rcdt_mrirac_fr3` project:

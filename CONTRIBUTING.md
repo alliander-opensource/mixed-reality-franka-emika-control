@@ -24,10 +24,10 @@ This project follows the following [Code of Conduct](https://github.com/Alliande
 Every file containing source code must include copyright. This includes any JS/CSS files that you might be serving out to
 browsers. 
 
-Apache 2.0 header: 
+MIT header: 
 
-     SPDX-FileCopyrightText: 'Copyright Contributors to the [name_open_source_project] project' 
-     SPDX-License-Identifier: Apache-2.0
+     SPDX-FileCopyrightText: 'Copyright Contributors to the Mixed Reality Industrial Robot Arm Control project' 
+     SPDX-License-Identifier: MIT
 
 ## Git branching
 

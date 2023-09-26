@@ -1,0 +1,69 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Mixed Reality Industrial Robot Arm Control
+Upstream-Contact: Alliander Open Source Program Office <ospo@alliander.com>
+Source: https://github.com/alliander-opensource/rcdt_mrirac_fr3
+
+Files:
+  MRIRAC_Unity/Packages/com.unity.robotics.ros-tcp-connector/*
+  MRIRAC_Unity/Packages/com.unity.robotics.urdf-importer@90f353e435/*
+Copyright: 2020 Unity Technologies
+License: Apache-2.0
+
+Files:
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.mixedreality.openxr-1.5.1.tgz
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.mixedreality.toolkit.examples-2.8.2.tgz
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.mixedreality.toolkit.extensions-2.8.2.tgz
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.mixedreality.toolkit.foundation-2.8.2.tgz
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.mixedreality.toolkit.standardassets-2.8.2.tgz
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.mixedreality.toolkit.tools-2.8.2.tgz
+  MRIRAC_Unity/Packages/MixedReality/com.microsoft.spatialaudio.spatializer.unity-2.0.37.tgz
+Copyright: (c) Microsoft Corporation
+License: MIT
+
+Files: MRIRAC_Unity/Assets/NuGet/*
+Copyright: (c) 2018 Patrick McCarthy
+License: MIT
+
+Files: MRIRAC_Unity/Assets/Packages/Microsoft.MixedReality.QR.0.5.3037/*
+Copyright: (c) Microsoft Corporation
+License: LicenseRef-Microsoft.MixedReality.QR-0.5.3037
+
+Files: MRIRAC_Unity/Assets/Packages/Microsoft.VCRTForwarders.140.1.0.7/*
+Copyright: (c) Microsoft Corporation
+License: MIT
+
+Files: MRIRAC_Unity/Assets/TextMesh Pro/*
+Copyright: 2022 Unity Technologies ApS
+License: LicenseRef-Unity-Companion-License
+
+Files:
+  cgmanifest.json
+  MRIRAC_Unity/.gitignore
+  MRIRAC_Unity/Assets/MRTK/*
+  MRIRAC_Unity/Assets/XR/*
+  MRIRAC_Unity/Assets/NuGet.config
+  MRIRAC_Unity/Assets/Resources/GeometryCompassSettings.asset
+Copyright: (c) Microsoft Corporation
+License: MIT
+
+Files:
+  *.meta
+  doc/images/*
+  MRIRAC_ROS/*
+  MRIRAC_Unity/Assets/MRIRAC/*
+  MRIRAC_Unity/Assets/MixedRealityToolkit.Generated/*
+  MRIRAC_Unity/Assets/msgbrowser_settings.asset
+  MRIRAC_Unity/Assets/packages.config
+  MRIRAC_Unity/Assets/Resources/ROSConnectionPrefab.prefab
+  MRIRAC_Unity/Assets/Scenes/kinova.unity
+  MRIRAC_Unity/Packages/manifest.json*
+  MRIRAC_Unity/Packages/packages-lock.json
+  MRIRAC_Unity/ProjectSettings/*
+Copyright: (c) Microsoft Corporation, Alliander N.V.
+License: MIT
+
+Files:
+  install.sh
+  MRIRAC_Unity/Assets/Scenes/FrankaEmika.unity
+Copyright: Alliander N.V.
+License: MIT

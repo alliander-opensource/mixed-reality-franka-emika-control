@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2014 Coraline Ada Ehmke
+
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 # Code of Conduct
 
 ## Our Pledge
