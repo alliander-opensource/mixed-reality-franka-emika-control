@@ -3,11 +3,11 @@
 There are a few ways to connect with the `rcdt_mrirac_fr3` project:
 
 * Submit an issue
-* Send an email to the Technical Steering Committee: <ospo@alliander.com>.
+* Send an email to: <koen8100@hotmail.com> or <ospo@alliander.com>
 
 ## How to ask for help, suggest a feature, or give recommendations.
 
-If you have trouble using the ospo examples, 
+If you have trouble using the rcdt_mrirac_fr3, 
 but there's not yet reason to suspect you've encountered a genuine bug,
 you can ask a question in the issues tab of the repository.
 
