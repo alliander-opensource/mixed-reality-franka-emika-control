@@ -142,5 +142,9 @@ This project was developed as part of the Master Thesis for my (Koen Bessels) MS
 
 This package is an adaption of the original [MRIRAC repository](https://github.com/microsoft/mixed-reality-robot-arm-control-demo/tree/main). Created by Matthew Hanlon and supervised by Eric Vollenweider from the ETH Zurich.
 
+# Licenses
+Use of the Mixed Reality Industrial Robot Arm Control source code is subject to the terms of multiple licenses, due to the inclusion of external packages.
+More information is available in the [LICENSE file](LICENSE.md).
+
 # Trademark Notice
 Trademarks This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft’s Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party’s policies.
